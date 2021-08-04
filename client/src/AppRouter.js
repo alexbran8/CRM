@@ -12,7 +12,7 @@ export const AppRouter = () => {
     <HashRouter  >
       <Header basename={config.baseLOCATION} />
         <Route exact path={config.baseLOCATION + "/"} component={Homepage} />
-        <Route exact path={config.baseLOCATION + "/error"} component={LoginError} />
+        <Route exact path={"/error"} component={LoginError} />
         <Route exact path={config.baseLOCATION + "/tac"} component={authGuard(Tac)} />
     </HashRouter>
   );
