@@ -125,7 +125,7 @@ export default class Header extends Component {
               <li className="nav-item">
                 <Link
                   className="nav-link text-white"
-                  to={config.baseLOCATION + "/tac"}
+                  to={"/tac"}
                 >
                   TAC
                       </Link>
