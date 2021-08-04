@@ -26,7 +26,7 @@ var config = {
     maxAge: 360000
   },
   serverPort: process.env.PORT || 8080,
-  db: new Sequelize("npt", "postgres", "fJdyP2Dyj@&6v!5hMM#VD", {
+  db: new Sequelize("tacdb", "postgres", "fJdyP2Dyj@&6v!5hMM#VD", {
     host: "10.129.210.150",
     dialect: "postgres",
     pool: {

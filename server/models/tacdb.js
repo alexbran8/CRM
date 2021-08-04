@@ -1,8 +1,8 @@
 const { db } = require("../config/configProvider")();
 
 module.exports = function (DataTypes) {
-  const Event = db.define(
-    "events",
+  const Tacdb = db.define(
+    "tacdb",
     {
       // id: {
       //   type: DataTypes.INTEGER,
@@ -45,5 +45,5 @@ module.exports = function (DataTypes) {
     },
     { timestamps: false }
   );
-  return Event;
+  return Tacdb;
 };
