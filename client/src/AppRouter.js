@@ -2,7 +2,7 @@ import React from "react";
 import Homepage from "./components/Homepage.jsx";
 import Header from "./components/Header.jsx";
 import LoginError from "./components/LoginError";
-import Tac from "./components/Tac";
+import Tac from "./components/Tac.tsx";
 import { HashRouter, Route } from "react-router-dom";
 import { config } from "./config"
 import authGuard from "./HOCs/authGuard.js";
