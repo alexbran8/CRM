@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { Table, Container, Row, Col, Checkbox, CardGroup, FormGroup } from 'react-bootstrap'
+import "./Tacdb.scss"
 const GET_ALL = gql`
   query  { 
     getAll(first:50)  {
@@ -32,7 +33,7 @@ const Tac = () => {
         }
     });
 
-    return (<div>tacdashboard
+    return (<div>
         <Table striped bordered hover responsive="xl" className="dash-table">
             <thead >
                 <tr>
@@ -78,8 +79,8 @@ const Tac = () => {
                     <th>
                         CR TAC
                     </th>
-                    <th>
-                    </th>
+                    {/* <th>
+                    </th> */}
                 </tr>
             </thead>
             <tbody>

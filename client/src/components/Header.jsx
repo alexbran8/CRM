@@ -112,7 +112,7 @@ export default class Header extends Component {
   render() {
     const { authenticated, user } = this.state;
     return (
-      <Navbar className="navbar" expand="sm">
+      <Navbar className="navbar sticky-nav" expand="sm"  fixed="top">
         <Link className="navbar-brand text-white" id="navbar-brand" to={config.baseLOCATION + "/"}>
           <b>NOKIA</b> {config.AppName} {config.appVersion}
           <UncontrolledPopover trigger="hover" placement="top" target="navbar-brand">
