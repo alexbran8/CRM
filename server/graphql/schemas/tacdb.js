@@ -1,20 +1,22 @@
 const { gql } = require("apollo-server");
 
 module.exports = gql`
-type normCheck {
-    Date: String
-    to_email: String
-    Resource: String
-    wbsCustomer: String
-    Task: String
-    taskComments: String
-    timeWrittingComments: String
-    billableHours: String
-	  realHour: String
-	  normOK: String
-	  normNOK:  String
-	  status: String
-    variation: String
+type tacdb {
+    cr_date: String
+    id: String
+    week: String
+    date: String
+    NORM: String
+    responsible_entity: String
+    no_incident: String
+    no_itv: String
+    status: String
+    site_constructor: String
+    region: String
+    comment_tac: String
+    OMC_engineer: String
+    TT_creator_short: String
+    site: String
   }
   type Response {
     success: String!
@@ -39,8 +41,7 @@ type normCheck {
    }
 
 extend  type Query  {
-    normCheckQuery(department: String!): [normCheck]
-    normCheckQueryNA: [normCheck]
+    getAll(first: Int): [tacdb]
 } 
 
 extend type Mutation {

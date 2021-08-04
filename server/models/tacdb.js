@@ -1,49 +1,71 @@
-const { db } = require("../config/configProvider")();
+// const { db } = require("../config/configProvider")();
 
-module.exports = function (DataTypes) {
-  const Tacdb = db.define(
-    "tacdb",
+module.exports = (sequelize, type) => {
+  const Tacdb = sequelize.define(
+    "tacdashboard_item",
     {
-      // id: {
-      //   type: DataTypes.INTEGER,
-      //   required: true,
-      //   unique: true,
-      //   primaryKey: true,
-      // },
-      start: {
-        type: DataTypes.DATE(),
+      id: {
+        type: type.INTEGER,
+        primaryKey: true
+      },
+      week: { type: type.STRING },
+      date: {
+        type: type.DATE(),
         required: true,
       },
-      end: {
-        type: DataTypes.DATE(),
+      duration: {
+        type: type.STRING,
         required: true,
       },
-      nokiaid: {
-        type: DataTypes.INTEGER,
+      hastagTac: {
+        type: type.STRING,
         required: true,
       },
-      title: {
-        type: DataTypes.STRING,
+      responsible_entity: {
+        type: type.STRING,
       },
-      bgColor: {
-        type: DataTypes.STRING,
+      comment_tac: {
+        type: type.STRING,
       },
-      type: {
-        type: DataTypes.STRING,
+      problem: {
+        type: type.STRING,
       },
-      task_admin: {
-        type:DataTypes.BOOLEAN
+      action: {
+        type:type.STRING
       },
-      task_operational: {
-        type:DataTypes.BOOLEAN
+      operation_location: {
+        type:type.STRING
       },
-      status: {
-        type: DataTypes.STRING,
+      collage: {
+        type: type.STRING,
       },
-      replacement: { type: DataTypes.STRING },
-      createdBy: { type: DataTypes.STRING },
+      alarm_bagot: { type: type.STRING },
+      createdBy: { type: type.STRING },
+      alarm_active: { type: type.STRING },
+      incident_type: { type: type.STRING },
+      NORM: { type: type.STRING },
+      status: { type: type.STRING },
+      process_status: { type: type.STRING },
+      TT_creator_short: { type: type.STRING },
+      task: { type: type.STRING },
+      site_constructor: { type: type.STRING, field:'constructor' },
+      OMC_engineer: { type: type.STRING },
+      comment_tac: { type: type.STRING },
+      insert_entity: { type: type.STRING },
+      insert_date: { type: type.STRING },
+      responsible_entity : {type: type.STRING},      
+      site : {type: type.STRING},      
+      region : {type: type.STRING},      
+      no_incident: {type : type.STRING},
+      no_itv: {type : type.STRING}
+      
+
     },
-    { timestamps: false }
+    { timestamps: false,  freezeTableName: true,  tableName: 'tacdashboard_item'},
+    // {
+    //   freezeTableName: true
+    // },
+    {}
   );
   return Tacdb;
 };

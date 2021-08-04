@@ -1,6 +1,6 @@
 const { gql } = require("apollo-server");
 
-const normCheck = require("./norms");
+const tacdb = require("./tacdb");
 
 
 const rootType = gql`
@@ -12,4 +12,4 @@ const rootType = gql`
   }
 `;
 
-module.exports = [rootType, normCheck];
+module.exports = [rootType, tacdb];

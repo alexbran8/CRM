@@ -1,3 +1,3 @@
-const normsResolvers = require("./normsResolvers");
+const tacdb = require("./tacdb");
 
-module.exports = [normsResolvers]
+module.exports = [tacdb]

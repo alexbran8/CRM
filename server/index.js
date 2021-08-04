@@ -26,6 +26,9 @@ const typeDefs = require("./graphql/schemas");
 const resolvers = require("./graphql/resolvers");
 const context = require("./graphql/context");
 
+const db = require("./models");
+
+
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
@@ -43,7 +46,7 @@ const apolloServer = new ApolloServer({
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-config.db
+db.sequelize
   .authenticate()
   .then(() => {
     console.log("Connection has been established successfully.");

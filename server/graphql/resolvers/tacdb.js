@@ -1,6 +1,7 @@
 const e = require("cors");
 const nodemailer = require("nodemailer");
-const { db, transporterConfig } = require("../../config/configProvider")();
+const db = require("../../models");
+
 
 const errorHandler = (err, req, res, next) => {
   const { code, desc = err.message } = err;
@@ -20,17 +21,11 @@ const emailHandler = async (metadata) => {
 
 module.exports = {
   Query: {
-    async normCheckQuery(root, args, context) {
+    async getAll(root, args, context) {
       console.log(args)
-      let result = await db.query(`SELECT * FROM get_norms_check('${args.department}')`);
-      return result[0];
-
-    },
-
-    async normCheckQueryNA(root, args, context) {
-      let result = await db.query(`SELECT * FROM get_norms_na()`);
-      console.log('y')
-      return result[0];
+      let result = await db.Tacdb.findAll({ limit: args.first});
+      console.log(result)
+      return result;
 
     }
   },
