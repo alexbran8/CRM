@@ -102,7 +102,7 @@ const Tac = () => {
                         <td>{item.TT_creator_short}</td>
                         <td>{item.site}</td>
                         <td>{item.region}</td>
-                        <td>{ item.comment_tac.substring(0,25) }</td>
+                        <td><span title={item.comment_tac}>{item.comment_tac.substring(0,25)}</span></td>
 
                     </tr>
                 })}
