@@ -125,9 +125,9 @@ export default class Header extends Component {
               <li className="nav-item">
                 <Link
                   className="nav-link text-white"
-                  to={config.baseLOCATION + "/schedule"}
+                  to={config.baseLOCATION + "/tac"}
                 >
-                  Attendance Form
+                  TAC
                       </Link>
               </li>
             </ul>
@@ -161,7 +161,7 @@ export default class Header extends Component {
     // Authenticate using via passport api in the backend
     // Open Twitter login page
     // Upon successful login, a cookie session will be stored in the client
-    window.open(config.baseURL + config.baseLOCATION + "/auth/twitter", "_self");
+    window.open(config.baseURL + config.baseLOCATION + "/auth/azure", "_self");
   };
 
   _handleLogoutClick = () => {
