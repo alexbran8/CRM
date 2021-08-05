@@ -1,5 +1,5 @@
 .dash-table {
-    margin-top: 250px;
+    margin-top: 100px;
     text-align: center;
 
 }
@@ -7,6 +7,7 @@
   .dash-table thead {
     background-color: #e7e7e0;
     position: sticky;
+    // border: 1px #7b8d9b solid;
     top: 170px; //140
 }
 
@@ -23,7 +24,7 @@
   
   // flex-wrap: wrap-reverse;
   // margin-top: 150px;
-  border: 1px #7b8d9b solid;
+  // border: 1px #7b8d9b solid;
   
   overflow-y: hidden;
   opacity: 100%;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useMutation, useQuery, gql } from "@apollo/client";
+import { makeStyles } from '@material-ui/core/styles';
 import { Table, Container, Row, Col, Checkbox, CardGroup, FormGroup } from 'react-bootstrap'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -28,9 +29,22 @@ const GET_ALL = gql`
   }
 `;
 
+const useStyles = makeStyles((theme) => ({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 200,
+    },
+  }));
+
 
 
 const Tac = () => {
+    const classes = useStyles();
     const [weekList, setuWeeksList] = useState([]);
     const { data, loading, error } = useQuery(GET_ALL, {
         variables: { department: 'radio' }, onCompleted: () => {
@@ -44,52 +58,33 @@ const Tac = () => {
     return (<div>
         <div className="filterContainer">
             <>
-                {/* <select
-                            className="form-control p-2 m-3 col"
-                            defaultValue=""
-                            onChange={(e) => {
-                                _onChangeFitler(e, "resource")
-                                //   const lineObj = { ...this.state.filter };
-                                //   lineObj.line_manager = e.target.value;
-                                //   this.setState({ filter: lineObj });
-                            }}
-                        >
-                            <option value="">All resources</option>
-                            {uResources && uResources.map((x, index) => {
-                                return (
-                                    <option key={x + index} value={x.Resource}>
-                                        {x.Resource} ({x.qty} tasks)
-                                    </option>
-                                );
-                            })
-                            }
-                        </select> */}
-            </>
-            <>
                 <Autocomplete
                     id="combo-box-demo"
                     options={weekList}
                     getOptionLabel={(option) => option}
                     style={{ width: 300 }}
+                    className={classes.textField}
                     renderInput={(params) => <TextField {...params} label="select week" variant="outlined" />}
                 />
             </>
+            <>
             <TextField
                 id="date"
                 type="date"
                 defaultValue="2017-05-24"
                 variant="outlined"
+                className={classes.textField}
                 InputLabelProps={{
                     shrink: true,
                 }}
             />
-            <>
             <>
                 <Autocomplete
                     id="combo-box-demo"
                     options={weekList}
                     getOptionLabel={(option) => option}
                     style={{ width: 300 }}
+                    className={classes.textField}
                     renderInput={(params) => <TextField {...params} label="select status" variant="outlined" />}
                 />
             </>
@@ -99,6 +94,7 @@ const Tac = () => {
                     options={weekList}
                     getOptionLabel={(option) => option}
                     style={{ width: 300 }}
+                    className={classes.textField}
                     renderInput={(params) => <TextField {...params} label="select site" variant="outlined" />}
                 />
             </>
@@ -108,6 +104,7 @@ const Tac = () => {
                     options={weekList}
                     getOptionLabel={(option) => option}
                     style={{ width: 300 }}
+                    className={classes.textField}
                     renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
                 />
             </>
