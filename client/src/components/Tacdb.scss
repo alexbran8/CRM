@@ -1,21 +1,44 @@
 .dash-table {
-    margin-top: 250px
+    margin-top: 250px;
+    text-align: center;
 
 }
-
-// .dash-table th {
-//     // position: sticky;
-//     // top: 70px; //140
-//     // background: #7b8d9b;
-
-//   }
 
   .dash-table thead {
     background-color: #e7e7e0;
     position: sticky;
-    top: 70px; //140
+    top: 170px; //140
 }
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.filterContainer {
+  position: sticky;
+  top: 70px;
+  display: flex;
+  z-index: 999;
+  height: 100px;
+  
+  // flex-wrap: wrap-reverse;
+  // margin-top: 150px;
+  border: 1px #7b8d9b solid;
+  
+  overflow-y: hidden;
+  opacity: 100%;
+  // align-items: stretch;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+// .filterContainer .box {
+//   -webkit-flex: 1;
+
+// }
+
+
+.filter-item {
+  width: 200px;
 }

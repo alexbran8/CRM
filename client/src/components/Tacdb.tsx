@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { Table, Container, Row, Col, Checkbox, CardGroup, FormGroup } from 'react-bootstrap'
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
+
 import "./Tacdb.scss"
+
 const GET_ALL = gql`
   query  { 
     getAll(first:50)  {
@@ -27,13 +31,90 @@ const GET_ALL = gql`
 
 
 const Tac = () => {
+    const [weekList, setuWeeksList] = useState([]);
     const { data, loading, error } = useQuery(GET_ALL, {
         variables: { department: 'radio' }, onCompleted: () => {
             console.log(data.getAll)
+            const weeks = data && data.getAll && data.getAll.map(x => x.week);
+            setuWeeksList([...new Set(weeks)]);
+
         }
     });
 
     return (<div>
+        <div className="filterContainer">
+            <>
+                {/* <select
+                            className="form-control p-2 m-3 col"
+                            defaultValue=""
+                            onChange={(e) => {
+                                _onChangeFitler(e, "resource")
+                                //   const lineObj = { ...this.state.filter };
+                                //   lineObj.line_manager = e.target.value;
+                                //   this.setState({ filter: lineObj });
+                            }}
+                        >
+                            <option value="">All resources</option>
+                            {uResources && uResources.map((x, index) => {
+                                return (
+                                    <option key={x + index} value={x.Resource}>
+                                        {x.Resource} ({x.qty} tasks)
+                                    </option>
+                                );
+                            })
+                            }
+                        </select> */}
+            </>
+            <>
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={weekList}
+                    getOptionLabel={(option) => option}
+                    style={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="select week" variant="outlined" />}
+                />
+            </>
+            <TextField
+                id="date"
+                type="date"
+                defaultValue="2017-05-24"
+                variant="outlined"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+            />
+            <>
+            <>
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={weekList}
+                    getOptionLabel={(option) => option}
+                    style={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="select status" variant="outlined" />}
+                />
+            </>
+            <>
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={weekList}
+                    getOptionLabel={(option) => option}
+                    style={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="select site" variant="outlined" />}
+                />
+            </>
+            <>
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={weekList}
+                    getOptionLabel={(option) => option}
+                    style={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
+                />
+            </>
+
+            </>
+            {/* </form> */}
+        </div>
         <Table striped bordered hover responsive="xl" className="dash-table">
             <thead >
                 <tr>
@@ -103,7 +184,7 @@ const Tac = () => {
                         <td>{item.TT_creator_short}</td>
                         <td>{item.site}</td>
                         <td>{item.region}</td>
-                        <td><span title={item.comment_tac}>{item.comment_tac.substring(0,25)}</span></td>
+                        <td><span title={item.comment_tac}>{item.comment_tac.substring(0, 25)}</span></td>
 
                     </tr>
                 })}
