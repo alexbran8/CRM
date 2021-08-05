@@ -1,6 +1,7 @@
 const e = require("cors");
 const nodemailer = require("nodemailer");
 const db = require("../../models");
+const { Op } = require("sequelize");
 
 
 const errorHandler = (err, req, res, next) => {
@@ -23,8 +24,17 @@ module.exports = {
   Query: {
     async getAll(root, args, context) {
       console.log(args)
-      let result = await db.Tacdb.findAll({ limit: args.first});
-      console.log(result)
+      let dateFilter = args.date ? { date: args.date } : null
+      let weekFilter = args.week ? { week: args.week } : null
+      let itvFilter = args.no_itv ? { no_itv: args.no_itv } : null
+      let statusFilter = args.status ? { status: args.status } : null
+      let siteFilter = args.site ? { site: args.site } : null
+      let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
+
+      let result = await db.Tacdb.findAll({
+        where: { [Op.and]: [dateFilter, weekFilter, itvFilter, statusFilter, siteFilter, responsibleFilter] },
+        limit: args.first
+      });
       return result;
 
     }
@@ -33,16 +43,16 @@ module.exports = {
     async sendNotifications(root, data, context) {
       try {
         console.log(data.data)
-  
+
         var groupedPeople = groupBy(data.data, 'to_email');
-        
+
         Object.keys(groupedPeople).forEach(item => sendEmail(groupedPeople[item], item))
 
         function sendEmail(data, email) {
           data.reduce(function (a, b) {
-            content = a + '<tr><td>' +  b.resource + '</td><td>' + b.date 
-            +  '</td><td>' +  b.taskComments + '</td><td>' +  b.twc + '</td><td>' +  b.rh + '</td><td>' +  b.normOK + '</td><td>'
-             + b.normNok + '</td><td>' + b.var + '</td></tr>';
+            content = a + '<tr><td>' + b.resource + '</td><td>' + b.date
+              + '</td><td>' + b.taskComments + '</td><td>' + b.twc + '</td><td>' + b.rh + '</td><td>' + b.normOK + '</td><td>'
+              + b.normNok + '</td><td>' + b.var + '</td></tr>';
             return content
           }, '')
           const metadata = {
@@ -56,14 +66,14 @@ module.exports = {
           };
           emailHandler(metadata).catch(console.error);
         }
-        const response = {message: 'Notifications have been successfully sent!', success: true}
-        return  response  
+        const response = { message: 'Notifications have been successfully sent!', success: true }
+        return response
       }
-               
+
       catch (error) {
         console.log(error)
-        const response = {message: error, success: false}
-        return  response
+        const response = { message: error, success: false }
+        return response
       }
     }
   }

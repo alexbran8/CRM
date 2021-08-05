@@ -41,10 +41,11 @@ type tacdb {
    }
 
 extend  type Query  {
-    getAll(first: Int): [tacdb]
+    getAll(first: Int week:String date:String no_itv: String status: String site: String responsible_entity: String): [tacdb]
 } 
 
 extend type Mutation {
   sendNotifications (data: [Norms]):Response!
 }
+
 `;
