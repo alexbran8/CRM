@@ -1,4 +1,4 @@
-import { AUTH_SIGN_UP, AUTH_SIGN_IN, AUTH_SIGN_OUT, AUTH_ERROR } from "./types";
+import { UPDATE_PROFILE, AUTH_SIGN_IN, AUTH_SIGN_OUT, AUTH_ERROR } from "./types";
 
 const DEFAULT_STATE = {
   isAuthenticated: false,
@@ -11,13 +11,13 @@ const DEFAULT_STATE = {
 
 export default (state = DEFAULT_STATE, action) => {
   switch (action.type) {
-    case AUTH_SIGN_UP:
+    case UPDATE_PROFILE:
       return {
         ...state,
         // access_token: action.payload,
-        // name: action.payload_name,
-        // email: action.payload_email,
-        role: action.payload_role,
+        name: action.payload.name,
+        email: action.payload.email,
+        role: action.payload.role,
         // nokiaid: action.payload_nokiaid,
         isAuthenticated: true,
         errorMessage: "",
