@@ -37,7 +37,11 @@ module.exports = {
       });
       return result;
 
-    }
+    },
+      async getDistinctWeeks(root, args, context) {
+        let result = await db.Tacdb.aggregate({attributes: ['week'], distinct: true})
+        return result
+      }
   },
   Mutation: {
     async sendNotifications(root, data, context) {

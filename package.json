@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@types/react-transition-group": "^1.1.7"
+  }
+}

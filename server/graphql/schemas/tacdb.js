@@ -18,6 +18,10 @@ type tacdb {
     TT_creator_short: String
     site: String
   }
+  type getDistinct {
+    week: String
+  }
+
   type Response {
     success: String!
     message: String!
@@ -42,6 +46,7 @@ type tacdb {
 
 extend  type Query  {
     getAll(first: Int week:String date:String no_itv: String status: String site: String responsible_entity: String): [tacdb]
+    getDistinctWeeks:[getDistinct]
 } 
 
 extend type Mutation {

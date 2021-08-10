@@ -8,8 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import "./Tacdb.scss"
 
 const GET_ALL = gql`
-  query ($date: String, $responsible_entity:String, $site: String, $no_itv: String, $status: String) { 
-    getAll(first:50, date:$date, responsible_entity:$responsible_entity, site:$site, no_itv:$no_itv, status:$status)  {
+  query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_itv: String, $status: String) { 
+    getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_itv:$no_itv, status:$status)  {
         id
         week
         date
@@ -29,6 +29,14 @@ const GET_ALL = gql`
   }
 `;
 
+const GET_DISTINCT = gql`
+query {
+    getDistinctWeeks {
+        week
+    }
+}
+`;
+
 const useStyles = makeStyles((theme) => ({
     container: {
       display: 'flex',
@@ -46,17 +54,23 @@ const useStyles = makeStyles((theme) => ({
 const Tac = () => {
     const classes = useStyles();
     const [weekList, setuWeeksList] = useState([]);
+    const [itvList, setuitvList] = useState([]);
     const [status, setStatus] = useState();
     const [itv, setItv] = useState();
     const [site, setSite] = useState();
+    const [date, setDate] = useState();
     const [responsible, setResponsible] = useState();
     const [week, setWeek] = useState();
-    const { data, loading, error } = useQuery(GET_ALL, {
-        variables: { status: 'Problème résolu' }, onCompleted: () => {
-            console.log(data.getAll)
-            const weeks = data && data.getAll && data.getAll.map(x => x.week);
-            setuWeeksList([...new Set(weeks)]);
+    const { data, loading, error, refetch } = useQuery(GET_ALL, {
+        variables: { status: status, week: week, date: date }, onCompleted: () => {
 
+
+        }
+    });
+
+    const { data:data2, loading:loading2, error:error2 } = useQuery(GET_DISTINCT, {
+        onCompleted: () => {
+            setuWeeksList(data2.getDistinctWeeks);
         }
     });
 
@@ -64,15 +78,17 @@ const Tac = () => {
         console.log(event.target, values.status)
     }
 
+    // const onSaveInformation = (id, name) => updateUser({ variables: { id, name })
+
     return (<div>
         <div className="filterContainer">
             <>
                 <Autocomplete
                     id="combo-box-demo"
                     options={weekList}
-                    getOptionLabel={(option) => option}
+                    getOptionLabel={(option) => option.week}
                     style={{ width: 300 }}
-                    onChange={(e,v) => setWeek(v)}
+                    onChange={(e,v) => {setWeek(v);refetch()}}
                     className={classes.textField}
                     renderInput={(params) => <TextField {...params} label="select week" variant="outlined" />}
                 />
@@ -80,7 +96,7 @@ const Tac = () => {
             <>
                 <Autocomplete
                     id="combo-box-demo"
-                    options={weekList}
+                    options={itvList}
                     getOptionLabel={(option) => option}
                     style={{ width: 300 }}
                     className={classes.textField}
@@ -92,9 +108,10 @@ const Tac = () => {
             <TextField
                 id="date"
                 type="date"
-                defaultValue="2017-05-24"
+                defaultValue="2021-05-24"
                 variant="outlined"
                 className={classes.textField}
+                onChange={(e,v) => {setDate(e.target.value);console.log(e.target.value);refetch()}}
                 InputLabelProps={{
                     shrink: true,
                 }}
@@ -106,7 +123,7 @@ const Tac = () => {
                     getOptionLabel={(option) => option.status}
                     style={{ width: 300 }}
                     className={classes.textField}
-                    onChange={(e,v) => setStatus(v.status)}
+                    onChange={(e,v) => {setStatus(v.status);refetch()}}
                     renderInput={(params) => <TextField {...params}  label="select status" variant="outlined" />}
                 />
             </>
@@ -128,7 +145,7 @@ const Tac = () => {
                     getOptionLabel={(option) => option}
                     style={{ width: 300 }}
                     className={classes.textField}
-                    onChange={(e,v) => setResponsible(v.responsible_entity)}
+                    onChange={(e,v) => {setResponsible(v.responsible_entity); refetch()}}
                     renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
                 />
             </>
