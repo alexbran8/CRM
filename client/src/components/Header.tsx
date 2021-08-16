@@ -226,11 +226,8 @@ const  _handleNotAuthenticated = () => {
  };
    return (
     <div className={classes.root}>
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar>
-        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-          <MenuIcon />
-        </IconButton>
         <Typography variant="h6" className={classes.title}>
         <Link className="navbar-brand text-white" to={config.baseLOCATION + "/"}>
           <b>NOKIA</b> {config.AppName} {user.auth.type === 'student' ? <div className="header-title"> {t("navbar.students")} </div> : null}
