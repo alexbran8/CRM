@@ -104,13 +104,20 @@ setItems(data)
     });
 
     const deleteItems = () => {
+
+      
         if (checked.length > 0) {
+            if (
+                window.confirm(`Are you sure you want to delete ${selected} items?
+              `)
+              ){
             deleteItemsMutation({
                 variables: {
                     data: checked
                 }
             }
             )
+        }
         }
         else { alert("please select some tasks...") }
     }
