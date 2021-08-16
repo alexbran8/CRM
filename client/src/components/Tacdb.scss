@@ -1,5 +1,5 @@
 .dash-table {
-    margin-top: 100px;
+    margin-top: 20px;
     text-align: center;
 }
 
@@ -53,4 +53,15 @@
 
 .filter-item {
   width: 200px;
+}
+
+.buttonContainer {
+  margin-top: 70px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // top: 100px;
+  // height: 200px;
+  // width: 100%
 }

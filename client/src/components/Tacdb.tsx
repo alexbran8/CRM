@@ -51,15 +51,15 @@ query {
 
 const useStyles = makeStyles((theme) => ({
     container: {
-      display: 'flex',
-      flexWrap: 'wrap',
+        display: 'flex',
+        flexWrap: 'wrap',
     },
     textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: 200,
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
     },
-  }));
+}));
 
 
 
@@ -80,7 +80,7 @@ const Tac = () => {
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
         variables: { status: status, week: week, date: date }, onCompleted: (
         ) => {
-setItems(data)
+            setItems(data)
 
         }
     });
@@ -94,30 +94,31 @@ setItems(data)
                     return i.id === parseInt(x.id);
                 }))
                 items.getAll.splice(items.getAll.findIndex(function (i) {
-                return parseInt(i.id) === parseInt(x.id);
-            }), 1);})
+                    return parseInt(i.id) === parseInt(x.id);
+                }), 1);
+            })
             setChecked([])
             console.log(items.getAll.length)
-            
+
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
     });
 
     const deleteItems = () => {
 
-      
+
         if (checked.length > 0) {
             if (
                 window.confirm(`Are you sure you want to delete ${selected} items?
               `)
-              ){
-            deleteItemsMutation({
-                variables: {
-                    data: checked
+            ) {
+                deleteItemsMutation({
+                    variables: {
+                        data: checked
+                    }
                 }
+                )
             }
-            )
-        }
         }
         else { alert("please select some tasks...") }
     }
@@ -126,7 +127,7 @@ setItems(data)
 
     const newDate = new Date()
 
-    const { data:data2, loading:loading2, error:error2 } = useQuery(GET_DISTINCT, {
+    const { data: data2, loading: loading2, error: error2 } = useQuery(GET_DISTINCT, {
         onCompleted: () => {
             setuWeeksList(data2.getDistinctWeeks);
         }
@@ -137,39 +138,37 @@ setItems(data)
     }
 
     const createArr = (id, item) => {
-            if (checked.find((y) => y.id == item.id)) {
-                console.log(id, item.id)
-                // checked.find((y) => checked.splice(y, 1))
-                checked.splice(checked.findIndex(function (i) {
-                    return i.id === parseInt(id);
-                }), 1);
-                setSelected(checked.length)
-                console.log(checked)
-            } else {
+        if (checked.find((y) => y.id == item.id)) {
+            console.log(id, item.id)
+            // checked.find((y) => checked.splice(y, 1))
+            checked.splice(checked.findIndex(function (i) {
+                return i.id === parseInt(id);
+            }), 1);
+            setSelected(checked.length)
+            console.log(checked)
+        } else {
 
-                checked.push({
-                    id:  parseInt(id)
-                })
-                setSelected(checked.length)
-                console.log(checked)
-            }
+            checked.push({
+                id: parseInt(id)
+            })
+            setSelected(checked.length)
+            console.log(checked)
         }
+    }
 
 
     // const onSaveInformation = (id, name) => updateUser({ variables: { id, name })
 
     return (<div>
         <div className="filterContainer">
-            {user.auth.role === 'L3' ? 
-        <Button variant="contained" color="secondary" onClick={deleteItems}>Delete {selected}</Button>
-        : null }
+
             <>
                 <Autocomplete
                     id="combo-box-demo"
                     options={weekList}
                     getOptionLabel={(option) => option.week}
                     style={{ width: 300 }}
-                    onChange={(e,v) => {setWeek(v);refetch()}}
+                    onChange={(e, v) => { setWeek(v); refetch() }}
                     className={classes.textField}
                     renderInput={(params) => <TextField {...params} label="select week" variant="outlined" />}
                 />
@@ -181,64 +180,67 @@ setItems(data)
                     getOptionLabel={(option) => option}
                     style={{ width: 300 }}
                     className={classes.textField}
-                    onChange={(e,v) => setItv(v)}
+                    onChange={(e, v) => setItv(v)}
                     renderInput={(params) => <TextField {...params} label="select ITV" variant="outlined" />}
                 />
             </>
             <>
-            <TextField
-                id="date"
-                type="date"
-                defaultValue={newDate.getDate()}
-                variant="outlined"
-                className={classes.textField}
-                onChange={(e,v) => {setDate(e.target.value);console.log(e.target.value);refetch()}}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-            />
-            <>
-                <Autocomplete
-                    id="combo-box-demo"
-                    options={[{status: 'null', labeL:""},{status: 'Problème résolu'}, {status:'Problème résolu avec réserve'},{status:'Problème pas identifié'}, {status:'Problème identifié'} ]}
-                    getOptionLabel={(option) => option.status}
-                    style={{ width: 300 }}
+                <TextField
+                    id="date"
+                    type="date"
+                    defaultValue={newDate.getDate()}
+                    variant="outlined"
                     className={classes.textField}
-                    onChange={(e,v) => {setStatus(v.status);refetch()}}
-                    renderInput={(params) => <TextField {...params}  label="select status" variant="outlined" />}
+                    onChange={(e, v) => { setDate(e.target.value); console.log(e.target.value); refetch() }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
                 />
+                <>
+                    <Autocomplete
+                        id="combo-box-demo"
+                        options={[{ status: 'null', labeL: "" }, { status: 'Problème résolu' }, { status: 'Problème résolu avec réserve' }, { status: 'Problème pas identifié' }, { status: 'Problème identifié' }]}
+                        getOptionLabel={(option) => option.status}
+                        style={{ width: 300 }}
+                        className={classes.textField}
+                        onChange={(e, v) => { setStatus(v.status); refetch() }}
+                        renderInput={(params) => <TextField {...params} label="select status" variant="outlined" />}
+                    />
+                </>
+                <>
+                    <Autocomplete
+                        id="combo-box-demo"
+                        options={weekList}
+                        getOptionLabel={(option) => option}
+                        style={{ width: 300 }}
+                        className={classes.textField}
+                        onChange={(e, v) => setStite(v)}
+                        renderInput={(params) => <TextField {...params} label="select site" variant="outlined" />}
+                    />
+                </>
+                <>
+                    <Autocomplete
+                        id="combo-box-demo"
+                        options={weekList}
+                        getOptionLabel={(option) => option}
+                        style={{ width: 300 }}
+                        className={classes.textField}
+                        onChange={(e, v) => { setResponsible(v.responsible_entity); refetch() }}
+                        renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
+                    />
+                </>
             </>
-            <>
-                <Autocomplete
-                    id="combo-box-demo"
-                    options={weekList}
-                    getOptionLabel={(option) => option}
-                    style={{ width: 300 }}
-                    className={classes.textField}
-                    onChange={(e,v) => setStite(v)}
-                    renderInput={(params) => <TextField {...params} label="select site" variant="outlined" />}
-                />
-            </>
-            <>
-                <Autocomplete
-                    id="combo-box-demo"
-                    options={weekList}
-                    getOptionLabel={(option) => option}
-                    style={{ width: 300 }}
-                    className={classes.textField}
-                    onChange={(e,v) => {setResponsible(v.responsible_entity); refetch()}}
-                    renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
-                />
-            </>
-            </>
-            
+
             {/* </form> */}
         </div>
-        <div className="buttons">
-            <p>
-        
-        </p>
-        </div>
+        {user.auth.role === 'L3' ?
+            <div className='buttonContainer'>
+                <Button variant="contained" color="secondary" onClick={deleteItems}>Delete {selected}</Button>
+                <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>Upload</Button>
+                <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>Notify</Button>
+                <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>AddItem</Button>
+            </div>
+            : null}
         <Table striped bordered hover responsive="xl" className="dash-table">
             <thead >
                 <tr>
@@ -293,8 +295,8 @@ setItems(data)
                     return <tr key={item.id}>
                         <td> <input
                             type="checkbox"
-                        checked={checked.find((y) => y.id == item.id) ? true : false}
-                        onChange={(e) => createArr(item.id, item)}
+                            checked={checked.find((y) => y.id == item.id) ? true : false}
+                            onChange={(e) => createArr(item.id, item)}
                         /></td>
                         <td>{item.week}</td>
                         <td>{item.date}</td>
@@ -308,7 +310,7 @@ setItems(data)
                         <td>{item.TT_creator_short}</td>
                         <td>{item.site}</td>
                         <td>{item.region}</td>
-                        <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25): null}</span></td>
+                        <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25) : null}</span></td>
 
                     </tr>
                 })}
