@@ -1,6 +1,6 @@
 import React from "react";
 import Homepage from "./components/Homepage.jsx";
-import Header from "./components/Header.jsx";
+import Header from "./components/Header";
 import LoginError from "./components/LoginError";
 import Tac from "./components/Tacdb";
 import { HashRouter, Route } from "react-router-dom";
