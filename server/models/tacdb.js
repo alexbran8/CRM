@@ -50,7 +50,6 @@ module.exports = (sequelize, type) => {
       task: { type: type.STRING },
       site_constructor: { type: type.STRING, field:'constructor' },
       OMC_engineer: { type: type.STRING },
-      comment_tac: { type: type.STRING },
       insert_entity: { type: type.STRING },
       insert_date: { type: type.STRING },
       responsible_entity : {type: type.STRING},      
