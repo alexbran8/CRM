@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from "react-redux";
 import { Table, Container, Row, Col, Checkbox, CardGroup, FormGroup } from 'react-bootstrap'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -63,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Tac = () => {
+    const user = useSelector((state) => ({ auth: state.auth }));
     const classes = useStyles();
     const [checked, setChecked] = useState([])
     const [selected, setSelected] = useState(0)
@@ -116,9 +118,10 @@ const Tac = () => {
 
     const createArr = (id, item) => {
             if (checked.find((y) => y.id == item.id)) {
+                console.log(id, item.id)
                 // checked.find((y) => checked.splice(y, 1))
                 checked.splice(checked.findIndex(function (i) {
-                    return i.id === id;
+                    return i.id === parseInt(id);
                 }), 1);
                 setSelected(checked.length)
                 console.log(checked)
@@ -137,7 +140,9 @@ const Tac = () => {
 
     return (<div>
         <div className="filterContainer">
-        <Button variant="contained" color="secondary" onClick={deleteItems}>Delete</Button>
+            {user.auth.role === 'L3' ? 
+        <Button variant="contained" color="secondary" onClick={deleteItems}>Delete {selected}</Button>
+        : null }
             <>
                 <Autocomplete
                     id="combo-box-demo"
@@ -175,7 +180,7 @@ const Tac = () => {
             <>
                 <Autocomplete
                     id="combo-box-demo"
-                    options={[{status: 'Problème résolu'}, {status:'Problème résolu avec réserve'},{status:'Problème pas identifié'}, {status:'Problème identifié'} ]}
+                    options={[{status: 'null', labeL:""},{status: 'Problème résolu'}, {status:'Problème résolu avec réserve'},{status:'Problème pas identifié'}, {status:'Problème identifié'} ]}
                     getOptionLabel={(option) => option.status}
                     style={{ width: 300 }}
                     className={classes.textField}
@@ -283,7 +288,7 @@ const Tac = () => {
                         <td>{item.TT_creator_short}</td>
                         <td>{item.site}</td>
                         <td>{item.region}</td>
-                        <td><span title={item.comment_tac}>{item.comment_tac.substring(0, 25)}</span></td>
+                        <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25): null}</span></td>
 
                     </tr>
                 })}
