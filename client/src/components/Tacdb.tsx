@@ -67,6 +67,7 @@ const Tac = () => {
     const user = useSelector((state) => ({ auth: state.auth }));
     const classes = useStyles();
     const [checked, setChecked] = useState([])
+    const [items, setItems] = useState([])
     const [selected, setSelected] = useState(0)
     const [weekList, setuWeeksList] = useState([]);
     const [itvList, setuitvList] = useState([]);
@@ -77,15 +78,27 @@ const Tac = () => {
     const [responsible, setResponsible] = useState();
     const [week, setWeek] = useState();
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
-        variables: { status: status, week: week, date: date }, onCompleted: () => {
-
+        variables: { status: status, week: week, date: date }, onCompleted: (
+        ) => {
+setItems(data)
 
         }
     });
 
     const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
-        onCompleted: (data) => {
-            alert(data.deleteItems.message)
+        onCompleted: (dataRes) => {
+            alert(dataRes.deleteItems.message);
+            console.log(items.getAll.length)
+            checked.forEach(x => {
+                console.log(items.getAll.findIndex(function (i) {
+                    return i.id === parseInt(x.id);
+                }))
+                items.getAll.splice(items.getAll.findIndex(function (i) {
+                return parseInt(i.id) === parseInt(x.id);
+            }), 1);})
+            setChecked([])
+            console.log(items.getAll.length)
+            
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
     });
@@ -269,7 +282,7 @@ const Tac = () => {
                 </tr>
             </thead>
             <tbody>
-                {data && data.getAll.map(item => {
+                {items && items.getAll && items.getAll.map(item => {
                     return <tr key={item.id}>
                         <td> <input
                             type="checkbox"
