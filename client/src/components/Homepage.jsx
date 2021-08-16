@@ -1,4 +1,4 @@
-import Header from "./Header.jsx";
+// import Header from "./Header.jsx";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import {config} from "../config"
@@ -27,6 +27,7 @@ export default class HomePage extends Component {
   render() {
     const { authenticated, user } = this.state;
     return (
+      
       <div className="homeContainer">
         <div>
           {/* add user to redux */}
