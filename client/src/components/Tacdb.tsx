@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Table, Container, Row, Col, Checkbox, CardGroup, FormGroup } from 'react-bootstrap'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 import "./Tacdb.scss"
 
@@ -27,6 +28,16 @@ const GET_ALL = gql`
         
     }
   }
+`;
+
+const DELETE_ITEMS = gql`
+mutation ($data: [idArray]) {
+    deleteItems (data:$data){
+        success
+        message
+      }
+    }
+
 `;
 
 const GET_DISTINCT = gql`
@@ -53,6 +64,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Tac = () => {
     const classes = useStyles();
+    const [checked, setChecked] = useState([])
+    const [selected, setSelected] = useState(0)
     const [weekList, setuWeeksList] = useState([]);
     const [itvList, setuitvList] = useState([]);
     const [status, setStatus] = useState();
@@ -68,6 +81,29 @@ const Tac = () => {
         }
     });
 
+    const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
+        onCompleted: (data) => {
+            alert(data.deleteItems.message)
+        },
+        onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
+    });
+
+    const deleteItems = () => {
+        if (checked.length > 0) {
+            deleteItemsMutation({
+                variables: {
+                    data: checked
+                }
+            }
+            )
+        }
+        else { alert("please select some tasks...") }
+    }
+
+
+
+    const newDate = new Date()
+
     const { data:data2, loading:loading2, error:error2 } = useQuery(GET_DISTINCT, {
         onCompleted: () => {
             setuWeeksList(data2.getDistinctWeeks);
@@ -78,10 +114,30 @@ const Tac = () => {
         console.log(event.target, values.status)
     }
 
+    const createArr = (id, item) => {
+            if (checked.find((y) => y.id == item.id)) {
+                // checked.find((y) => checked.splice(y, 1))
+                checked.splice(checked.findIndex(function (i) {
+                    return i.id === id;
+                }), 1);
+                setSelected(checked.length)
+                console.log(checked)
+            } else {
+
+                checked.push({
+                    id:  parseInt(id)
+                })
+                setSelected(checked.length)
+                console.log(checked)
+            }
+        }
+
+
     // const onSaveInformation = (id, name) => updateUser({ variables: { id, name })
 
     return (<div>
         <div className="filterContainer">
+        <Button variant="contained" color="secondary" onClick={deleteItems}>Delete</Button>
             <>
                 <Autocomplete
                     id="combo-box-demo"
@@ -108,7 +164,7 @@ const Tac = () => {
             <TextField
                 id="date"
                 type="date"
-                defaultValue="2021-05-24"
+                defaultValue={newDate.getDate()}
                 variant="outlined"
                 className={classes.textField}
                 onChange={(e,v) => {setDate(e.target.value);console.log(e.target.value);refetch()}}
@@ -149,9 +205,14 @@ const Tac = () => {
                     renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
                 />
             </>
-
             </>
+            
             {/* </form> */}
+        </div>
+        <div className="buttons">
+            <p>
+        
+        </p>
         </div>
         <Table striped bordered hover responsive="xl" className="dash-table">
             <thead >
@@ -207,8 +268,8 @@ const Tac = () => {
                     return <tr key={item.id}>
                         <td> <input
                             type="checkbox"
-                        // checked={checked.find((y) => y.uid == item.uid) ? true : false}
-                        // onChange={(e) => createArr(item.uid, item)}
+                        checked={checked.find((y) => y.id == item.id) ? true : false}
+                        onChange={(e) => createArr(item.id, item)}
                         /></td>
                         <td>{item.week}</td>
                         <td>{item.date}</td>
