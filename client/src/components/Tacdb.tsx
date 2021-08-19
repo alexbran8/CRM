@@ -6,6 +6,7 @@ import { Table, Container, Row, Col, Checkbox, CardGroup, FormGroup } from 'reac
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import FileReader from "./FileReader";
 
 import "./Tacdb.scss"
 
@@ -77,6 +78,7 @@ const Tac = () => {
     const [date, setDate] = useState();
     const [responsible, setResponsible] = useState();
     const [week, setWeek] = useState();
+    const [showUploadModal, setShowUploadModal] = useState(false)
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
         variables: { status: status, week: week, date: date }, onCompleted: (
         ) => {
@@ -236,11 +238,15 @@ const Tac = () => {
         {user.auth.role === 'L3' ?
             <div className='buttonContainer'>
                 <Button variant="contained" color="secondary" onClick={deleteItems}>Delete {selected}</Button>
-                <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>Upload</Button>
+                <Button variant="contained" color="primary" onClick={() =>setShowUploadModal(!showUploadModal)}>Upload</Button>
                 <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>Notify</Button>
                 <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>AddItem</Button>
             </div>
             : null}
+            <FileReader 
+            setShowModal={() => setShowUploadModal(!showUploadModal)}
+            showModal = {showUploadModal} />
+
         <Table striped bordered hover responsive="xl" className="dash-table">
             <thead >
                 <tr>
