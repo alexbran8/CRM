@@ -36,28 +36,12 @@ class ExcelReader extends Component {
     this.handleFile = this.handleFile.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.sendData = this.sendData.bind(this);
-    this.appendProjectName = this.appendProjectName.bind(this);
   }
 
-  appendProjectName() {
-    for (var i = 0; i < this.state.data.length; i++) {
-      this.state.data[i].projectName = this.state.file.name.split('.')[0];
-    }
-  }
 
   sendData(res) {
-    var that = this;
-    axios.post(config.baseURL + baseLOCATION + '/upload', {
-      data: res
-    })
-      .then(function (response) {
-        // alert(response.data.message + ' => imported: ' + response.data.imported + '; existing: ' + response.data.existing );
-        console.log(response.data)
-        that.setState({ messageData: response.data })
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
+    return res
+
   }
 
   handleModalShowHide() {
@@ -68,6 +52,7 @@ class ExcelReader extends Component {
     const files = e.target.files;
     if (files && files[0]) this.setState({ file: files[0] });
   };
+
 
   handleFile() {
     /* Boilerplate to set up FileReader */
@@ -90,11 +75,10 @@ class ExcelReader extends Component {
       }
 
       );
-      let filteredData = data.filter(data => data.Etat == 'A réaliser')
       /* Update state */
-      this.setState({ data: filteredData, cols: make_cols(ws['!ref']) }, () => {
-        this.appendProjectName();
-        this.sendData(this.state.data);
+      this.setState({ data: data, cols: make_cols(ws['!ref']) }, () => {
+        // this.sendData(this.state.data);
+        this.props.getData(this.state.data)
         //console.log(JSON.stringify(this.state.data, null, 2));
       });
 
@@ -108,41 +92,28 @@ class ExcelReader extends Component {
   }
 
   render() {
-    return (
-      <Container fluid>
-        <div className="upload-container">
-          <div >{this.state.messageData.message ? <div className="alert alert-success" role="alert">{this.state.messageData.message}</div> : null}</div>
-          <div> {this.state.messageData.imported >= 0 ? <div className="alert alert-info" role="alert">imported items: {this.state.messageData.imported}</div> : null} </div>
-          <div> {this.state.messageData.existing >= 0 ? <div className="alert alert-warning" role="alert">existing items: {this.state.messageData.existing}</div> : null} </div>
-        </div>
-        <Button variant="primary"
-        //  className={styles.button} 
-         onClick={() => this.handleModalShowHide()}>
-          Upload
-              </Button>
-        <Modal show={this.state.showHide} className="upload-modal"> 
-          <Modal.Header closeButton onClick={() => this.handleModalShowHide()}>
-            <Modal.Title>Upload Page</Modal.Title>
-          </Modal.Header>
+    return (<div>
+      <Modal show={this.props.showModal} className="upload-modal">
+        <Modal.Header >
+          <Modal.Title>Upload Page</Modal.Title>
+        </Modal.Header>
 
-          <Modal.Body>
-            <input type="file" className="form-control" id="file" accept={SheetJSFT} onChange={this.handleChange} />
-
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => this.handleModalShowHide()}>
-              Close
-                </Button>
-            <Button variant="primary"
-              onClick={() => { this.handleFile(); this.handleModalShowHide(); }}
-            >
-              Confirm
-                </Button>
-          </Modal.Footer>
-        </Modal>
-      </Container>
-    )
+        <Modal.Body>
+          <input type="file" className="form-control" id="file" accept={SheetJSFT} onChange={this.handleChange} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => this.props.setShowModal()}>
+            Close
+          </Button>
+          <Button variant="primary"
+            onClick={() => { this.handleFile(); this.props.setShowModal(); }}
+          >
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal></div>)
   }
 }
+
 
 export default ExcelReader;

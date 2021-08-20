@@ -6,9 +6,13 @@ import { Table, Container, Row, Col, Checkbox, CardGroup, FormGroup } from 'reac
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import axios from 'axios'
 import FileReader from "./FileReader";
 
+import {config} from "../config"
+
 import "./Tacdb.scss"
+import ExcelReader from "./ExcelReader";
 
 const GET_ALL = gql`
   query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_itv: String, $status: String) { 
@@ -17,8 +21,8 @@ const GET_ALL = gql`
         week
         date
         NORM
-        responsible_entity 
-        no_incident 
+        responsible_entity
+        no_incident
         no_itv
         status
         site_constructor
@@ -87,6 +91,7 @@ const Tac = () => {
         }
     });
 
+    
     const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
         onCompleted: (dataRes) => {
             alert(dataRes.deleteItems.message);
@@ -128,6 +133,22 @@ const Tac = () => {
 
 
     const newDate = new Date()
+
+    const sendData = (data) => {
+        var that = this;
+        axios.post(config.baseURL + config.baseLOCATION + '/dailyTasks', {
+          data: data
+        })
+          .then(function (response) {
+            // alert(response.data.message + ' => imported: ' + response.data.imported + '; existing: ' + response.data.existing );
+            console.log(response.data)
+            that.setState({ messageData: response.data })
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    
+    }
 
     const { data: data2, loading: loading2, error: error2 } = useQuery(GET_DISTINCT, {
         onCompleted: () => {
@@ -243,8 +264,9 @@ const Tac = () => {
                 <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>AddItem</Button>
             </div>
             : null}
-            <FileReader 
+            <ExcelReader 
             setShowModal={() => setShowUploadModal(!showUploadModal)}
+            getData={sendData}
             showModal = {showUploadModal} />
 
         <Table striped bordered hover responsive="xl" className="dash-table">

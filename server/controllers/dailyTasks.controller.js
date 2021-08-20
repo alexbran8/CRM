@@ -1,60 +1,56 @@
-const { db } = require("../config/configProvider")();
-const sequelize = require("sequelize");
-const { DataTypes, Op } = sequelize;
-const Project = require("../models/dailyTasks.model")(sequelize, DataTypes);
-// const Schedule = require("../models/schedule")(sequelize, DataTypes);
-// Create and Save a new Project
+const db = require("../../models");
+
+
 exports.create = async (req, res) => {
   try {
-    console.log(req.body.data[0]["Element Conf"])
+    console.log(req.body.data)
     // Validate request
-    if (req.body.data[0]["Element Conf"]) {
-      console.log("promo upload")
-    }
-    else {
-      res.status(400).send({
-        message: "Content can not be empty!"
-      });
-      return;
-    }
+    // if (req.body.data[0]["Element Conf"]) {
+    //   console.log("promo upload")
+    // }
+    // else {
+    //   res.status(400).send({
+    //     message: "Content can not be empty!"
+    //   });
+    //   return;
+    // }
     let project = [];
     let existingEntries = [];
 
     for (var i = 0; i < req.body.data.length; i++) {
 
       // check if entry allready exists in datbase
-      let check = await db.query(
-        `SELECT id, task, tt FROM "dailyTasks" 
-        WHERE task = '${req.body.data[i]["Nom Activite"]}' and tt = '${req.body.data[i]["Num Instance"]}'
-        `
-      );
+      // let check = await db.query(
+      //   `SELECT id, task, tt FROM "dailyTasks" 
+      //   WHERE task = '${req.body.data[i]["Nom Activite"]}' and tt = '${req.body.data[i]["Num Instance"]}'
+      //   `
+      // );
 
 
       const row = {
-        status: req.body.data[i].Etat,
-        site: req.body.data[i]["Element Conf"],
-        criticite: req.body.data[i].Priorite,
-        phase: req.body.data[i].Retard,
-        tt: req.body.data[i]["Num Instance"],
+        task: req.body.data[i].Task,
+        no_incident: req.body.data[i]["N° Incident"],
+        no_itv:req.body.data[i]["ITV"],
+        
+        week: "",
+        TT_creatorL:req.body.data[i]["Auteur"],
+        auteur: req.body.data[i]["Auteur"],
+        region: req.body.data[i]["Service d'exploitation"],
+        site: req.body.data[i]["Détecté sur"],
         task: req.body.data[i]["Nom Activite"],
-        projectName: req.body.data[i]["Nom Processus"],
-        auteur: req.body.data[i]["Responsable"],
-        itv: req.body.data[i]["Num Instance"],
-        description: req.body.data[i].Zone + req.body.data[i].Region,
-        // start: req.body.data[i]["Date Demarrage"],
-        // end: req.body.data[i]["Date Demarrage"],
+        responsible_entity: req.body.data[i]["Utilisateur"],
         crDate: Date.now(),
       }
-      console.log(check[0].length > 0) 
-      if (check[0].length == 0 ) {
+      
+      // if (check[0].length == 0 ) {
         project.push(row)
-      }
-      else {
-        existingEntries.push(row)
-      }
+    //   }
+    //   else {
+    //     existingEntries.push(row)
+    //   }
     }
 
-    Project.bulkCreate(project)
+    db.Tacdb.bulkCreate(project)
       .then(data => {
         res.status(200).send({
           message: "Import successfull!",
