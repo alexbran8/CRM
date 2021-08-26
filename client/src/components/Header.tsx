@@ -112,7 +112,7 @@ export const Header = () => {
            sessionStorage.setItem('name',responseJson.user.first_name);
            sessionStorage.setItem('token',responseJson.user.token);
            sessionStorage.setItem('roles',responseJson.user.roles);
-          //  getIcon(responseJson.user.token);
+           getIcon(responseJson.user.token);
            dispatch({
                      type: UPDATE_PROFILE,
                      payload: {
@@ -194,6 +194,7 @@ export const Header = () => {
       .then(response => response.blob())
       .then(blob => setPic(URL.createObjectURL(blob)))
       .catch(error => {
+        setPic(null);
         setState({
           // authenticated: false,
           error: "Failed to authenticate user"

@@ -1,4 +1,4 @@
-const db = require("../../models");
+const db = require("../models/index");
 
 
 exports.create = async (req, res) => {
