@@ -17,7 +17,7 @@ docker stop dashboard  && docker rm dashboard
 docker run  -d -p 5005:4000  --name dashboard  dashboard 
 
 # remove unused containers
-sudo docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs sudo docker rm
+docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs docker rm
 
 # remove unused images
-docker images -q |xargs docker rmi
+# docker images -q |xargs docker rmi
