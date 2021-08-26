@@ -230,10 +230,10 @@ const  _handleNotAuthenticated = () => {
     <AppBar position="fixed">
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
-        <Link className="navbar-brand text-white" to={config.baseLOCATION + "/"}>
+        <Link className="navbar-brand text-white" to={"/"}>
           <b>NOKIA</b> {config.AppName} {user.auth.type === 'student' ? <div className="header-title"> {t("navbar.students")} </div> : null}
           </Link>
-          <Link className="navbar-brand text-white" to={config.baseLOCATION + "/tac"}>TAC</Link>
+          <Link className="navbar-brand text-white" to={"/tac"}>TAC</Link>
         </Typography>
         {(state && state.authenticated) ? (
           <div>
