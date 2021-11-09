@@ -9,7 +9,9 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios'
 import FileReader from "./FileReader";
 
-import {config} from "../config"
+import SimpleModal from "../components/common/Modal"
+
+import { config } from "../config"
 
 import "./Tacdb.scss"
 import ExcelReader from "./ExcelReader";
@@ -31,10 +33,23 @@ const GET_ALL = gql`
         site
         region
         comment_tac
-        
+        task
+        incident_type
     }
   }
 `;
+
+const DELETE_ITEM = gql`
+mutation ($id: Int) {
+    deleteItem (id:$id){
+        success
+        message
+        id
+      }
+    }
+
+`;
+
 
 const DELETE_ITEMS = gql`
 mutation ($data: [idArray]) {
@@ -43,8 +58,28 @@ mutation ($data: [idArray]) {
         message
       }
     }
+`;
+
+const ADD_ITEM = gql`
+mutation ($data: Project) {
+    addItem (data:$data){
+        success
+        message
+      }
+    }
 
 `;
+
+
+const EDIT_ITEM = gql`
+mutation ($data: Project) {
+    editItem (data:$data){
+        success
+        message
+      }
+    }
+`;
+
 
 const GET_DISTINCT = gql`
 query {
@@ -64,6 +99,11 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         width: 200,
     },
+        palette: {
+        //   primary: blue,
+          secondary: "#ff7961",
+        },
+      
 }));
 
 
@@ -77,11 +117,15 @@ const Tac = () => {
     const [weekList, setuWeeksList] = useState([]);
     const [itvList, setuitvList] = useState([]);
     const [status, setStatus] = useState();
+    const [showModal, setShowModal] = React.useState<boolean>(false);
+    const [operation, setOperation] = useState<string>();
+    const [selectedItem, setSelectedItem] = useState();
     const [itv, setItv] = useState();
     const [site, setSite] = useState();
     const [date, setDate] = useState();
     const [responsible, setResponsible] = useState();
     const [week, setWeek] = useState();
+    const [item, setItem] = useState([]);
     const [showUploadModal, setShowUploadModal] = useState(false)
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
         variables: { status: status, week: week, date: date }, onCompleted: (
@@ -91,7 +135,84 @@ const Tac = () => {
         }
     });
 
+    const [addItemMutation] = useMutation(ADD_ITEM, {
+        onCompleted: (dataRes) => {
+          // update state
+          const newProjects = [...projects]
+          newProjects.forEach((item) => {
+            item.id = item.id + 1;
+          });
+          setProjects(newProjects => [...newProjects, item]);
+          setShowModal(false)
     
+        },
+        onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
+      });
+    
+      const [deleteItemMutation] = useMutation(DELETE_ITEM, {
+        onCompleted: (dataRes) => {
+          // update state after item is deleted from db
+          let newProjects = projects.filter(function (el) { return el.id != dataRes.deleteItem.id; });
+          setProjects(newProjects)
+        },
+        onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
+      });
+    
+      const [updateItemMutation] = useMutation(EDIT_ITEM, {
+        onCompleted: (dataRes) => {
+          // update state
+          const newProjects = [...projects]
+          let index = newProjects.findIndex((y) => y.id === item.id)
+    
+          newProjects[index] = item
+    
+          setProjects(newProjects)
+          setShowModal(false)
+        },
+        onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
+      });
+
+      const updateItem = (data) => {
+        let inputData = data
+        console.log({inputData})
+        setItem(inputData)
+        updateItemMutation({
+          variables: {
+            data: inputData
+          }
+        }
+        )
+      }
+
+      const addMoreItems = (data, index) => {
+        let inputData = data
+        setItem((item) => ({
+          ...item, ...inputData,
+          id: 0, 
+    
+        }));
+        // save to db
+        addItemMutation({
+          variables: {
+            data: inputData
+          }
+        }
+        )
+      }
+
+
+      const handleInputValues = (value, field, index) => {
+        // console.log({value})
+        // check if values are valid
+        console.log('before', item)
+        // if yes, add values to state
+        setItem((item) => ({
+          ...item,
+          [field]: value,
+          id: index
+        }));
+      }
+
     const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
         onCompleted: (dataRes) => {
             alert(dataRes.deleteItems.message);
@@ -137,17 +258,17 @@ const Tac = () => {
     const sendData = (data) => {
         var that = this;
         axios.post(config.baseURL + config.baseLOCATION + '/dailyTasks', {
-          data: data
+            data: data
         })
-          .then(function (response) {
-            // alert(response.data.message + ' => imported: ' + response.data.imported + '; existing: ' + response.data.existing );
-            console.log(response.data)
-            that.setState({ messageData: response.data })
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-    
+            .then(function (response) {
+                // alert(response.data.message + ' => imported: ' + response.data.imported + '; existing: ' + response.data.existing );
+                console.log(response.data)
+                that.setState({ messageData: response.data })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
     }
 
     const { data: data2, loading: loading2, error: error2 } = useQuery(GET_DISTINCT, {
@@ -178,6 +299,12 @@ const Tac = () => {
             console.log(checked)
         }
     }
+
+    const handleModal = (selectedItem) => {
+        setShowModal(!showModal)
+        setSelectedItem(selectedItem)
+      }
+    
 
 
     // const onSaveInformation = (id, name) => updateUser({ variables: { id, name })
@@ -259,20 +386,21 @@ const Tac = () => {
         {user.auth.role === 'L3' ?
             <div className='buttonContainer'>
                 <Button variant="contained" color="secondary" onClick={deleteItems}>Delete {selected}</Button>
-                <Button variant="contained" color="primary" onClick={() =>setShowUploadModal(!showUploadModal)}>Upload</Button>
+                <Button variant="contained" color="primary" onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
                 <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>Notify</Button>
-                <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>AddItem</Button>
+                <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
             </div>
             : null}
-            <ExcelReader 
+        <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
             getData={sendData}
-            showModal = {showUploadModal} />
+            showModal={showUploadModal} />
 
         <Table striped bordered hover responsive="xl" className="dash-table">
             <thead >
                 <tr>
                     <th>Select</th>
+                    <th></th>
                     <th>
                         WEEK
                     </th>
@@ -314,6 +442,7 @@ const Tac = () => {
                     <th>
                         CR TAC
                     </th>
+                    <th></th>
                     {/* <th>
                     </th> */}
                 </tr>
@@ -325,7 +454,13 @@ const Tac = () => {
                             type="checkbox"
                             checked={checked.find((y) => y.id == item.id) ? true : false}
                             onChange={(e) => createArr(item.id, item)}
-                        /></td>
+                        />
+                        </td>
+                        <td><Button variant="contained" color="primary" 
+                         onClick={(event) => {
+                            setOperation('edit'); setItem(item); handleModal({ title: 'Edit Item', data: item });
+                          }}
+                        >EDIT</Button></td>
                         <td>{item.week}</td>
                         <td>{item.date}</td>
                         <td>{item.NORM}</td>
@@ -339,11 +474,23 @@ const Tac = () => {
                         <td>{item.site}</td>
                         <td>{item.region}</td>
                         <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25) : null}</span></td>
-
+                        <td><Button variant="contained" color="secondary" onClick={() => { alert('delete') }}>Delete</Button></td>
                     </tr>
                 })}
             </tbody>
         </Table>
+        {showModal ? (
+        <SimpleModal
+          //formValidator={formCheck}
+          // setShowModalOpen={showModal}
+          item={selectedItem}
+          handleModal={handleModal}
+          handleClose={handleModal}
+          saveFunction={operation === 'add' ? addMoreItems : updateItem}
+          handleInputValues={handleInputValues}
+          operation={operation}
+        />
+      ) : null}
 
     </div>)
 }

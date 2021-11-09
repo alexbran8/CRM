@@ -17,6 +17,8 @@ type tacdb {
     OMC_engineer: String
     TT_creator_short: String
     site: String
+    task: String
+    incident_type: String
   }
   type getDistinct {
     week: String
