@@ -396,7 +396,7 @@ const Tac = () => {
             getData={sendData}
             showModal={showUploadModal} />
 
-        <Table striped bordered hover responsive="xl" className="dash-table">
+        <Table striped bordered hover  className="dash-table">
             <thead >
                 <tr>
                     <th>Select</th>
