@@ -9,7 +9,7 @@ type tacdb {
     NORM: String
     responsible_entity: String
     no_incident: String
-    no_itv: String
+    no_itv: String  
     status: String
     site_constructor: String
     region: String
@@ -19,6 +19,14 @@ type tacdb {
     site: String
     task: String
     incident_type: String
+    hastagTac: String
+    TT_creator: String
+    technician: String
+    collage: String
+    action: String
+    alarme_active: String
+    alarme_bagot: String
+    operation_location: String
   }
   type getDistinct {
     week: String

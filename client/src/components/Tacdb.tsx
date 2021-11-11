@@ -20,9 +20,13 @@ const GET_ALL = gql`
   query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_itv: String, $status: String) { 
     getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_itv:$no_itv, status:$status)  {
         id
+        action
+        alarme_active
+        alarme_bagot
         week
         date
         NORM
+        operation_location
         responsible_entity
         no_incident
         no_itv
@@ -35,6 +39,10 @@ const GET_ALL = gql`
         comment_tac
         task
         incident_type
+        hastagTac
+        TT_creator
+        technician
+        collage
     }
   }
 `;
@@ -126,7 +134,7 @@ const Tac = () => {
     const [responsible, setResponsible] = useState();
     const [week, setWeek] = useState();
     const [item, setItem] = useState([]);
-    const [showUploadModal, setShowUploadModal] = useState(false)
+    const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
         variables: { status: status, week: week, date: date }, onCompleted: (
         ) => {
@@ -474,7 +482,7 @@ const Tac = () => {
                         <td>{item.site}</td>
                         <td>{item.region}</td>
                         <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25) : null}</span></td>
-                        <td><Button variant="contained" color="secondary" onClick={() => { alert('delete') }}>Delete</Button></td>
+                        <td><Button variant="contained" color="secondary" disabled={true} onClick={() => { alert('delete') }}>Delete</Button></td>
                     </tr>
                 })}
             </tbody>

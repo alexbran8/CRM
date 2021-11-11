@@ -38,16 +38,96 @@ import "./Form.scss"
 
 const actionList = ["ITV terrain", "Action à distance", "Escalader le ticket", "Ticket déjà fermé/cloturé", "Ticket à fermer", "Analyser au N2/N3", "ITV + Action à distance", "TI Gelé"];
 const appelList = ["SSNE", "CLA", "Assigné", "Appel", "LdR", "Pre-check", "Suivi", "Supervision NE", "Taskforce", "Taskforce RdP"]
-const constructorList = ["ERICSSON","HUAWEI","NOKIA","NORTEL","OTHER"]
-const incidentTypeList = ["Vigie","Radio","Transmission","Cœur","Performance QoS"]
+const constructorList = ["ERICSSON", "HUAWEI", "NOKIA", "NORTEL", "OTHER"]
+const incidentTypeList = ["Vigie", "Radio", "Transmission", "Cœur", "Performance QoS"]
+const statusList = ['Problème résolu', 'Problème résolu avec réserve', 'Problème pas identifié']
+const regionList = ["CTA", "MED", "NOE", "SWE", "WST", "IDF"]
+const hashtagTacList = ["Déjà fermé", "Modifié plus", "Modifié", "Kill TT", "Conforme"]
+
+const problemList = ["Alarme externe / Environnement", "Autres", "Licence",
+  "Perte de supervision",
+  "Perte de capacité",
+  "Site entier HS",
+  "Site entier en bagot",
+  "Techno HS",
+  "Techno en bagot",
+  "Cellule(s) HS",
+  "Cellule(s) en bagot",
+  "Plusieurs sites HS",
+  "Plusieurs sites en bagot",
+  "RSSI/RTWP",
+  "PIM",
+  "VSWR",
+  "X Feeder & X Secteur",
+  "TEA",
+  "TDC",
+  "TEA/TDC",
+  "Baisse du trafic",
+  "Dégradation HO",
+  "RET",
+  "RET et TMA",
+  "TMA"]
+
+const mainCauseList = ["Logicielles - Outils / Bases des dates",
+  "Voisinage",
+  "Unité Radio (MRFU, RRU, RUS)",
+  "Triplexeur",
+  "TMA",
+  "TRX",
+  "SFP",
+  "Serrages",
+  "RET",
+  "RET / TMA",
+  "Quadriplexeur",
+  "Huawei Châssis BBU",
+  "ADM/XCA",
+  "Aménagement",
+  "Antenne",
+  "ASC",
+  "Atelier Energie / Disjoncteur",
+  "alarme RET",
+  "Huawei 4G - LMPT",
+  "Huawei 4G - LBBP",
+  "Boitier Hybride",
+  "Bretelles",
+  "Brouilleur externe",
+  "Brouilleur interne",
+  "Câblage",
+  "Conf CEMV2",
+  "Conf Cœur / BSC / RNC",
+  "Huawei 3G / 4G - UBBP",
+  "Ericsson 4G - Baseband",
+  "Huawei 2G - GTMU",
+  "Huawei 3G - WBBP",
+  "Huawei 3G - WMPT",
+  "Huawei 3G / 4G - UMPT",
+  "FHT",
+  "PTN",
+  "Conf Radio",
+  "Conf Trans",
+  "Connecteurs",
+  "Diplexeur",
+  "Ericsson - SIU",
+  "Ericsson 2G - DUG",
+  "Ericsson 3G - DUW",
+  "Ericsson 4G - DUS",
+  "Ericsson 4G - XMU",
+  "Fan Unit (FMU)",
+  "Fibres",
+  "DUS HS",
+  "RRU HS",
+  "connecteur SFP défectueux",
+  "Tilt NOK"
+]
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       '& .MuiTextField-root': {
         margin: theme.spacing(1),
-        width: '25ch',
+        width: '25ch'
       },
+
     },
     primaryColor: {
       color: 'rgb(169,169,169)',
@@ -59,7 +139,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: 'rgb(169,169,169)',
       width: 'auto',
       height: '56px',
-      border: '1px groove black',
+      border: '1px groove yellow',
       display: 'flex',
       alignItems: 'center',
     },
@@ -69,6 +149,15 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       marginRight: '150px',
     },
+    textField: {
+      borderWidth: "1px",
+      borderColor: "yellow"
+    },
+    notchedOutline: {
+      borderWidth: "1px",
+      borderColor: "yellow !important"
+    }
+
   }),
 );
 
@@ -206,7 +295,10 @@ export default function FormPropsTextFields(props: any) {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Grid item xs={12}>
+          <Grid
+            item
+          // xs={12}
+          >
             <Typography className={classes.primaryColor} >
               Main Info
             </Typography>
@@ -214,7 +306,7 @@ export default function FormPropsTextFields(props: any) {
               style={{ marginTop: 20 }}
             />
             <Grid container direction="row" className={classes.mainHeader}>
-              <Grid item xs={6}>
+              <Grid item xs={2}>
                 <Controller
                   control={control}
                   name="task"
@@ -248,7 +340,7 @@ export default function FormPropsTextFields(props: any) {
                       id="date"
                       type="date"
                       label="date"
-                      
+
                       className={classes.textField}
                       onChange={onChange}
                       error={!!error}
@@ -354,748 +446,524 @@ export default function FormPropsTextFields(props: any) {
                   rules={{ required: 'incident type is required' }}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <Controller
                   control={control}
-                  name="task"
-                  defaultValue={props.operation === 'edit' ? props.values.task : null}
+                  name="status"
+                  defaultValue={props.operation === 'edit' ? props.values.status : null}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                       value={value}
                       onChange={(event, item) => {
                         onChange(item);
                       }}
-                      id="task"
-                      options={appelList}
+                      id="status"
+                      options={statusList}
                       renderInput={(params) => (
                         <TextField
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="appel"
+                          label="status"
                         />
                       )}
                     />
                   )}
-                  rules={{ required: 'TT TYPE is required' }}
+                  rules={{ required: 'status required' }}
                 />
-                {/* <Controller
-                control={control}
-                name="action"
-                defaultValue={props.operation === 'edit' ? props.values.type : null}
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                  <Autocomplete
-                    value={value}
-                    onChange={(event, item) => {
-                      onChange(item);
-                    }}
-                    id="action"
-                    options={actionList}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        error={!!error}
-                        helperText={error ? error.message : null}
-                        label="action"
-                      />
-                    )}
-                  />
-                )}
-                rules={{ required: 'Action is required' }}
-              />
+                <Controller
+                  control={control}
+                  name="week"
+                  defaultValue={props.operation === 'edit' ? props.values.week : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="week"
+                      type="text"
+                      label="week"
+                      value={value}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="upalu"
+                  defaultValue={props.operation === 'edit' ? props.values.OMC_engineer : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="upalu"
+                      type="text"
+                      label="upalu"
+                      value={value}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="region"
+                  defaultValue={props.operation === 'edit' ? props.values.region : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="region"
+                      options={regionList}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="region"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'region is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="SI"
 
-              <TextField
-                id="appel"
-                select
-                variant="outlined"
-                // onInput={e => setAppel(e.target.value)}
-                // {...register('appel')}
-                onBlur={(e) => { handleInputValue(e, 'appel') }}
-                onChange={(e) => { handleInputValue(e, 'appel') }}
-                {...(errors["appel"] && { error: true, helperText: errors["appel"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" >
-                      <div className={classes.label}>
-                        <ListIcon />
-                      </div>
-                      <label> Appel</label>
+                  defaultValue={props.operation === 'edit' ? props.values.si : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="si"
+                      type="text"
+                      disabled={true}
+                      label="si"
+                      value={value}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="problem"
+                  defaultValue={props.operation === 'edit' ? props.values.problem : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="problem"
+                      options={problemList}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="problematique"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'problematique is required' }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Controller
+                  control={control}
+                  name="no_incident"
+                  defaultValue={props.operation === 'edit' ? props.values.no_incident : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="no_incident"
+                      type="text"
+                      label="TT GIR"
+                      value={value}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                  rules={{ required: 'TT is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="no_itv"
 
-                    </InputAdornment>
+                  defaultValue={props.operation === 'edit' ? props.values.no_itv : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="no_itv"
+                      type="text"
 
-                  )
-                }}
+                      label="ITV"
+                      value={value}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="operation_location"
+                  defaultValue={props.operation === 'edit' ? props.values.operation_location : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="operation_location"
+                      options={['Oui', 'Non', 'Pas complétement']}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="On sait trate"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'On sait traite is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="norm"
+                  defaultValue={props.operation === 'edit' ? props.values.norm : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="norm"
+                      options={['T0','T1','T2','T3']}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="Norm"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'Norm is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="main_cause"
+                  defaultValue={props.operation === 'edit' ? props.values.main_cause : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="main_cause"
+                      options={mainCauseList}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="Main Cause"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'Main Cause is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="action"
+                  defaultValue={props.operation === 'edit' ? props.values.action : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="action"
+                      options={['OUI', 'NON']}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="Action"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'Action is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="alarm_bagot"
+                  defaultValue={props.operation === 'edit' ? props.values.alarm_bagot : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="alarm_bagot"
+                      options={['OUI', 'NON']}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="Alarm Bagot"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'Alarm bagot is required' }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Controller
+                  control={control}
+                  name="TT_creator_short"
 
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+                  defaultValue={props.operation === 'edit' ? props.values.TT_creator_short : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="TT_creator_short"
+                      type="text"
 
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                // {...register("flag")}
-                onChange={(e) => { handleInputValue(e, 'flag') }}
-                onBlur={(e) => { handleInputValue(e, 'flag') }}
-                {...(errors["flag"] && { error: true, helperText: errors["flag"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label} >
-                        <FlagIcon />
-                      </div>
-                      <label>------</label>
-                    </InputAdornment>
-                  )
-                }}
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                required
-                id="standard-basic"
-                variant="outlined"
-                // {...register("tt")}
+                      label="TT Creator"
+                      value={value}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="technician"
 
-                onBlur={(e) => { handleInputValue(e, 'tt') }}
-                onChange={(e) => { handleInputValue(e, 'tt') }}
-                {...(errors["tt"] && { error: true, helperText: errors["tt"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <label> TT  </label>
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                required
-                id="standard-basic"
-                variant="outlined"
-                // {...register("ttCreator")}
-                onBlur={(e) => { handleInputValue(e, 'ttCreator') }}
-                onChange={(e) => { handleInputValue(e, 'ttCreator') }}
-                {...(errors["ttCreator"] && { error: true, helperText: errors["ttCreator"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
+                  defaultValue={props.operation === 'edit' ? props.values.technician : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="technician"
+                      type="text"
 
-                        <label > TT Creator </label>
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
+                      label="technician"
+                      value={value}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="collage"
+                  defaultValue={props.operation === 'edit' ? props.values.collage : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="collage"
+                      options={['OUI', 'NON']}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="collage"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: '# is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="duration"
 
-
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="filled"
-                onBlur={(e) => { handleInputValue(e, '#') }}
-                onChange={(e) => { handleInputValue(e, '#') }}
-                {...(errors["#"] && { error: true, helperText: errors["#"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <label> # </label>
-                      </div>
-                      <label>  ----- </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-
-              <TextField
-                id="outlined-multiline-static"
-                label="TAC comment here!"
-                multiline
-                rows={14}
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'Chat') }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-
-                        <ChatBubbleOutlineIcon />
-                      </div>
-
-                    </InputAdornment>
-                  )
-                }}
-              />
-
-
-              <TextField
-                id="data"
-                type="date"
-                variant="outlined"
-                onBlur={(e) => { handleInputValue(e, 'data') }}
-                onChange={(e) => { handleInputValue(e, 'data') }}
-                {...(errors["data"] && { error: true, helperText: errors["data"] })}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-
-                        <CalendarTodayIcon />
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                id="data"
-                type="date"
-                variant="outlined"
-                onBlur={(e) => { handleInputValue(e, 'data2') }}
-                onChange={(e) => { handleInputValue(e, 'data') }}
-                {...(errors["data2"] && { error: true, helperText: errors["data2"] })}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" >
-                      <div className={classes.label}>
-                        <CalendarTodayIcon />
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                required
-                id="outlined-required"
-                variant="outlined"
-                onBlur={(e) => { handleInputValue(e, 'itv') }}
-                onChange={(e) => { handleInputValue(e, 'itv') }}
-                {...(errors["itv"] && { error: true, helperText: errors["itv"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <label> ITV </label>
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                required
-                id="outlined-required"
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'technician') }}
-                onBlur={(e) => { handleInputValue(e, 'technician') }}
-                {...(errors["technician"] && { error: true, helperText: errors["technician"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <label>Technician </label>
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                // onBlur={handleInputValue}
-                onChange={(e) => { handleInputValue(e, 'abran') }}
-                onBlur={(e) => { handleInputValue(e, 'abran') }}
-                {...(errors["abran"] && { error: true, helperText: errors["abran"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <PersonIcon />
-                      </div>
-                      <label> abran</label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                required
-                id="outlined-required"
-                placeholder="UPALU"
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'upalu') }}
-                onBlur={(e) => { handleInputValue(e, 'upalu') }}
-                {...(errors["upalu"] && { error: true, helperText: errors["upalu"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <AlternateEmailIcon />
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'onSait') }}
-                onBlur={(e) => { handleInputValue(e, 'onSait') }}
-                {...(errors["onSait"] && { error: true, helperText: errors["onSait"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <label>On sait traiter </label>
-                      </div>
-                      <label>Oui </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'collage') }}
-                onBlur={(e) => { handleInputValue(e, 'collage') }}
-                {...(errors["collage"] && { error: true, helperText: errors["collage"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <span>Collage </span>
-                      </div>
-                      <label> NON </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-
-
-              <TextField
-                required
-                id="outlined-required"
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'target') }}
-                onBlur={(e) => { handleInputValue(e, 'target') }}
-                {...(errors["target"] && { error: true, helperText: errors["target"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <GpsFixedIcon />
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'language') }}
-                onBlur={(e) => { handleInputValue(e, 'language') }}
-                {...(errors["language"] && { error: true, helperText: errors["language"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <LanguageIcon />
-                      </div>
-                      <label> ------ </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'norm') }}
-                onBlur={(e) => { handleInputValue(e, 'norm') }}
-                {...(errors["norm"] && { error: true, helperText: errors["norm"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <span> Norm</span>
-                      </div>
-                      <label> ------- </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                id="time"
-                type="time"
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'time') }}
-                onBlur={(e) => { handleInputValue(e, 'time') }}
-                {...(errors["time"] && { error: true, helperText: errors["time"] })}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{
-                  step: 0, // 5 min
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <AccessTimeIcon />
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-
-
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'ericson') }}
-                onBlur={(e) => { handleInputValue(e, 'ericson') }}
-                {...(errors["ericson"] && { error: true, helperText: errors["ericson"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <PhoneIphoneIcon />
-                      </div>
-                      <label> ERICSSON </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                required
-                id="outlined-required"
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'si') }}
-                onBlur={(e) => { handleInputValue(e, 'si') }}
-                {...(errors["si"] && { error: true, helperText: errors["si"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <span> SI </span>
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'mainCause') }}
-                onBlur={(e) => { handleInputValue(e, 'mainCause') }}
-                {...(errors["mainCause"] && { error: true, helperText: errors["mainCause"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <span> Main Cause </span>
-                      </div>
-                      <label> --------</label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'sousCause') }}
-                onBlur={(e) => { handleInputValue(e, 'sousCause') }}
-                {...(errors["sousCause"] && { error: true, helperText: errors["sousCause"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <span> Sous Cause</span>
-                      </div>
-                      <label> -------- </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-
-
-
-
-
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'ttType') }}
-                onBlur={(e) => { handleInputValue(e, 'ttType') }}
-                {...(errors["ttType"] && { error: true, helperText: errors["ttType"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" >
-                      <div className={classes.label}>
-                        <span >TT Type</span>
-                      </div>
-                      <label> -------</label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'problematique') }}
-                onBlur={(e) => { handleInputValue(e, 'problematique') }}
-                {...(errors["problematique"] && { error: true, helperText: errors["problematique"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" >
-                      <div className={classes.label}>
-                        <span> Problematique </span>
-                      </div>
-                      <label> -------</label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'action') }}
-                onBlur={(e) => { handleInputValue(e, 'action') }}
-                {...(errors["action"] && { error: true, helperText: errors["action"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <span> Action</span>
-                      </div>
-                      <label>-------- </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'corectiveAction') }}
-                onBlur={(e) => { handleInputValue(e, 'corectiveAction') }}
-                {...(errors["corectiveAction"] && { error: true, helperText: errors["corectiveAction"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <span> Corective Action </span>
-                      </div>
-                      <label>------- </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                required
-                id="filled-required"
-                variant="filled"
-                onChange={(e) => { handleInputValue(e, 'processStatus') }}
-                onBlur={(e) => { handleInputValue(e, 'processStatus') }}
-                {...(errors["processStatus"] && { error: true, helperText: errors["processStatus"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <span> Process Status </span>
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-
-              <TextField
-                required
-                id="filled-required"
-                variant="filled"
-                onChange={(e) => { handleInputValue(e, 'inverted') }}
-                onBlur={(e) => { handleInputValue(e, 'inverted') }}
-                {...(errors["inverted"] && { error: true, helperText: errors["inverted"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" >
-                      <div className={classes.label}>
-                        <span > Inverted by </span>
-                      </div>
-                    </InputAdornment>
-                  )
-                }}
-              />
-
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'bagot') }}
-                onBlur={(e) => { handleInputValue(e, 'bagot') }}
-                {...(errors["bagot"] && { error: true, helperText: errors["bagot"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <div className={classes.label}>
-                        <NotificationsIcon />
-                        <span>-Bagot</span>
-                      </div>
-                      <label> Non</label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-
-              <TextField
-                id="standard-select-currency"
-                select
-                variant="outlined"
-                onChange={(e) => { handleInputValue(e, 'active') }}
-                onBlur={(e) => { handleInputValue(e, 'active') }}
-                {...(errors["active"] && { error: true, helperText: errors["active"] })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" >
-                      <div className={classes.label}>
-                        <NotificationsNoneIcon />
-                        <span >-Active</span>
-                      </div>
-                      <label>OUI </label>
-                    </InputAdornment>
-                  )
-                }}
-
-              >
-                {actionList.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField> */}
+                  defaultValue={props.operation === 'edit' ? props.values.duration : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="duration"
+                      type="text"
+                      label="duration"
+                      value={value}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="root_cause"
+                  defaultValue={props.operation === 'edit' ? props.values.root_cause : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="root_cause"
+                      options={["Physique","Logique","Logique & Physique"]}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="Sous Cause"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'Sous Cause is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="corrective_action"
+                  defaultValue={props.operation === 'edit' ? props.values.corrective_action : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="corrective_action"
+                      options={['OUI', 'NON']}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="Corrective Action"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'Corrective Action is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="alarme_active"
+                  defaultValue={props.operation === 'edit' ? props.values.alarme_active : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="alarme_active"
+                      options={['OUI', 'NON']}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="alarme_active"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: 'alarme_active is required' }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Controller
+                  control={control}
+                  name="hastagTac"
+                  defaultValue={props.operation === 'edit' ? props.values.hastagTac : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <Autocomplete
+                      value={value}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      id="hastagTac"
+                      options={hashtagTacList}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="#"
+                        />
+                      )}
+                    />
+                  )}
+                  rules={{ required: '# is required' }}
+                />
+                <Controller
+                  control={control}
+                  name="comment_tac"
+                  defaultValue={props.operation === 'edit' ? props.values.comment_tac : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      // className={classes.notchedOutline}
+                      id="comment_tac"
+                      style={{ borderColor: 'orange' }}
+                      type="text"
+                      label="comment_tac"
+                      value={value}
+                      multiline
+                      rows={10}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      variant="outlined"
+                    //   InputProps={{
+                    //     classes: {
+                    //        root: classes.root
+                    //     }
+                    //  }}
+                    />
+                  )}
+                />
               </Grid>
             </Grid>
 
