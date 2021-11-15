@@ -53,6 +53,23 @@ module.exports = {
       }
   },
   Mutation: {
+    async addItem(root, data, context) {
+      try {
+        let new_id = await db.sequelize.query("Select nextval(pg_get_serial_sequence('tacdashboard_item', 'id')) as new_id;")
+        data.data.id=new_id[0][0].new_id
+        console.log(data.data.id)      
+        db.Tacdb.create(data.data)  
+        const response = {message: 'Notifications have been successfully sent!', success: true}
+        return  response  
+      }
+               
+      catch (error) {
+        console.log(error)
+        const response = {message: error, success: false}
+        return  response
+      }
+    },
+
     async deleteItems(root, data, context) {
       try {
         data.data.forEach((x) =>{

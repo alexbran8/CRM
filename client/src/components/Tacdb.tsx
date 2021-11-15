@@ -80,7 +80,7 @@ mutation ($data: [idArray]) {
 `;
 
 const ADD_ITEM = gql`
-mutation ($data: Project) {
+mutation ($data: itemSave) {
     addItem (data:$data){
         success
         message
@@ -91,7 +91,7 @@ mutation ($data: Project) {
 
 
 const EDIT_ITEM = gql`
-mutation ($data: Project) {
+mutation ($data: itemSave) {
     editItem (data:$data){
         success
         message
@@ -151,7 +151,7 @@ const Tac = () => {
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
         variables: { status: status, week: week, date: date, responsible_entity: responsible }, onCompleted: (
         ) => {
-            setItems(data)
+            setItems(data.getAll)
 
         }
     });
@@ -168,11 +168,11 @@ const Tac = () => {
     const [addItemMutation] = useMutation(ADD_ITEM, {
         onCompleted: (dataRes) => {
           // update state
-          const newProjects = [...projects]
-          newProjects.forEach((item) => {
+          const newItems = [...items]
+          newItems.forEach((item) => {
             item.id = item.id + 1;
           });
-          setProjects(newProjects => [...newProjects, item]);
+          setItems(newItems => [...newItems, item]);
           setShowModal(false)
     
         },
@@ -497,7 +497,7 @@ const Tac = () => {
                 </tr>
             </thead>
             <tbody>
-                {items && items.getAll && items.getAll.map(item => {
+                {items &&  items.map(item => {
                     return <tr key={item.id}>
                         <td> <input
                             type="checkbox"

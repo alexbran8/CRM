@@ -332,15 +332,15 @@ export default function FormPropsTextFields(props: any) {
                 />
                 <Controller
                   control={control}
-                  name="responsible"
-                  defaultValue={props.operation === 'edit' ? props.values.responsible_entity : null}
+                  name="responsible_entity"
+                  defaultValue={props.operation === 'edit' ? props.values.responsible_entity : 'abran'}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                       value={value}
                       onChange={(event, item) => {
                         onChange(item);
                       }}
-                      id="responsible"
+                      id="responsible_entity"
                       options={appelList}
                       renderInput={(params) => (
                         <TextField
@@ -471,11 +471,11 @@ export default function FormPropsTextFields(props: any) {
                 />
                 <Controller
                   control={control}
-                  name="upalu"
+                  name="OMC_engineer"
                   defaultValue={props.operation === 'edit' ? props.values.OMC_engineer : null}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
-                      id="upalu"
+                      id="OMC_engineer"
                       type="text"
                       label="upalu"
                       value={value}
@@ -513,9 +513,9 @@ export default function FormPropsTextFields(props: any) {
                   )}
                   rules={{ required: 'region is required' }}
                 />
-                <Controller
-                  control={control}
-                  name="SI"
+                {/* <Controller
+                  // control={control}
+                  // name="SI"
 
                   defaultValue={props.operation === 'edit' ? props.values.si : null}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -534,7 +534,7 @@ export default function FormPropsTextFields(props: any) {
                       }}
                     />
                   )}
-                />
+                /> */}
                 <Controller
                   control={control}
                   name="problem"
@@ -630,15 +630,15 @@ export default function FormPropsTextFields(props: any) {
                 />
                 <Controller
                   control={control}
-                  name="norm"
-                  defaultValue={props.operation === 'edit' ? props.values.norm : null}
+                  name="NORM"
+                  defaultValue={props.operation === 'edit' ? props.values.NORM : null}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                       value={value}
                       onChange={(event, item) => {
                         onChange(item);
                       }}
-                      id="norm"
+                      id="NORM"
                       options={['T0', 'T1', 'T2', 'T3']}
                       renderInput={(params) => (
                         <TextField
@@ -865,15 +865,15 @@ export default function FormPropsTextFields(props: any) {
                 />
                 <Controller
                   control={control}
-                  name="alarme_active"
-                  defaultValue={props.operation === 'edit' ? props.values.alarme_active : null}
+                  name="alarm_active"
+                  defaultValue={props.operation === 'edit' ? props.values.alarm_active : null}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                       value={value}
                       onChange={(event, item) => {
                         onChange(item);
                       }}
-                      id="alarme_active"
+                      id="alarm_active"
                       options={['OUI', 'NON']}
                       renderInput={(params) => (
                         <TextField
@@ -885,7 +885,7 @@ export default function FormPropsTextFields(props: any) {
                       )}
                     />
                   )}
-                  rules={{ required: 'alarme_active is required' }}
+                  rules={{ required: 'alarm_active is required' }}
                 />
               </Grid>
               <Grid item xs={2}>

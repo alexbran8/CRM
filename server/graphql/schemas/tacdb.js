@@ -41,6 +41,39 @@ type tacdb {
     message: String!
   }
 
+  input itemSave {
+    cr_date: String
+    id: String
+    week: String
+    date: String
+    NORM: String
+    duration: String
+    responsible_entity: String
+    no_incident: String
+    no_itv: String  
+    status: String
+    site_constructor: String
+    region: String
+    comment_tac: String
+    OMC_engineer: String
+    TT_creator_short: String
+    site: String
+    task: String
+    incident_type: String
+    hastagTac: String
+    TT_creator: String
+    technician: String
+    collage: String
+    action: String
+    alarm_active: String
+    alarm_bagot: String
+    operation_location: String
+    corrective_action:String
+    root_cause:String
+    main_cause:String
+    problem:String
+  }
+
   input idArray {
     id: Int!
    }
@@ -53,6 +86,7 @@ extend  type Query  {
 
 extend type Mutation {
   deleteItems (data: [idArray]):Response!
+  addItem(data: itemSave):Response!
 }
 
 `;

@@ -4,9 +4,10 @@ module.exports = (sequelize, type) => {
   const Tacdb = sequelize.define(
     "tacdashboard_item",
     {
-      id: {
+      uid: {
         type: type.INTEGER,
-        primaryKey: true
+        // primaryKey: true
+        field:'id' 
       },
       week: { type: type.STRING },
       date: {
