@@ -3,7 +3,7 @@ const { gql } = require("apollo-server");
 module.exports = gql`
 type tacdb {
     cr_date: String
-    id: String
+    uid: String
     week: String
     date: String
     NORM: String
@@ -24,9 +24,13 @@ type tacdb {
     technician: String
     collage: String
     action: String
-    alarme_active: String
-    alarme_bagot: String
+    alarm_active: String
+    alarm_bagot: String
     operation_location: String
+    problem:String
+    corrective_action: String
+    main_cause:String
+    root_cause:String
   }
   type getDistinct {
     week: String
@@ -43,6 +47,7 @@ type tacdb {
 
   input itemSave {
     cr_date: String
+    uid: String
     id: String
     week: String
     date: String
@@ -87,6 +92,7 @@ extend  type Query  {
 extend type Mutation {
   deleteItems (data: [idArray]):Response!
   addItem(data: itemSave):Response!
+  editItem(data: itemSave):Response!
 }
 
 `;

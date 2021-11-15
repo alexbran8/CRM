@@ -69,6 +69,27 @@ module.exports = {
         return  response
       }
     },
+    async editItem(root, data, context) {
+      try {
+        const { id, title, requirements, type, description,  coordinator } = data.data  
+        const dataToUpdate = data.data
+        let uid = dataToUpdate. uid
+        console.log(uid)
+        db.Tacdb.update(
+            dataToUpdate ,
+          { where: { id: uid  } }
+        );
+        const response = {message: 'Notifications have been successfully sent!', success: true}
+        return  response  
+      }
+               
+      catch (error) {
+        console.log(error)
+        const response = {message: error, success: false}
+        return  response
+      }
+    },
+
 
     async deleteItems(root, data, context) {
       try {

@@ -30,10 +30,8 @@ query {
 const GET_ALL = gql`
   query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_itv: String, $status: String) { 
     getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_itv:$no_itv, status:$status)  {
-        id
+        uid
         action
-        alarme_active
-        alarme_bagot
         week
         date
         NORM
@@ -54,6 +52,13 @@ const GET_ALL = gql`
         TT_creator
         technician
         collage
+        problem
+        main_cause
+        root_cause
+        alarm_active
+        alarm_bagot
+        corrective_action
+        hastagTac
     }
   }
 `;
@@ -191,12 +196,12 @@ const Tac = () => {
       const [updateItemMutation] = useMutation(EDIT_ITEM, {
         onCompleted: (dataRes) => {
           // update state
-          const newProjects = [...projects]
-          let index = newProjects.findIndex((y) => y.id === item.id)
+          const newItems = [...items]
+          let index = newItems.findIndex((y) => y.uid === item.uid)
     
-          newProjects[index] = item
+          newItems[index] = item
     
-          setProjects(newProjects)
+          setItems(newItems)
           setShowModal(false)
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },

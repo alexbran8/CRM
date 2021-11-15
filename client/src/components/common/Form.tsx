@@ -283,6 +283,28 @@ export default function FormPropsTextFields(props: any) {
             />
             <Grid container direction="row" className={classes.mainHeader}>
               <Grid item xs={2}>
+              <Controller
+                  name="uid"
+                  defaultValue={props.operation === 'edit' ? props.values.uid : null}
+                  control={control}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      value={value}
+                      id="uid"
+                      type="text"
+                      label="uid"
+                      // disabled={true}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                  // rules={{ required: 'uid is required' }}
+                />
                 <Controller
                   control={control}
                   name="task"
@@ -318,7 +340,7 @@ export default function FormPropsTextFields(props: any) {
                       id="date"
                       type="date"
                       label="date"
-
+                      value={value}                      
                       className={classes.textField}
                       onChange={onChange}
                       error={!!error}

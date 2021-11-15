@@ -57,9 +57,12 @@ module.exports = (sequelize, type) => {
       site : {type: type.STRING},      
       region : {type: type.STRING},      
       no_incident: {type : type.STRING},
-      no_itv: {type : type.STRING}
-      
-
+      no_itv: {type : type.STRING},
+      main_cause: {type: type.STRING},
+      root_cause: {type: type.STRING},
+      alarm_bagot: {type: type.STRING},
+      alarm_active: {type: type.STRING},
+      corrective_action: {type: type.STRING}     
     },
     { timestamps: false,  freezeTableName: true,  tableName: 'tacdashboard_item'},
     // {
