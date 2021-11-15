@@ -9,14 +9,15 @@ module.exports = function (
 ) {
   try {
   console.log(`**Passport ADFS strategy...`)
-  console.log(jwt.decode(params.access_token))
-  const userProfile = jwt.decode(params.id_token, '', true)
-  // New user
-  console.log(`**New ADFS user...`, userProfile)
-
-  console.log(JSON.stringify(userProfile))
-  console.log(profile)
   console.log(params)
+  const userProfile = jwt.decode(params.id_token, '', true)
+  
+  // New user
+  // console.log(`**New ADFS user...`, userProfile)
+
+  console.log(userProfile)
+  
+  // console.log(params)
 
   var user = {
     id: userProfile.aud,
@@ -30,6 +31,7 @@ module.exports = function (
     provider: 'adfs',
     exp: new Date(1000*userProfile.exp)
   }
+  // console.log(userProfile)
   console.log(`**ADFS user added...`)
   return done(null, user)
 }

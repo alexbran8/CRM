@@ -13,12 +13,12 @@ import DoneIcon from '@material-ui/icons/Done';
 
 function getModalStyle() {
   return {
-    width: '100%',
+    width: '80%',
     maxWidth: '100vw',
     maxHeight: '100%',
     position: 'fixed',
     top: '50%',
-    left:  '0%',
+    left:  '10%',
     transform: 'translate(0, -50%)',
     overflowY: 'auto'
   };

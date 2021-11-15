@@ -32,8 +32,6 @@ import { useFormControls } from './Create';
 
 import "./Form.scss"
 
-// import { FormControl } from '@mui/material';
-// import Input from '@mui/material/Input';
 
 
 const actionList = ["ITV terrain", "Action à distance", "Escalader le ticket", "Ticket déjà fermé/cloturé", "Ticket à fermer", "Analyser au N2/N3", "ITV + Action à distance", "TI Gelé"];
@@ -119,15 +117,69 @@ const mainCauseList = ["Logicielles - Outils / Bases des dates",
   "connecteur SFP défectueux",
   "Tilt NOK"
 ]
-
+// const useStyles = makeStyles({
+//   root: {
+//     // margin: theme.spacing(2),
+//     width: '30ch',
+//     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+//     border: 0,
+//     borderRadius: 3,
+//     boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+//     color: 'white',
+//     // height: 48,
+//     padding: '0 30px',
+//   },
+// });
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    outline: {
+      "&:before": {
+        borderColor: "red"
+      },
+      "&:after": {
+        borderColor: "red"
+      },
+    },
     root: {
       '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: '25ch'
+        margin: theme.spacing(2),
+        width: '26ch',
       },
+      textField: { borderColor: 'red' }
 
+      // "& .MuiInputLabel-root": {
+      //   color: "green"
+      // },
+      // "& .notchedOutline":{
+      //   color: "red"
+      // },
+
+      // "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      //   borderColor: "green"
+      // },
+      // "&:hover .MuiOutlinedInput-input": {
+      //   color: "red"
+      // },
+      // "&:hover .MuiInputLabel-root": {
+      //   color: "red"
+      // },
+      // "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      //   borderColor: "red"
+      // },
+      // "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+      //   color: "purple"
+      // },
+      // "& .MuiInputLabel-root.Mui-focused": {
+      //   color: "purple"
+      // },
+      // "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      //   borderColor: "purple"
+      // }
+    },
+    selectBorder: {
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: 'red'
+      }
     },
     primaryColor: {
       color: 'rgb(169,169,169)',
@@ -136,7 +188,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: 'blue'
     },
     label: {
-      backgroundColor: 'rgb(169,169,169)',
+      backgroundColor: 'red',
       width: 'auto',
       height: '56px',
       border: '1px groove yellow',
@@ -199,82 +251,6 @@ export default function FormPropsTextFields(props: any) {
   const { register, handleSubmit, control } = useForm({});
 
 
-  // const {register, handleSubmit} = useForm<Profile>()
-
-  // const [state, setState] = useState({
-  //   appel: '',
-  //   data: '',
-  //   abran: '',
-  //   target: '',
-  //   ericson: '',
-  //   ttType: '',
-  //   flag: '',
-  //   upalu: '',
-  //   language: '',
-  //   si: '',
-  //   problematique: '',
-  //   tt: '',
-  //   itv: '',
-  //   onSaint: '',
-  //   norm: '',
-  //   mainCause: '',
-  //   action: '',
-  //   ttCreator: '',
-  //   technician: '',
-  //   collage: '',
-  //   time: '',
-  //   sousCause: '',
-  //   corectiveAction: '',
-  //   bagot: '',
-  //   active: '',
-
-  // });
-
-  //   const changeState = (e:any) => {
-  //     setForms({
-  //       ...forms,
-  //       appel: e.target.values,
-  //       data: e.target.values,
-  //       abran: e.target.values,
-  //       target: e.target.values,
-  //       ericson: e.target.values,
-  //       ttType: e.target.values,
-  //       flag: e.target.values,
-  //       upalu: e.target.values,
-  //       language: e.target.values,
-  //       si: e.values,
-  //       problematique: e.target.values,
-  //       tt: e.target.values,
-  //       itv: e.target.values,
-  //       onSaint: e.target.values,
-  //       norm: e.target.values,
-  //       mainCause: e.target.values,
-  //       action: e.target.values,
-  //       ttCreator: e.target.values,
-  //       technician: e.target.values,
-  //       collage: e.target.values,
-  //       time: e.target.values,
-  //       sousCause: e.target.values,
-  //       corectiveAction: e.target.values,
-  //       bagot: e.target.values,
-  //       active: e.target.values,
-
-  //     })
-  //   }
-
-  // React.useEffect(() => {
-  //   const json = localStorage.getItem("form");
-  //   const loadedForm = JSON.parse(json);
-  //   if (loadedForm) {
-  //     setForms(loadedForm);
-  //   }
-  // }, []);
-
-
-  // function deleteForm(id) {
-  //   let updatedforms = [...forms].filter((forms) => form.id !== id);
-  //   setForms(updatedForms);
-  // }
 
   const {
     handleInputValue,
@@ -321,10 +297,12 @@ export default function FormPropsTextFields(props: any) {
                       options={appelList}
                       renderInput={(params) => (
                         <TextField
+                          classes={{ notchedOutline: classes.outline }}
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
                           label="appel"
+
                         />
                       )}
                     />
@@ -661,7 +639,7 @@ export default function FormPropsTextFields(props: any) {
                         onChange(item);
                       }}
                       id="norm"
-                      options={['T0','T1','T2','T3']}
+                      options={['T0', 'T1', 'T2', 'T3']}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -848,7 +826,7 @@ export default function FormPropsTextFields(props: any) {
                         onChange(item);
                       }}
                       id="root_cause"
-                      options={["Physique","Logique","Logique & Physique"]}
+                      options={["Physique", "Logique", "Logique & Physique"]}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -941,7 +919,7 @@ export default function FormPropsTextFields(props: any) {
                   defaultValue={props.operation === 'edit' ? props.values.comment_tac : null}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
-                      // className={classes.notchedOutline}
+                      className={classes.notchedOutline}
                       id="comment_tac"
                       style={{ borderColor: 'orange' }}
                       type="text"

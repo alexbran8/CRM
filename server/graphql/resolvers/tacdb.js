@@ -30,7 +30,7 @@ module.exports = {
       let weekFilter = args.week ? { week: args.week } : null
       let itvFilter = args.no_itv ? { no_itv: args.no_itv } : null
       var statusFilter = args.status ? { status: args.status } : null
-      var statusFilter = args.status === 'null' ? { comment_tac: {[Op.eq]: null} } : null
+      // var statusFilter = args.status === 'null' ? { comment_tac: {[Op.eq]: null} } : null
       let siteFilter = args.site ? { site: args.site } : null
       let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
       

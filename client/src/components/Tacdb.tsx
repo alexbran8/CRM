@@ -133,6 +133,7 @@ const Tac = () => {
     const [date, setDate] = useState();
     const [responsible, setResponsible] = useState();
     const [week, setWeek] = useState();
+    const [statusClear, setClearStatus] = useState<boolean>(false)
     const [item, setItem] = useState([]);
     const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
@@ -324,6 +325,7 @@ const Tac = () => {
                 <Autocomplete
                     id="combo-box-demo"
                     options={weekList}
+                    disabled={true}
                     getOptionLabel={(option) => option.week}
                     style={{ width: 300 }}
                     onChange={(e, v) => { setWeek(v); refetch() }}
@@ -335,6 +337,7 @@ const Tac = () => {
                 <Autocomplete
                     id="combo-box-demo"
                     options={itvList}
+                    disabled={true}
                     getOptionLabel={(option) => option}
                     style={{ width: 300 }}
                     className={classes.textField}
@@ -356,12 +359,20 @@ const Tac = () => {
                 />
                 <>
                     <Autocomplete
-                        id="combo-box-demo"
-                        options={[{ status: 'null', labeL: "" }, { status: 'Problème résolu' }, { status: 'Problème résolu avec réserve' }, { status: 'Problème pas identifié' }, { status: 'Problème identifié' }]}
+                        id="status"
+                        options={[ { status: 'Problème résolu' }, { status: 'Problème résolu avec réserve' }, { status: 'Problème pas identifié' }, { status: 'Problème identifié' }]}
                         getOptionLabel={(option) => option.status}
                         style={{ width: 300 }}
                         className={classes.textField}
-                        onChange={(e, v) => { setStatus(v.status); refetch() }}
+                        onInputChange={(event, newInputValue, reason) => {
+                            if (reason === 'clear') {
+                                setStatus(''); refetch()
+                              return
+                            } else {
+                                setStatus(newInputValue); refetch()
+                            }
+                          }}
+                        // onChange={(e, v) => { setStatus(v.status);alert(v.status); refetch() }}
                         renderInput={(params) => <TextField {...params} label="select status" variant="outlined" />}
                     />
                 </>
@@ -371,6 +382,7 @@ const Tac = () => {
                         options={weekList}
                         getOptionLabel={(option) => option}
                         style={{ width: 300 }}
+                        disabled={true}
                         className={classes.textField}
                         onChange={(e, v) => setStite(v)}
                         renderInput={(params) => <TextField {...params} label="select site" variant="outlined" />}
