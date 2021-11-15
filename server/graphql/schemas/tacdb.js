@@ -32,6 +32,10 @@ type tacdb {
     week: String
   }
 
+  type getResponsibles {
+    DISTINCT: String
+  }
+
   type Response {
     success: String!
     message: String!
@@ -44,6 +48,7 @@ type tacdb {
 extend  type Query  {
     getAll(first: Int week:String date:String no_itv: String status: String site: String responsible_entity: String): [tacdb]
     getDistinctWeeks:[getDistinct]
+    getResponsibles:[getResponsibles]
 } 
 
 extend type Mutation {

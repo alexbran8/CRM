@@ -16,6 +16,17 @@ import { config } from "../config"
 import "./Tacdb.scss"
 import ExcelReader from "./ExcelReader";
 
+const GET_RESPONSIBLES = gql`
+query {
+    getResponsibles {
+        DISTINCT
+    }
+    
+}
+    
+
+`;
+
 const GET_ALL = gql`
   query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_itv: String, $status: String) { 
     getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_itv:$no_itv, status:$status)  {
@@ -131,15 +142,25 @@ const Tac = () => {
     const [itv, setItv] = useState();
     const [site, setSite] = useState();
     const [date, setDate] = useState();
-    const [responsible, setResponsible] = useState();
+    const [responsiblesList, setResponsiblesList] = useState();
+    const [responsible, setResponsible] = useState<string>(null);
     const [week, setWeek] = useState();
     const [statusClear, setClearStatus] = useState<boolean>(false)
     const [item, setItem] = useState([]);
     const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
-        variables: { status: status, week: week, date: date }, onCompleted: (
+        variables: { status: status, week: week, date: date, responsible_entity: responsible }, onCompleted: (
         ) => {
             setItems(data)
+
+        }
+    });
+
+    const { data:responsibleData, loading:loadingReponsibles, error:ErrorResponsibles, refetch: refetchResponsibles } = useQuery(GET_RESPONSIBLES, {
+        // variables: { }, 
+        onCompleted: (
+        ) => {
+            setResponsiblesList(responsibleData.getResponsibles)
 
         }
     });
@@ -391,11 +412,19 @@ const Tac = () => {
                 <>
                     <Autocomplete
                         id="combo-box-demo"
-                        options={weekList}
-                        getOptionLabel={(option) => option}
+                        options={responsiblesList}
+                        getOptionLabel={(option) => option.DISTINCT}
                         style={{ width: 300 }}
                         className={classes.textField}
-                        onChange={(e, v) => { setResponsible(v.responsible_entity); refetch() }}
+                        // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
+                        onInputChange={(event, newInputValue, reason) => {
+                            if (reason === 'clear') {
+                                setResponsible(''); refetch()
+                              return
+                            } else {
+                                setResponsible(newInputValue); refetch()
+                            }
+                          }}
                         renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
                     />
                 </>

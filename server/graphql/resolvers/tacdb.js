@@ -44,6 +44,12 @@ module.exports = {
       async getDistinctWeeks(root, args, context) {
         let result = await db.Tacdb.aggregate({attributes: ['week'], distinct: true})
         return result
+      },
+
+      async getResponsibles(root, args, context) {
+        let result = await db.Tacdb.aggregate('responsible_entity', 'DISTINCT',{plain: false} )
+        console.log(result)
+        return result
       }
   },
   Mutation: {
