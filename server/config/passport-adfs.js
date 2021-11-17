@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const db = require("../../models");
 
 module.exports = function (
   accessToken,
@@ -16,6 +17,10 @@ module.exports = function (
   // console.log(`**New ADFS user...`, userProfile)
 
   console.log(userProfile)
+
+  // get usershortId
+  let shortId = 'abran'
+  // let shortId = await db.sequelize.query(`Select nextval(pg_get_serial_sequence('tacdashboard_item', 'id')) as new_id where email =${userProfile.unique_name};`)
   
   // console.log(params)
 
@@ -26,6 +31,7 @@ module.exports = function (
     email: userProfile.unique_name,
     first_name: userProfile.given_name,
     last_name: userProfile.family_name,
+    shortId: shortId,
     // check how to add multiple roles
     roles: userProfile.roles[0],
     provider: 'adfs',
