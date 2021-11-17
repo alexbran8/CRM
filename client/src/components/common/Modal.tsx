@@ -94,7 +94,7 @@ console.log(props)
       <Modal
        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
         // setShowModalOpen={open}
-        open={props.handleModal}
+        open={true}
         onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"

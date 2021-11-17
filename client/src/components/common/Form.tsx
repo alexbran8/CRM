@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form'
 
@@ -248,9 +248,36 @@ type Profile = {
 
 export default function FormPropsTextFields(props: any) {
   const classes = useStyles();
-  const { register, handleSubmit, control } = useForm({});
+  const { handleSubmit, control  } = useForm({});
+  const [weekGet, setWeek] = useState()
+  const [dateValue, setDateValue] = useState()
 
 
+  function getWeek (date) {
+    console.log(control.date)
+    const currentdate = new Date(date);
+    var oneJan = new Date(currentdate.getFullYear(), 0, 1);
+    var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
+    var result = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
+    var finalResult = result + '-' + currentdate.getFullYear().toString().substr(-2);
+    return finalResult
+  }
+
+  // getDurartion (norm) {
+  //   switch(norm) {
+  //     case T0:
+  //       // code block
+  //       break;
+  //     case T1:
+  //       // code block
+  //       break;
+  //       case T2:
+  //       // code block
+  //       break;
+  //     default:
+  //       // code block
+  //   } 
+  // }
 
   const {
     handleInputValue,
@@ -261,14 +288,16 @@ export default function FormPropsTextFields(props: any) {
 
   console.log({ props })
 
-  const onSubmit = (data: any) => { console.log(data); props.saveFunction(data) }
+  const onSubmit = (data: any) => {alert(dateValue);
+    data.week=getWeek(dateValue);
+    console.log(data.week);props.saveFunction(data) }
 
   return (
     <Grid container>
       <div className="add-from">
         <form
           className={classes.root}
-          autoComplete="off"
+          autoComplete="on"
           onSubmit={handleSubmit(onSubmit)}
         >
           <Grid
@@ -283,7 +312,7 @@ export default function FormPropsTextFields(props: any) {
             />
             <Grid container direction="row" className={classes.mainHeader}>
               <Grid item xs={2}>
-              <Controller
+                <Controller
                   name="uid"
                   defaultValue={props.operation === 'edit' ? props.values.uid : null}
                   control={control}
@@ -303,7 +332,7 @@ export default function FormPropsTextFields(props: any) {
                       }}
                     />
                   )}
-                  // rules={{ required: 'uid is required' }}
+                // rules={{ required: 'uid is required' }}
                 />
                 <Controller
                   control={control}
@@ -319,7 +348,7 @@ export default function FormPropsTextFields(props: any) {
                       options={appelList}
                       renderInput={(params) => (
                         <TextField
-                          classes={{ notchedOutline: classes.outline }}
+                          // classes={{ notchedOutline: classes.outline }}
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
@@ -340,9 +369,12 @@ export default function FormPropsTextFields(props: any) {
                       id="date"
                       type="date"
                       label="date"
-                      value={value}                      
+                      value={value}
                       className={classes.textField}
-                      onChange={onChange}
+                      onChange={(event) => {
+                        onChange(event.target.value); 
+                        setDateValue(event.target.value);
+                      }}
                       error={!!error}
                       helperText={error ? error.message : null}
                       InputLabelProps={{
@@ -471,26 +503,54 @@ export default function FormPropsTextFields(props: any) {
                   )}
                   rules={{ required: 'status required' }}
                 />
-                <Controller
-                  control={control}
+ <Controller
+                        name="week"
+                        control={control}
+                        defaultValue=""
+                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                            <TextField
+                                id="week"
+                                type="text"
+                                className={classes.textField}
+                                label="week"
+                                disabled={true}
+                                // style = {{width: 150}}
+                                // defaultValue="2021-05-24"
+                                // variant="filled"
+                                value={getWeek(dateValue)}
+                                onChange={onChange}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                            />
+                        )}
+                    // rules={{ required: 'End hour is required' }}
+                    />
+
+
+                {/* <Controller
                   name="week"
-                  defaultValue={props.operation === 'edit' ? props.values.week : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  control={control}
+                  // defaultValue={weekGet}
+                  render={({ field: { onChange }, fieldState: { error } }) => (
                     <TextField
                       id="week"
                       type="text"
                       label="week"
-                      value={value}
+                      disabled={true}
+                      // defaultValue={props.operation === 'edit' ? props.values.week : week}
+                      value={dateValue}
+                      
                       className={classes.textField}
-                      onChange={onChange}
+                      onChange={(e) => {onChange(e);console.log(e)}}
                       error={!!error}
                       helperText={error ? error.message : null}
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      // {... register('week')}
                     />
                   )}
-                />
+                /> */}
                 <Controller
                   control={control}
                   name="OMC_engineer"
@@ -941,7 +1001,7 @@ export default function FormPropsTextFields(props: any) {
                   defaultValue={props.operation === 'edit' ? props.values.comment_tac : null}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
-                      className={classes.notchedOutline}
+                      // className={classes.notchedOutline}
                       id="comment_tac"
                       style={{ borderColor: 'orange' }}
                       type="text"

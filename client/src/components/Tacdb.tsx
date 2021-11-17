@@ -147,7 +147,7 @@ const Tac = () => {
     const [itv, setItv] = useState();
     const [site, setSite] = useState();
     const [date, setDate] = useState();
-    const [responsiblesList, setResponsiblesList] = useState();
+    const [responsiblesList, setResponsiblesList] = useState([]);
     const [responsible, setResponsible] = useState<string>(null);
     const [week, setWeek] = useState();
     const [statusClear, setClearStatus] = useState<boolean>(false)
@@ -210,6 +210,7 @@ const Tac = () => {
       const updateItem = (data) => {
         let inputData = data
         console.log({inputData})
+        alert(inputData.week)
         setItem(inputData)
         updateItemMutation({
           variables: {
@@ -502,8 +503,8 @@ const Tac = () => {
                 </tr>
             </thead>
             <tbody>
-                {items &&  items.map(item => {
-                    return <tr key={item.id}>
+                {items &&  items.map((item, index) => {
+                    return <tr key={index}>
                         <td> <input
                             type="checkbox"
                             checked={checked.find((y) => y.id == item.id) ? true : false}
@@ -512,7 +513,10 @@ const Tac = () => {
                         </td>
                         <td><Button variant="contained" color="primary" 
                          onClick={(event) => {
+                            //  if (user.auth.userName === item.responsible_entity) {
                             setOperation('edit'); setItem(item); handleModal({ title: 'Edit Item', data: item });
+                            //  }
+                            //  else {alert ('You are not allowed to edit this item...')}
                           }}
                         >EDIT</Button></td>
                         <td>{item.week}</td>
