@@ -248,12 +248,12 @@ type Profile = {
 
 export default function FormPropsTextFields(props: any) {
   const classes = useStyles();
-  const { handleSubmit, control, setValue  } = useForm({});
+  const { handleSubmit, control, setValue, watch } = useForm({});
   const [weekGet, setWeek] = useState()
   const [dateValue, setDateValue] = useState()
 
 
-  function getWeek (date) {
+  function getWeek(date) {
     const currentdate = new Date(date);
     var oneJan = new Date(currentdate.getFullYear(), 0, 1);
     var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
@@ -262,21 +262,37 @@ export default function FormPropsTextFields(props: any) {
     return finalResult
   }
 
-  // getDurartion (norm) {
-  //   switch(norm) {
-  //     case T0:
-  //       // code block
-  //       break;
-  //     case T1:
-  //       // code block
-  //       break;
-  //       case T2:
-  //       // code block
-  //       break;
-  //     default:
-  //       // code block
-  //   } 
-  // }
+  const getDurartion = (norm, taskType) => {
+    switch (norm) {
+      case "T0" && taskType === "Assigné":
+        return 0.28
+        setFieldLock(true)
+        // code block
+        break;
+      case "T0" && taskType !== "Assigné":
+        return 0.00
+        // code block
+        break;
+      case "T1":
+        return 0.30
+        // code block
+        break;
+      case "T1" && "Appel":
+        return 0.30
+        // code block
+        break;
+      case "T2" && taskType !== "Suivi":
+        return 0.60
+        // code block
+        break;
+      case "T2" && taskType === "Suivi":
+        return 0.50
+        // code block
+        break;
+      default:
+        return 0
+    }
+  }
 
   const {
     handleInputValue,
@@ -287,7 +303,8 @@ export default function FormPropsTextFields(props: any) {
 
   console.log({ props })
 
-  const onSubmit = (data: any) => {props.saveFunction(data) }
+  watch("norm")
+  const onSubmit = (data: any) => { props.saveFunction(data) }
 
   return (
     <Grid container>
@@ -369,7 +386,7 @@ export default function FormPropsTextFields(props: any) {
                       value={value}
                       className={classes.textField}
                       onChange={(event) => {
-                        onChange(event.target.value); 
+                        onChange(event.target.value);
                         setValue('week', getWeek(event.target.value))
                       }}
                       error={!!error}
@@ -500,28 +517,28 @@ export default function FormPropsTextFields(props: any) {
                   )}
                   rules={{ required: 'status required' }}
                 />
- <Controller
-                        name="week"
-                        control={control}
-                        defaultValue={props.operation === 'edit' ? props.values.week : null}
-                        render={({ field: { onChange, value }, fieldState: { error } }) => (
-                            <TextField
-                                id="week"
-                                type="text"
-                                className={classes.textField}
-                                label="week"
-                                disabled={true}
-                                // style = {{width: 150}}
-                                // defaultValue="2021-05-24"
-                                // variant="filled"
-                                value={value}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                            />
-                        )}
-                    // rules={{ required: 'End hour is required' }}
+                <Controller
+                  name="week"
+                  control={control}
+                  defaultValue={props.operation === 'edit' ? props.values.week : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="week"
+                      type="text"
+                      className={classes.textField}
+                      label="week"
+                      disabled={true}
+                      // style = {{width: 150}}
+                      // defaultValue="2021-05-24"
+                      // variant="filled"
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
                     />
+                  )}
+                // rules={{ required: 'End hour is required' }}
+                />
 
 
                 {/* <Controller
@@ -716,6 +733,7 @@ export default function FormPropsTextFields(props: any) {
                       value={value}
                       onChange={(event, item) => {
                         onChange(item);
+                        setValue("duration", getDurartion(item, "Assigné"))
                       }}
                       id="NORM"
                       options={['T0', 'T1', 'T2', 'T3']}
@@ -884,6 +902,7 @@ export default function FormPropsTextFields(props: any) {
                       type="text"
                       label="duration"
                       value={value}
+                      disabled={watch("NORM")!=='T3'}
                       className={classes.textField}
                       onChange={onChange}
                       error={!!error}
