@@ -248,13 +248,12 @@ type Profile = {
 
 export default function FormPropsTextFields(props: any) {
   const classes = useStyles();
-  const { handleSubmit, control  } = useForm({});
+  const { handleSubmit, control, setValue  } = useForm({});
   const [weekGet, setWeek] = useState()
   const [dateValue, setDateValue] = useState()
 
 
   function getWeek (date) {
-    console.log(control.date)
     const currentdate = new Date(date);
     var oneJan = new Date(currentdate.getFullYear(), 0, 1);
     var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
@@ -288,9 +287,7 @@ export default function FormPropsTextFields(props: any) {
 
   console.log({ props })
 
-  const onSubmit = (data: any) => {alert(dateValue);
-    data.week=getWeek(dateValue);
-    console.log(data.week);props.saveFunction(data) }
+  const onSubmit = (data: any) => {props.saveFunction(data) }
 
   return (
     <Grid container>
@@ -373,7 +370,7 @@ export default function FormPropsTextFields(props: any) {
                       className={classes.textField}
                       onChange={(event) => {
                         onChange(event.target.value); 
-                        setDateValue(event.target.value);
+                        setValue('week', getWeek(event.target.value))
                       }}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -506,7 +503,7 @@ export default function FormPropsTextFields(props: any) {
  <Controller
                         name="week"
                         control={control}
-                        defaultValue=""
+                        defaultValue={props.operation === 'edit' ? props.values.week : null}
                         render={({ field: { onChange, value }, fieldState: { error } }) => (
                             <TextField
                                 id="week"
@@ -517,7 +514,7 @@ export default function FormPropsTextFields(props: any) {
                                 // style = {{width: 150}}
                                 // defaultValue="2021-05-24"
                                 // variant="filled"
-                                value={getWeek(dateValue)}
+                                value={value}
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}

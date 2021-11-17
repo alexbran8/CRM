@@ -209,8 +209,6 @@ const Tac = () => {
 
       const updateItem = (data) => {
         let inputData = data
-        console.log({inputData})
-        alert(inputData.week)
         setItem(inputData)
         updateItemMutation({
           variables: {
