@@ -263,29 +263,30 @@ export default function FormPropsTextFields(props: any) {
   }
 
   const getDurartion = (norm, taskType) => {
-    switch (norm) {
-      case "T0" && taskType === "Assigné":
+
+    switch (true) {
+      case norm === "T0" && taskType === "Assigné":
         return 0.28
         setFieldLock(true)
         // code block
         break;
-      case "T0" && taskType !== "Assigné":
+      case norm === "T0" && taskType !== "Assigné":
         return 0.00
         // code block
         break;
-      case "T1":
+      case norm === "T1":
         return 0.30
         // code block
         break;
-      case "T1" && "Appel":
-        return 0.30
-        // code block
-        break;
-      case "T2" && taskType !== "Suivi":
+      // case "T1" && "Appel":
+      //   return 0.30
+      //   // code block
+      //   break;
+      case norm === "T2" && taskType !== "Suivi":
         return 0.60
         // code block
         break;
-      case "T2" && taskType === "Suivi":
+      case norm === "T2" && taskType === "Suivi":
         return 0.50
         // code block
         break;
@@ -357,6 +358,7 @@ export default function FormPropsTextFields(props: any) {
                       value={value}
                       onChange={(event, item) => {
                         onChange(item);
+                        setValue("duration", getDurartion(watch("NORM"), item))
                       }}
                       id="task"
                       options={appelList}
@@ -733,9 +735,10 @@ export default function FormPropsTextFields(props: any) {
                       value={value}
                       onChange={(event, item) => {
                         onChange(item);
-                        setValue("duration", getDurartion(item, "Assigné"))
+                        setValue("duration", getDurartion(item, watch("task")))
                       }}
                       id="NORM"
+                      disabled={!watch("task")}
                       options={['T0', 'T1', 'T2', 'T3']}
                       renderInput={(params) => (
                         <TextField
@@ -902,7 +905,7 @@ export default function FormPropsTextFields(props: any) {
                       type="text"
                       label="duration"
                       value={value}
-                      disabled={watch("NORM")!=='T3'}
+                      disabled={watch("NORM") !== 'T3'}
                       className={classes.textField}
                       onChange={onChange}
                       error={!!error}
