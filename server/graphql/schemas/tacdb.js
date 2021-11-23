@@ -48,11 +48,10 @@ type tacdb {
   input itemSave {
     cr_date: String
     uid: String
-    id: String
     week: String
     date: String
     NORM: String
-    duration: String
+    duration: Float
     responsible_entity: String
     no_incident: String
     no_itv: String  
@@ -80,7 +79,7 @@ type tacdb {
   }
 
   input idArray {
-    id: Int!
+    uid: Int!
    }
 
 extend  type Query  {

@@ -64,11 +64,11 @@ const GET_ALL = gql`
 `;
 
 const DELETE_ITEM = gql`
-mutation ($id: Int) {
-    deleteItem (id:$id){
+mutation ($uid: Int) {
+    deleteItem (uid:$uid){
         success
         message
-        id
+        uid
       }
     }
 
@@ -175,7 +175,7 @@ const Tac = () => {
           // update state
           const newItems = [...items]
           newItems.forEach((item) => {
-            item.id = item.id + 1;
+            item.uid = item.uid + 1;
           });
           setItems(newItems => [...newItems, item]);
           setShowModal(false)
@@ -187,7 +187,7 @@ const Tac = () => {
       const [deleteItemMutation] = useMutation(DELETE_ITEM, {
         onCompleted: (dataRes) => {
           // update state after item is deleted from db
-          let newProjects = projects.filter(function (el) { return el.id != dataRes.deleteItem.id; });
+          let newProjects = projects.filter(function (el) { return el.uid != dataRes.deleteItem.uid; });
           setProjects(newProjects)
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
@@ -222,7 +222,7 @@ const Tac = () => {
         let inputData = data
         setItem((item) => ({
           ...item, ...inputData,
-          id: 0, 
+          uid: 0, 
     
         }));
         // save to db
@@ -243,24 +243,24 @@ const Tac = () => {
         setItem((item) => ({
           ...item,
           [field]: value,
-          id: index
+          uid: index
         }));
       }
 
     const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
         onCompleted: (dataRes) => {
             alert(dataRes.deleteItems.message);
-            console.log(items.getAll.length)
+            console.log({items})    
             checked.forEach(x => {
-                console.log(items.getAll.findIndex(function (i) {
-                    return i.id === parseInt(x.id);
+                console.log(items.findIndex(function (i) {
+                    return i.uid === parseInt(x.uid);
                 }))
-                items.getAll.splice(items.getAll.findIndex(function (i) {
-                    return parseInt(i.id) === parseInt(x.id);
+                items.splice(items.findIndex(function (i) {
+                    return parseInt(i.uid) === parseInt(x.uid);
                 }), 1);
             })
             setChecked([])
-            console.log(items.getAll.length)
+            console.log(items.length)
 
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },

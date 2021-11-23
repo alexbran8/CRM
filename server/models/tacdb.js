@@ -7,7 +7,7 @@ module.exports = (sequelize, type) => {
       uid: {
         type: type.INTEGER,
         // primaryKey: true
-        field:'id' 
+        field:'id'
       },
       week: { type: type.STRING },
       date: {
