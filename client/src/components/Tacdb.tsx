@@ -289,6 +289,8 @@ const Tac = () => {
 
     const newDate = new Date()
 
+    // FIXME: select does not work
+
     const sendData = (data) => {
         var that = this;
         axios.post(config.baseURL + config.baseLOCATION + '/dailyTasks', {
@@ -315,19 +317,19 @@ const Tac = () => {
         console.log(event.target, values.status)
     }
 
-    const createArr = (id, item) => {
-        if (checked.find((y) => y.id == item.id)) {
-            console.log(id, item.id)
+    const createArr = (uid, item) => {
+        if (checked.find((y) => y.uid == item.uid)) {
+            console.log(uid, item.uid)
             // checked.find((y) => checked.splice(y, 1))
             checked.splice(checked.findIndex(function (i) {
-                return i.id === parseInt(id);
+                return i.uid === parseInt(uid);
             }), 1);
             setSelected(checked.length)
             console.log(checked)
         } else {
 
             checked.push({
-                id: parseInt(id)
+                uid: parseInt(uid)
             })
             setSelected(checked.length)
             console.log(checked)
@@ -505,8 +507,8 @@ const Tac = () => {
                     return <tr key={index}>
                         <td> <input
                             type="checkbox"
-                            checked={checked.find((y) => y.id == item.id) ? true : false}
-                            onChange={(e) => createArr(item.id, item)}
+                            checked={checked.find((y) => y.uid == item.uid) ? true : false}
+                            onChange={(e) => createArr(item.uid, item)}
                         />
                         </td>
                         <td><Button variant="contained" color="primary" 
