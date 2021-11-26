@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from "react-redux";
@@ -15,6 +15,7 @@ import { config } from "../config"
 
 import "./Tacdb.scss"
 import ExcelReader from "./ExcelReader";
+
 
 const GET_RESPONSIBLES = gql`
 query {
@@ -247,6 +248,11 @@ const Tac = () => {
         }));
       }
 
+    //   useEffect( () => {
+    //       console.log(user.auth.userName)
+    //       setResponsible(user.auth.userName)
+    //   },[user, responsible])
+
     const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
         onCompleted: (dataRes) => {
             alert(dataRes.deleteItems.message);
@@ -422,6 +428,7 @@ const Tac = () => {
                         getOptionLabel={(option) => option.DISTINCT}
                         style={{ width: 300 }}
                         className={classes.textField}
+                        // inputValue='abran'
                         // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
                         onInputChange={(event, newInputValue, reason) => {
                             if (reason === 'clear') {
@@ -513,10 +520,10 @@ const Tac = () => {
                         </td>
                         <td><Button variant="contained" color="primary" 
                          onClick={(event) => {
-                            //  if (user.auth.userName === item.responsible_entity) {
+                             if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ) {
                             setOperation('edit'); setItem(item); handleModal({ title: 'Edit Item', data: item });
-                            //  }
-                            //  else {alert ('You are not allowed to edit this item...')}
+                             }
+                             else {alert ('You are not allowed to edit this item...')}
                           }}
                         >EDIT</Button></td>
                         <td>{item.week}</td>
