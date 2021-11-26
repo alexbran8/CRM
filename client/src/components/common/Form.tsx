@@ -1047,7 +1047,7 @@ export default function FormPropsTextFields(props: any) {
             </Grid>
 
             <Button type="submit" variant="contained" color="primary">
-              Add
+              {props.operation}
             </Button>
 
 

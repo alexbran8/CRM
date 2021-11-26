@@ -89,7 +89,7 @@ console.log(props)
     <div>
       
       <Button variant="contained" color="primary"  onClick={handleOpen}>
-        Add
+        {props.operation}
       </Button>
       <Modal
        style={{display:'flex',alignItems:'center',justifyContent:'center'}}

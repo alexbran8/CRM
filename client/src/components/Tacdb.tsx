@@ -539,7 +539,13 @@ const Tac = () => {
                         <td>{item.site}</td>
                         <td>{item.region}</td>
                         <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25) : null}</span></td>
-                        <td><Button variant="contained" color="secondary" disabled={true} onClick={() => { alert('delete') }}>Delete</Button></td>
+                        <td><Button variant="contained" color="secondary" disabled={true} onClick={() => {
+                            if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ) {
+                                alert('delete')
+                                 }
+                                 else {alert ('You are not allowed to delete this item...')}
+                              }} 
+                            >Delete</Button></td>
                     </tr>
                 })}
             </tbody>
