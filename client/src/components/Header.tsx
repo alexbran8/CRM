@@ -109,6 +109,7 @@ export const Header = () => {
            });
            sessionStorage.setItem('exp',responseJson.user.exp);
            sessionStorage.setItem('userEmail',responseJson.user.email);
+           sessionStorage.setItem('userName',responseJson.user.userName);
            sessionStorage.setItem('name',responseJson.user.first_name);
            sessionStorage.setItem('token',responseJson.user.token);
            sessionStorage.setItem('roles',responseJson.user.roles);
@@ -117,6 +118,7 @@ export const Header = () => {
                      type: UPDATE_PROFILE,
                      payload: {
                        role: responseJson.user.roles,
+                       userName:responseJson.user.userName,
                        name:responseJson.user.first_name,
                        email: responseJson.user.email
                      },
@@ -216,6 +218,7 @@ const  _handleLogoutClick = () => {
    // Set authenticated state to false in the HomePage
    window.open(config.baseURL + config.baseLOCATION + "/auth/logout", "_self");
    sessionStorage.removeItem('exp')
+   sessionStorage.removeItem('userName')
    sessionStorage.removeItem('userEmail')
    sessionStorage.removeItem('name')
    sessionStorage.removeItem('token')

@@ -9,6 +9,7 @@ const DEFAULT_STATE = {
   isAuthenticated: false,
   name: "",
   role: "",
+  userName: "",
   token: "",
   errorMessage: "",
   nokiaid: ""

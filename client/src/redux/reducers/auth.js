@@ -18,6 +18,7 @@ export default (state = DEFAULT_STATE, action) => {
         name: action.payload.name,
         email: action.payload.email,
         role: action.payload.role,
+        userName: action.payload.userName,
         // nokiaid: action.payload_nokiaid,
         isAuthenticated: true,
         errorMessage: "",
