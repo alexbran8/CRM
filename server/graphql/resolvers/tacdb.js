@@ -90,6 +90,24 @@ module.exports = {
       }
     },
 
+    async deleteItem(root, data, context) {
+      try {
+      //   db.Tacdb.destroy({
+      //     where: {  
+      //        id: data.uid
+      //     }
+      // })
+      const response = { message: 'Item hs been successfully deleted!', uid: data.uid, success: true }
+        return response
+      }
+      catch (error) {
+        console.log(error)
+        const response = {message: error, success: false}
+        return  response
+      }
+    },
+
+
 
     async deleteItems(root, data, context) {
       try {

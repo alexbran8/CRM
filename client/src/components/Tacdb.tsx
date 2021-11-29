@@ -188,10 +188,10 @@ const Tac = () => {
       const [deleteItemMutation] = useMutation(DELETE_ITEM, {
         onCompleted: (dataRes) => {
           // update state after item is deleted from db
-          let newProjects = projects.filter(function (el) { return el.uid != dataRes.deleteItem.uid; });
-          setProjects(newProjects)
+          let newItems = items.filter(function (el) { return el.uid != dataRes.deleteItem.uid; });
+          setItems(newItems)
         },
-        onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
+        onError: (error) => { console.error("Error deleting item", error); alert("Error deleting item" + error.message) },
       });
     
       const [updateItemMutation] = useMutation(EDIT_ITEM, {
@@ -217,6 +217,15 @@ const Tac = () => {
           }
         }
         )
+      }
+
+      const deleteItem = (uid) => {
+        deleteItemMutation({
+            variables: {
+              uid: parseInt(uid)
+            }
+          }
+          )
       }
 
       const addMoreItems = (data, index) => {
@@ -447,9 +456,9 @@ const Tac = () => {
         </div>
         {user.auth.role === 'L3' ?
             <div className='buttonContainer'>
-                <Button variant="contained" color="secondary" onClick={deleteItems}>Delete {selected}</Button>
-                <Button variant="contained" color="primary" onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
-                <Button variant="contained" color="primary" disabled={true} onClick={deleteItems}>Notify</Button>
+                <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
+                <Button variant="contained" color="primary"  hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
+                <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
                 <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
             </div>
             : null}
@@ -461,7 +470,7 @@ const Tac = () => {
         <Table striped bordered hover  className="dash-table">
             <thead >
                 <tr>
-                    <th>Select</th>
+                    { user.auth.role === 'L3' ? <th>Select</th> : null }
                     <th></th>
                     <th>
                         WEEK
@@ -512,12 +521,12 @@ const Tac = () => {
             <tbody>
                 {items &&  items.map((item, index) => {
                     return <tr key={index}>
-                        <td> <input
+                        { user.auth.role === 'L3' ? <td> <input
                             type="checkbox"
                             checked={checked.find((y) => y.uid == item.uid) ? true : false}
                             onChange={(e) => createArr(item.uid, item)}
                         />
-                        </td>
+                        </td>: null}
                         <td><Button variant="contained" color="primary" 
                          onClick={(event) => {
                              if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ) {
@@ -539,9 +548,10 @@ const Tac = () => {
                         <td>{item.site}</td>
                         <td>{item.region}</td>
                         <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25) : null}</span></td>
-                        <td><Button variant="contained" color="secondary" disabled={true} onClick={() => {
+                        <td><Button variant="contained" color="secondary" disabled={ user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ? false: true }
+                        onClick={() => {
                             if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ) {
-                                alert('delete')
+                                deleteItem(item.uid)
                                  }
                                  else {alert ('You are not allowed to delete this item...')}
                               }} 

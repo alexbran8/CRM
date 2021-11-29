@@ -738,7 +738,7 @@ export default function FormPropsTextFields(props: any) {
                         setValue("duration", getDurartion(item, watch("task")))
                       }}
                       id="NORM"
-                      disabled={!watch("task")}
+                      disabled={!watch("task") }
                       options={['T0', 'T1', 'T2', 'T3']}
                       renderInput={(params) => (
                         <TextField
@@ -905,7 +905,7 @@ export default function FormPropsTextFields(props: any) {
                       type="text"
                       label="duration"
                       value={value}
-                      disabled={watch("NORM") !== 'T3'}
+                      disabled={watch("NORM") !== 'T3' || props.values.norm !=='T3' }
                       className={classes.textField}
                       onChange={onChange}
                       error={!!error}
