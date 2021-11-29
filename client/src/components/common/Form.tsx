@@ -124,8 +124,14 @@ const useStyles = makeStyles((theme: Theme) =>
       '& .MuiTextField-root': {
         margin: theme.spacing(2),
         width: '26ch',
+        // borderBottom: '1px solid rgb(215 50 50 / 70%)'
       },
+      
     },
+    mandatory: {
+      borderBottom: '1px solid red'
+    },
+ 
   }),
 );
 
@@ -254,8 +260,6 @@ export default function FormPropsTextFields(props: any) {
                       id="uid"
                       type="text"
                       label="uid"
-                      // disabled={true}
-                      className={classes.textField}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -279,22 +283,22 @@ export default function FormPropsTextFields(props: any) {
                       }}
                       id="task"
                       options={appelList}
+                      
                       renderInput={(params) => (
                         <TextField
-                          classes={{  root: classes.cssLabel,
-                            focused: classes.cssLabel, }}
-                          {...params}
+                          {...params }
                           error={!!error}
-                          variant="standard"
                           helperText={error ? error.message : null}
-                          label="appel"
-                          focused="true"
-
+                          label="appel*"
+                          className={`mandatory ${classes.textField}`}
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
+
                     />
                   )}
                   rules={{ required: 'Appel is required' }}
+
                 />
                 <Controller
                   name="date"
@@ -304,8 +308,8 @@ export default function FormPropsTextFields(props: any) {
                     <TextField
                       id="date"
                       type="date"
-                      label="date"
-                      
+                      label="date*"
+
                       value={value}
                       className={classes.textField}
                       onChange={(event) => {
@@ -317,6 +321,7 @@ export default function FormPropsTextFields(props: any) {
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      style={{ borderBottom: '1px solid red' }}
                     />
                   )}
                   rules={{ required: 'Date is required' }}
@@ -338,7 +343,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="responsible"
+                          label="responsible*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -353,7 +359,7 @@ export default function FormPropsTextFields(props: any) {
                     <TextField
                       id="site"
                       type="text"
-                      label="site"
+                      label="site*"
                       value={value}
                       className={classes.textField}
                       onChange={onChange}
@@ -362,6 +368,7 @@ export default function FormPropsTextFields(props: any) {
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      style={{ borderBottom: '1px solid red' }}
                     />
                   )}
                   rules={{ required: 'Site is required' }}
@@ -383,7 +390,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="constructor"
+                          label="constructor*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -404,10 +412,14 @@ export default function FormPropsTextFields(props: any) {
                       options={incidentTypeList}
                       renderInput={(params) => (
                         <TextField
+                          // InputProps={{
+                          //   className: classes.mandatory,
+                          // }}
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="tt type"
+                          label="tt type*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -433,7 +445,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="status"
+                          label="status*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -498,7 +511,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="region"
+                          label="region*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -522,7 +536,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="problematique"
+                          label="problematique*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -539,7 +554,7 @@ export default function FormPropsTextFields(props: any) {
                     <TextField
                       id="no_incident"
                       type="text"
-                      label="TT GIR"
+                      label="TT GIR*"
                       value={value}
                       className={classes.textField}
                       onChange={onChange}
@@ -548,6 +563,7 @@ export default function FormPropsTextFields(props: any) {
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      style={{ borderBottom: '1px solid red' }}
                     />
                   )}
                   rules={{ required: 'TT is required' }}
@@ -591,7 +607,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="On sait trate"
+                          label="On sait trate*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -610,14 +627,15 @@ export default function FormPropsTextFields(props: any) {
                         setValue("duration", getDurartion(item, watch("task")))
                       }}
                       id="NORM"
-                      disabled={!watch("task") }
+                      disabled={!watch("task")}
                       options={['T0', 'T1', 'T2', 'T3']}
                       renderInput={(params) => (
                         <TextField
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="Norm"
+                          label="Norm*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -641,7 +659,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="Main Cause"
+                          label="Main Cause*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -665,7 +684,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="Action"
+                          label="Action*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -689,7 +709,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="Alarm Bagot"
+                          label="Alarm Bagot*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -732,10 +753,9 @@ export default function FormPropsTextFields(props: any) {
                       className={classes.textField}
                       onChange={onChange}
                       error={!!error}
+                      required={watch('task') === 'appel'}
                       helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
+                      style={{ borderBottom: '1px solid red' }}
                     />
                   )}
                 />
@@ -756,12 +776,18 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="collage"
+                          label="collage*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
+
                   )}
-                  rules={{ required: '# is required' }}
+                  rules={{ required: 'collage is required' }}
+                // InputProps={{
+                //   className: classes.mandatory,
+                // }}
+
                 />
                 <Controller
                   control={control}
@@ -774,7 +800,7 @@ export default function FormPropsTextFields(props: any) {
                       type="text"
                       label="duration"
                       value={value}
-                      disabled={watch("NORM") !== 'T3' || props.values.norm !=='T3' }
+                      disabled={watch("NORM") !== 'T3' || props.values.norm !== 'T3'}
                       className={classes.textField}
                       onChange={onChange}
                       error={!!error}
@@ -802,7 +828,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="Sous Cause"
+                          label="Sous Cause*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -826,7 +853,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="Corrective Action"
+                          label="Corrective Action*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -850,7 +878,8 @@ export default function FormPropsTextFields(props: any) {
                           {...params}
                           error={!!error}
                           helperText={error ? error.message : null}
-                          label="alarme_active"
+                          label="alarme_active*"
+                          style={{ borderBottom: '1px solid red' }}
                         />
                       )}
                     />
@@ -881,7 +910,7 @@ export default function FormPropsTextFields(props: any) {
                       )}
                     />
                   )}
-                  // rules={{ required: '# is required' }}
+                // rules={{ required: '# is required' }}
                 />
                 <Controller
                   control={control}
@@ -904,11 +933,6 @@ export default function FormPropsTextFields(props: any) {
                         shrink: true,
                       }}
                       variant="outlined"
-                    //   InputProps={{
-                    //     classes: {
-                    //        root: classes.root
-                    //     }
-                    //  }}
                     />
                   )}
                 />
