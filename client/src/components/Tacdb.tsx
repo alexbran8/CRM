@@ -454,14 +454,14 @@ const Tac = () => {
 
             {/* </form> */}
         </div>
-        {user.auth.role === 'L3' ?
+        
             <div className='buttonContainer'>
                 <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
                 <Button variant="contained" color="primary"  hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
                 <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
                 <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
             </div>
-            : null}
+        
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
             getData={sendData}
