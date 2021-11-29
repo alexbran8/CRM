@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme, styled } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form'
 
 import Button from '@material-ui/core/Button';
@@ -117,99 +117,15 @@ const mainCauseList = ["Logicielles - Outils / Bases des dates",
   "connecteur SFP défectueux",
   "Tilt NOK"
 ]
-// const useStyles = makeStyles({
-//   root: {
-//     // margin: theme.spacing(2),
-//     width: '30ch',
-//     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-//     border: 0,
-//     borderRadius: 3,
-//     boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-//     color: 'white',
-//     // height: 48,
-//     padding: '0 30px',
-//   },
-// });
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    outline: {
-      "&:before": {
-        borderColor: "red"
-      },
-      "&:after": {
-        borderColor: "red"
-      },
-    },
     root: {
       '& .MuiTextField-root': {
         margin: theme.spacing(2),
         width: '26ch',
       },
-      textField: { borderColor: 'red' }
-
-      // "& .MuiInputLabel-root": {
-      //   color: "green"
-      // },
-      // "& .notchedOutline":{
-      //   color: "red"
-      // },
-
-      // "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-      //   borderColor: "green"
-      // },
-      // "&:hover .MuiOutlinedInput-input": {
-      //   color: "red"
-      // },
-      // "&:hover .MuiInputLabel-root": {
-      //   color: "red"
-      // },
-      // "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-      //   borderColor: "red"
-      // },
-      // "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-      //   color: "purple"
-      // },
-      // "& .MuiInputLabel-root.Mui-focused": {
-      //   color: "purple"
-      // },
-      // "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      //   borderColor: "purple"
-      // }
     },
-    selectBorder: {
-      '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'red'
-      }
-    },
-    primaryColor: {
-      color: 'rgb(169,169,169)',
-    },
-    secondaryColor: {
-      color: 'blue'
-    },
-    label: {
-      backgroundColor: 'red',
-      width: 'auto',
-      height: '56px',
-      border: '1px groove yellow',
-      display: 'flex',
-      alignItems: 'center',
-    },
-    right: {
-      float: 'right',
-      display: 'flex',
-      flexDirection: 'column',
-      marginRight: '150px',
-    },
-    textField: {
-      borderWidth: "1px",
-      borderColor: "yellow"
-    },
-    notchedOutline: {
-      borderWidth: "1px",
-      borderColor: "yellow !important"
-    }
-
   }),
 );
 
@@ -244,6 +160,7 @@ type Profile = {
   bagot: string
   active: string
 }
+
 
 
 export default function FormPropsTextFields(props: any) {
@@ -364,11 +281,14 @@ export default function FormPropsTextFields(props: any) {
                       options={appelList}
                       renderInput={(params) => (
                         <TextField
-                          // classes={{ notchedOutline: classes.outline }}
+                          classes={{  root: classes.cssLabel,
+                            focused: classes.cssLabel, }}
                           {...params}
                           error={!!error}
+                          variant="standard"
                           helperText={error ? error.message : null}
                           label="appel"
+                          focused="true"
 
                         />
                       )}
@@ -385,6 +305,7 @@ export default function FormPropsTextFields(props: any) {
                       id="date"
                       type="date"
                       label="date"
+                      
                       value={value}
                       className={classes.textField}
                       onChange={(event) => {
@@ -539,34 +460,7 @@ export default function FormPropsTextFields(props: any) {
                       helperText={error ? error.message : null}
                     />
                   )}
-                // rules={{ required: 'End hour is required' }}
                 />
-
-
-                {/* <Controller
-                  name="week"
-                  control={control}
-                  // defaultValue={weekGet}
-                  render={({ field: { onChange }, fieldState: { error } }) => (
-                    <TextField
-                      id="week"
-                      type="text"
-                      label="week"
-                      disabled={true}
-                      // defaultValue={props.operation === 'edit' ? props.values.week : week}
-                      value={dateValue}
-                      
-                      className={classes.textField}
-                      onChange={(e) => {onChange(e);console.log(e)}}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      // {... register('week')}
-                    />
-                  )}
-                /> */}
                 <Controller
                   control={control}
                   name="OMC_engineer"
@@ -611,28 +505,6 @@ export default function FormPropsTextFields(props: any) {
                   )}
                   rules={{ required: 'region is required' }}
                 />
-                {/* <Controller
-                  // control={control}
-                  // name="SI"
-
-                  defaultValue={props.operation === 'edit' ? props.values.si : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="si"
-                      type="text"
-                      disabled={true}
-                      label="si"
-                      value={value}
-                      className={classes.textField}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                /> */}
                 <Controller
                   control={control}
                   name="problem"
@@ -829,13 +701,11 @@ export default function FormPropsTextFields(props: any) {
                 <Controller
                   control={control}
                   name="TT_creator_short"
-
                   defaultValue={props.operation === 'edit' ? props.values.TT_creator_short : null}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       id="TT_creator_short"
                       type="text"
-
                       label="TT Creator"
                       value={value}
                       className={classes.textField}
@@ -848,17 +718,16 @@ export default function FormPropsTextFields(props: any) {
                     />
                   )}
                 />
+                {/* TODO: make it mandatory when type of task is "Appel" */}
                 <Controller
                   control={control}
                   name="technician"
-
                   defaultValue={props.operation === 'edit' ? props.values.technician : null}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       id="technician"
                       type="text"
-
-                      label="technician"
+                      label="technician (telephone)*"
                       value={value}
                       className={classes.textField}
                       onChange={onChange}
@@ -1012,7 +881,7 @@ export default function FormPropsTextFields(props: any) {
                       )}
                     />
                   )}
-                  rules={{ required: '# is required' }}
+                  // rules={{ required: '# is required' }}
                 />
                 <Controller
                   control={control}
@@ -1027,7 +896,7 @@ export default function FormPropsTextFields(props: any) {
                       label="comment_tac"
                       value={value}
                       multiline
-                      rows={10}
+                      rows={20}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
