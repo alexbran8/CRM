@@ -753,11 +753,11 @@ export default function FormPropsTextFields(props: any) {
                       className={classes.textField}
                       onChange={onChange}
                       error={!!error}
-                      required={watch('task') === 'appel'}
                       helperText={error ? error.message : null}
                       style={{ borderBottom: '1px solid red' }}
                     />
                   )}
+                  rules={{ required: watch('task') === 'Appel' }}
                 />
                 <Controller
                   control={control}
