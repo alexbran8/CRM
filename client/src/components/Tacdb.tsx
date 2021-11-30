@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios'
 import FileReader from "./FileReader";
-
+import { useForm, Controller } from 'react-hook-form'
 import SimpleModal from "../components/common/Modal"
 
 import { config } from "../config"
@@ -124,11 +124,11 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         width: 200,
     },
-        palette: {
+    palette: {
         //   primary: blue,
-          secondary: "#ff7961",
-        },
-      
+        secondary: "#ff7961",
+    },
+
 }));
 
 
@@ -142,18 +142,19 @@ const Tac = () => {
     const [weekList, setuWeeksList] = useState([]);
     const [itvList, setuitvList] = useState([]);
     const [status, setStatus] = useState();
-    const [showModal, setShowModal] = React.useState<boolean>(false);
-    const [operation, setOperation] = useState<string>();
+    const [showModal, setShowModal] = React.useState < boolean > (false);
+    const [operation, setOperation] = useState < string > (null);
     const [selectedItem, setSelectedItem] = useState();
     const [itv, setItv] = useState();
     const [site, setSite] = useState();
     const [date, setDate] = useState();
     const [responsiblesList, setResponsiblesList] = useState([]);
-    const [responsible, setResponsible] = useState<string>(null);
+    const [responsible, setResponsible] = useState < string > (user.auth.userName);
     const [week, setWeek] = useState();
-    const [statusClear, setClearStatus] = useState<boolean>(false)
+    const [statusClear, setClearStatus] = useState < boolean > (false)
     const [item, setItem] = useState([]);
-    const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
+    const [showUploadModal, setShowUploadModal] = useState < boolean > (false)
+    const { watch, control, setValue } = useForm({});
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
         variables: { status: status, week: week, date: date, responsible_entity: responsible }, onCompleted: (
         ) => {
@@ -162,7 +163,7 @@ const Tac = () => {
         }
     });
 
-    const { data:responsibleData, loading:loadingReponsibles, error:ErrorResponsibles, refetch: refetchResponsibles } = useQuery(GET_RESPONSIBLES, {
+    const { data: responsibleData, loading: loadingReponsibles, error: ErrorResponsibles, refetch: refetchResponsibles } = useQuery(GET_RESPONSIBLES, {
         // variables: { }, 
         onCompleted: (
         ) => {
@@ -173,89 +174,95 @@ const Tac = () => {
 
     const [addItemMutation] = useMutation(ADD_ITEM, {
         onCompleted: (dataRes) => {
-          // update state
-          const newItems = [...items]
-          newItems.forEach((item) => {
-            item.uid = item.uid + 1;
-          });
-          setItems(newItems => [...newItems, item]);
-          setShowModal(false)
-    
+            // update state
+            const newItems = [...items]
+            newItems.forEach((item) => {
+                item.uid = item.uid + 1;
+            });
+            setItems(newItems => [...newItems, item]);
+            setShowModal(false)
+
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
-      });
-    
-      const [deleteItemMutation] = useMutation(DELETE_ITEM, {
+    });
+
+    const [deleteItemMutation] = useMutation(DELETE_ITEM, {
         onCompleted: (dataRes) => {
-          // update state after item is deleted from db
-          let newItems = items.filter(function (el) { return el.uid != dataRes.deleteItem.uid; });
-          setItems(newItems)
+            // update state after item is deleted from db
+            let newItems = items.filter(function (el) { return el.uid != dataRes.deleteItem.uid; });
+            setItems(newItems)
         },
         onError: (error) => { console.error("Error deleting item", error); alert("Error deleting item" + error.message) },
-      });
-    
-      const [updateItemMutation] = useMutation(EDIT_ITEM, {
+    });
+
+    const [updateItemMutation] = useMutation(EDIT_ITEM, {
         onCompleted: (dataRes) => {
-          // update state
-          const newItems = [...items]
-          let index = newItems.findIndex((y) => y.uid === item.uid)
-    
-          newItems[index] = item
-    
-          setItems(newItems)
-          setShowModal(false)
+            // update state
+            const newItems = [...items]
+            let index = newItems.findIndex((y) => y.uid === item.uid)
+
+            newItems[index] = item
+
+            setItems(newItems)
+            setShowModal(false)
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
-      });
+    });
 
-      const updateItem = (data) => {
+    const updateItem = (data) => {
         let inputData = data
         setItem(inputData)
         updateItemMutation({
-          variables: {
-            data: inputData
-          }
+            variables: {
+                data: inputData
+            }
         }
         )
-      }
+    }
 
-      const deleteItem = (uid) => {
+    const deleteItem = (uid) => {
         deleteItemMutation({
             variables: {
-              uid: parseInt(uid)
+                uid: parseInt(uid)
             }
-          }
-          )
-      }
+        }
+        )
+    }
 
-      const addMoreItems = (data, index) => {
+    const addMoreItems = (data, index) => {
         let inputData = data
         setItem((item) => ({
-          ...item, ...inputData,
-          uid: 0, 
-    
+            ...item, ...inputData,
+            uid: 0,
+
         }));
         // save to db
         addItemMutation({
-          variables: {
-            data: inputData
-          }
+            variables: {
+                data: inputData
+            }
         }
         )
-      }
+    }
+
+    useEffect(() => {
+        setValue('date', newDate.getDate()); refetch()
+        console.log(user.auth.userName)
+        setResponsible(user.auth.userName); refetch()
+    }, [])
 
 
-      const handleInputValues = (value, field, index) => {
+    const handleInputValues = (value, field, index) => {
         // console.log({value})
         // check if values are valid
         console.log('before', item)
         // if yes, add values to state
         setItem((item) => ({
-          ...item,
-          [field]: value,
-          uid: index
+            ...item,
+            [field]: value,
+            uid: index
         }));
-      }
+    }
 
     //   useEffect( () => {
     //       console.log(user.auth.userName)
@@ -265,7 +272,7 @@ const Tac = () => {
     const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
         onCompleted: (dataRes) => {
             alert(dataRes.deleteItems.message);
-            console.log({items})    
+            console.log({ items })
             checked.forEach(x => {
                 console.log(items.findIndex(function (i) {
                     return i.uid === parseInt(x.uid);
@@ -354,8 +361,8 @@ const Tac = () => {
     const handleModal = (selectedItem) => {
         setShowModal(!showModal)
         setSelectedItem(selectedItem)
-      }
-    
+    }
+
 
 
     // const onSaveInformation = (id, name) => updateUser({ variables: { id, name })
@@ -388,32 +395,39 @@ const Tac = () => {
                 />
             </>
             <>
-                <TextField
-                    id="date"
-                    type="date"
-                    defaultValue={newDate.getDate()}
-                    variant="outlined"
-                    className={classes.textField}
-                    onChange={(e, v) => { setDate(e.target.value); console.log(e.target.value); refetch() }}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
+                <Controller
+                    control={control}
+                    name="date"
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+
+                        <TextField
+                            id="date"
+                            type="date"
+                            defaultValue={newDate}
+                            variant="outlined"
+                            className={classes.textField}
+                            onChange={(e, v) => { setDate(e.target.value); refetch() }}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    )}
                 />
                 <>
                     <Autocomplete
                         id="status"
-                        options={[ { status: 'Problème résolu' }, { status: 'Problème résolu avec réserve' }, { status: 'Problème pas identifié' }, { status: 'Problème identifié' }]}
+                        options={[{ status: 'Problème résolu' }, { status: 'Problème résolu avec réserve' }, { status: 'Problème pas identifié' }, { status: 'Problème identifié' }]}
                         getOptionLabel={(option) => option.status}
                         style={{ width: 300 }}
                         className={classes.textField}
                         onInputChange={(event, newInputValue, reason) => {
                             if (reason === 'clear') {
                                 setStatus(''); refetch()
-                              return
+                                return
                             } else {
                                 setStatus(newInputValue); refetch()
                             }
-                          }}
+                        }}
                         // onChange={(e, v) => { setStatus(v.status);alert(v.status); refetch() }}
                         renderInput={(params) => <TextField {...params} label="select status" variant="outlined" />}
                     />
@@ -431,46 +445,53 @@ const Tac = () => {
                     />
                 </>
                 <>
-                    <Autocomplete
-                        id="combo-box-demo"
-                        options={responsiblesList}
-                        getOptionLabel={(option) => option.DISTINCT}
-                        style={{ width: 300 }}
-                        className={classes.textField}
-                        // inputValue='abran'
-                        // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
-                        onInputChange={(event, newInputValue, reason) => {
-                            if (reason === 'clear') {
-                                setResponsible(''); refetch()
-                              return
-                            } else {
-                                setResponsible(newInputValue); refetch()
-                            }
-                          }}
-                        renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
+                    <Controller
+                        control={control}
+                        name="responsible"
+                        defaultValue='abran'
+                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                            <Autocomplete
+                                id="responsible"
+                                options={responsiblesList}
+                                getOptionLabel={(option) => option.DISTINCT}
+                                style={{ width: 300 }}
+                                className={classes.textField}
+                                value={value}
+                                // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
+                                onInputChange={(event, newInputValue, reason) => {
+                                    if (reason === 'clear') {
+                                        setResponsible(''); refetch()
+                                        return
+                                    } else {
+                                        setResponsible(newInputValue); refetch()
+                                    }
+                                }}
+                                renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
+                            />
+                        )}
                     />
                 </>
             </>
 
             {/* </form> */}
         </div>
-        
-            <div className='buttonContainer'>
-                <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
-                <Button variant="contained" color="primary"  hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
-                <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
-                <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
-            </div>
-        
+
+        <div className='buttonContainer'>
+            <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
+            <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
+            <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
+            <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
+        </div>
+
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
             getData={sendData}
             showModal={showUploadModal} />
 
-        <Table striped bordered hover  className="dash-table">
+        <Table striped bordered hover className="dash-table">
             <thead >
                 <tr>
-                    { user.auth.role === 'L3' ? <th>Select</th> : null }
+                    {user.auth.role === 'L3' ? <th>Select</th> : null}
                     <th></th>
                     <th>
                         WEEK
@@ -519,21 +540,21 @@ const Tac = () => {
                 </tr>
             </thead>
             <tbody>
-                {items &&  items.map((item, index) => {
+                {items && items.map((item, index) => {
                     return <tr key={index}>
-                        { user.auth.role === 'L3' ? <td> <input
+                        {user.auth.role === 'L3' ? <td> <input
                             type="checkbox"
                             checked={checked.find((y) => y.uid == item.uid) ? true : false}
                             onChange={(e) => createArr(item.uid, item)}
                         />
-                        </td>: null}
-                        <td><Button variant="contained" color="primary" 
-                         onClick={(event) => {
-                             if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ) {
-                            setOperation('edit'); setItem(item); handleModal({ title: 'Edit Item', data: item });
-                             }
-                             else {alert ('You are not allowed to edit this item...')}
-                          }}
+                        </td> : null}
+                        <td><Button variant="contained" color="primary"
+                            onClick={(event) => {
+                                if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3') {
+                                    setOperation('edit'); setItem(item); handleModal({ title: 'Edit Item', data: item });
+                                }
+                                else { alert('You are not allowed to edit this item...') }
+                            }}
                         >EDIT</Button></td>
                         <td>{item.week}</td>
                         <td>{item.date}</td>
@@ -548,30 +569,30 @@ const Tac = () => {
                         <td>{item.site}</td>
                         <td>{item.region}</td>
                         <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25) : null}</span></td>
-                        <td><Button variant="contained" color="secondary" disabled={ user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ? false: true }
-                        onClick={() => {
-                            if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ) {
-                                deleteItem(item.uid)
-                                 }
-                                 else {alert ('You are not allowed to delete this item...')}
-                              }} 
-                            >Delete</Button></td>
+                        <td><Button variant="contained" color="secondary" disabled={user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ? false : true}
+                            onClick={() => {
+                                if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3') {
+                                    deleteItem(item.uid)
+                                }
+                                else { alert('You are not allowed to delete this item...') }
+                            }}
+                        >Delete</Button></td>
                     </tr>
                 })}
             </tbody>
         </Table>
         {showModal ? (
-        <SimpleModal
-          //formValidator={formCheck}
-          // setShowModalOpen={showModal}
-          item={selectedItem}
-          handleModal={handleModal}
-          handleClose={handleModal}
-          saveFunction={operation === 'add' ? addMoreItems : updateItem}
-          handleInputValues={handleInputValues}
-          operation={operation}
-        />
-      ) : null}
+            <SimpleModal
+                //formValidator={formCheck}
+                // setShowModalOpen={showModal}
+                item={selectedItem}
+                handleModal={handleModal}
+                handleClose={handleModal}
+                saveFunction={operation === 'add' ? addMoreItems : updateItem}
+                handleInputValues={handleInputValues}
+                operation={operation}
+            />
+        ) : null}
 
     </div>)
 }

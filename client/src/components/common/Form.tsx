@@ -593,7 +593,7 @@ export default function FormPropsTextFields(props: any) {
                 <Controller
                   control={control}
                   name="operation_location"
-                  defaultValue={props.operation === 'edit' ? props.values.operation_location : null}
+                  defaultValue={props.operation === 'edit' ? props.values.operation_location : 'OUI'}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                       value={value}
@@ -695,13 +695,14 @@ export default function FormPropsTextFields(props: any) {
                 <Controller
                   control={control}
                   name="alarm_bagot"
-                  defaultValue={props.operation === 'edit' ? props.values.alarm_bagot : null}
+                  defaultValue={props.operation === 'edit' ? props.values.alarm_bagot : 'NON'}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                       value={value}
                       onChange={(event, item) => {
                         onChange(item);
                       }}
+                      
                       id="alarm_bagot"
                       options={['OUI', 'NON']}
                       renderInput={(params) => (
@@ -864,7 +865,7 @@ export default function FormPropsTextFields(props: any) {
                 <Controller
                   control={control}
                   name="alarm_active"
-                  defaultValue={props.operation === 'edit' ? props.values.alarm_active : null}
+                  defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                       value={value}
