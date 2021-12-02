@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from "react-redux";
-import { Table, Container, Row, Col, Checkbox, CardGroup, FormGroup } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios'
-import FileReader from "./FileReader";
+// import FileReader from "./FileReader";
 import { useForm, Controller } from 'react-hook-form'
 import SimpleModal from "../components/common/Modal"
 
@@ -147,11 +147,12 @@ const Tac = () => {
     const [selectedItem, setSelectedItem] = useState();
     const [itv, setItv] = useState();
     const [site, setSite] = useState();
-    const [date, setDate] = useState();
+    const newDate = new Date();
+    const [date, setDate] = useState(newDate);
     const [responsiblesList, setResponsiblesList] = useState([]);
     const [responsible, setResponsible] = useState < string > (user.auth.userName);
     const [week, setWeek] = useState();
-    const [statusClear, setClearStatus] = useState < boolean > (false)
+    // const [statusClear, setClearStatus] = useState < boolean > (false)
     const [item, setItem] = useState([]);
     const [showUploadModal, setShowUploadModal] = useState < boolean > (false)
     const { watch, control, setValue } = useForm({});
@@ -245,17 +246,9 @@ const Tac = () => {
         )
     }
 
-    useEffect(() => {
-        setValue('date', newDate.getDate()); refetch()
-        console.log(user.auth.userName)
-        setResponsible(user.auth.userName); refetch()
-    }, [])
 
 
     const handleInputValues = (value, field, index) => {
-        // console.log({value})
-        // check if values are valid
-        console.log('before', item)
         // if yes, add values to state
         setItem((item) => ({
             ...item,
@@ -263,11 +256,6 @@ const Tac = () => {
             uid: index
         }));
     }
-
-    //   useEffect( () => {
-    //       console.log(user.auth.userName)
-    //       setResponsible(user.auth.userName)
-    //   },[user, responsible])
 
     const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
         onCompleted: (dataRes) => {
@@ -309,7 +297,7 @@ const Tac = () => {
 
 
 
-    const newDate = new Date()
+
 
     // FIXME: select does not work
 
@@ -364,18 +352,27 @@ const Tac = () => {
     }
 
 
+    useEffect(()=>{
+        setResponsible(user.auth.userName)
+    },[])
 
-    // const onSaveInformation = (id, name) => updateUser({ variables: { id, name })
-
+    const dateToString = d => `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}` 
+    const myDate = new Date()
+    console.log(dateToString(myDate))
     return (<div>
-        <div className="filterContainer">
 
+        <div className="filterContainer">
+            {/* <form
+        //   className={classes.root}
+          autoComplete="on"
+        //   onSubmit={handleSubmit(onSubmit)}
+        > */}
             <>
                 <Autocomplete
                     id="combo-box-demo"
                     options={weekList}
                     disabled={true}
-                    getOptionLabel={(option) => option.week}
+                    // getOptionLabel={(option) => option.week}
                     style={{ width: 300 }}
                     onChange={(e, v) => { setWeek(v); refetch() }}
                     className={classes.textField}
@@ -387,32 +384,28 @@ const Tac = () => {
                     id="combo-box-demo"
                     options={itvList}
                     disabled={true}
-                    getOptionLabel={(option) => option}
+                    // getOptionLabel={(option) => option}
                     style={{ width: 300 }}
                     className={classes.textField}
                     onChange={(e, v) => setItv(v)}
                     renderInput={(params) => <TextField {...params} label="select ITV" variant="outlined" />}
                 />
             </>
+            
             <>
-                <Controller
-                    control={control}
-                    name="date"
-                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-
                         <TextField
-                            id="date"
+                            id="dateFilter"
                             type="date"
-                            defaultValue={newDate}
+                            // value={"12-02-2021"}
+                            // defaultValue={}
+                            defaultValue={dateToString(myDate)}
                             variant="outlined"
                             className={classes.textField}
                             onChange={(e, v) => { setDate(e.target.value); refetch() }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
+                        // InputLabelProps={{
+                        //     shrink: true,
+                        // }}
                         />
-                    )}
-                />
                 <>
                     <Autocomplete
                         id="status"
@@ -436,7 +429,7 @@ const Tac = () => {
                     <Autocomplete
                         id="combo-box-demo"
                         options={weekList}
-                        getOptionLabel={(option) => option}
+                        // getOptionLabel={(option) => option}
                         style={{ width: 300 }}
                         disabled={true}
                         className={classes.textField}
@@ -445,19 +438,20 @@ const Tac = () => {
                     />
                 </>
                 <>
-                    <Controller
+                    {/* <Controller
                         control={control}
                         name="responsible"
-                        defaultValue='abran'
-                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        
+                        render={({ field: { onChange, value }, fieldState: { error } }) => ( */}
                             <Autocomplete
                                 id="responsible"
                                 options={responsiblesList}
+                                defaultValue={{'DISTINCT': responsible}}
                                 getOptionLabel={(option) => option.DISTINCT}
                                 style={{ width: 300 }}
                                 className={classes.textField}
-                                value={value}
                                 // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
+                                
                                 onInputChange={(event, newInputValue, reason) => {
                                     if (reason === 'clear') {
                                         setResponsible(''); refetch()
@@ -466,14 +460,19 @@ const Tac = () => {
                                         setResponsible(newInputValue); refetch()
                                     }
                                 }}
-                                renderInput={(params) => <TextField {...params} label="select responsible" variant="outlined" />}
+                                renderInput={(params) => <TextField {...params}
+                                    label="select responsible"
+                                    variant="outlined"
+                                    
+                                defaultValue={responsible}
+                                />}
                             />
-                        )}
-                    />
+                        {/* )} */}
+                    {/* /> */}
                 </>
             </>
-
             {/* </form> */}
+
         </div>
 
         <div className='buttonContainer'>

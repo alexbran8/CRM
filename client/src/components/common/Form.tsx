@@ -225,9 +225,8 @@ export default function FormPropsTextFields(props: any) {
     errors
   } = useFormControls();
 
-  console.log({ props })
 
-  watch("norm")
+  // watch("norm")
   const onSubmit = (data: any) => { props.saveFunction(data) }
 
   return (
