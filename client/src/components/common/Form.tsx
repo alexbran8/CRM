@@ -258,6 +258,7 @@ export default function FormPropsTextFields(props: any) {
                       value={value}
                       id="uid"
                       type="text"
+                      disabled={true}
                       label="uid"
                       onChange={onChange}
                       error={!!error}
