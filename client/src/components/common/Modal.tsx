@@ -77,6 +77,8 @@ console.log(props)
       </button> */}
      <FormPropsTextFields 
      values={props.item.data}
+     user={props.user}
+     userList={props.userList}
      operation={props.operation}
      handleInputValues={props.handleInputValues}
      saveFunction={props.saveFunction}

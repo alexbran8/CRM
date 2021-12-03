@@ -585,6 +585,8 @@ const Tac = () => {
                 //formValidator={formCheck}
                 // setShowModalOpen={showModal}
                 item={selectedItem}
+                user={user.auth.userName}
+                userList={responsiblesList}
                 handleModal={handleModal}
                 handleClose={handleModal}
                 saveFunction={operation === 'add' ? addMoreItems : updateItem}
