@@ -329,22 +329,23 @@ export default function FormPropsTextFields(props: any) {
                 <Controller
                   control={control}
                   name="responsible_entity"
-                  defaultValue={props.operation === 'edit' ? props.values.responsible_entity : props.user}
+                  // defaultValue={props.operation === 'edit' ? 'props.values.responsible_entity' : 'abran'}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
-                      // value={value}
+                      value={value}
                       onChange={(event, item) => {
                         onChange(item);
                       }}
                       id="responsible_entity"
                       options={props.userList ? props.userList : {}}
                       getOptionLabel={(option) => option.DISTINCT}
-                      defaultValue={props.operation === 'edit' ? props.values.responsible_entity : props.user}
+                      defaultValue={props.operation === 'edit' ?  {'DISTINCT':props.values.responsible_entity} : {'DISTINCT': props.user}}
+                      disabled={true}
                       renderInput={(params) => (
                         <TextField
                           {...params}
                           error={!!error}
-                          defaultValue={props.operation === 'edit' ? props.values.responsible_entity : props.user}
+                          // defaultValue={props.operation === 'edit' ? props.values.responsible_entity : props.user}
                           helperText={error ? error.message : null}
                           label="responsible*"
                           style={{ borderBottom: '1px solid red' }}
