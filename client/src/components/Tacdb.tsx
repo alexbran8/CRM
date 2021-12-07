@@ -7,6 +7,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios'
+import {AlertComponent} from "./common/Alert/Alert"
 // import FileReader from "./FileReader";
 import { useForm, Controller } from 'react-hook-form'
 import SimpleModal from "../components/common/Modal"
@@ -135,6 +136,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Tac = () => {
     const user = useSelector((state) => ({ auth: state.auth }));
+
     const classes = useStyles();
     const [checked, setChecked] = useState([])
     const [items, setItems] = useState([])
@@ -356,6 +358,9 @@ const Tac = () => {
         setResponsible(user.auth.userName)
     },[])
 
+
+    
+
     const dateToString = d => `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}` 
     const myDate = new Date()
     console.log(dateToString(myDate))
@@ -481,6 +486,9 @@ const Tac = () => {
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
             <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
         </div>
+  
+      <AlertComponent
+      messages={'Modal is now responsive'} />
 
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
