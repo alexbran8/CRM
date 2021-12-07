@@ -890,24 +890,27 @@ export default function FormPropsTextFields(props: any) {
               )}
               rules={{ required: 'incident type is required' }}
             />
-            {/* TODO: add blank item */}
             <Grid item  style={{ borderColor: 'orange', width: '30ch' }} >
                     {/* <Paper className={classes.paper}>xs=12 sm=6</Paper> */}
                     <> </>
                 </Grid>
+                {console.log(props.values)}
             <Controller
               control={control}
               name="alarm_bagot"
-              defaultValue={props.operation === 'edit' ? props.values.alarm_bagot : 'NON'}
+              
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <Autocomplete
                   value={value}
                   onChange={(event, item) => {
                     onChange(item);
                   }}
-
+                  
                   id="alarm_bagot"
-                  options={['OUI', 'NON']}
+                  options={[{title: 'OUI'}, {title: 'NON'}]}
+                  defaultValue={props.operation === 'edit' ? {title : props.values.alarm_bagot} : {title: 'NON'}}
+                  getOptionLabel={(option) =>option.title}
+                  
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -924,7 +927,7 @@ export default function FormPropsTextFields(props: any) {
             <Controller
               control={control}
               name="alarm_active"
-              defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
+              
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <Autocomplete
                   value={value}
@@ -932,7 +935,9 @@ export default function FormPropsTextFields(props: any) {
                     onChange(item);
                   }}
                   id="alarm_active"
+                  defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
                   options={['OUI', 'NON']}
+                  // getOptionLabel={(option) => option.title}
                   renderInput={(params) => (
                     <TextField
                       {...params}
