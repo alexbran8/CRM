@@ -804,6 +804,10 @@ export default function FormPropsTextFields(props: any) {
               rules={{ required: 'Constructor is required' }}
             />
             {/* TODO: add blank item :-?*/}
+            <Grid item  style={{ borderColor: 'orange', width: '30ch' }} >
+                    {/* <Paper className={classes.paper}>xs=12 sm=6</Paper> */}
+                    <> </>
+                </Grid>
             <Controller
               control={control}
               name="action"
@@ -887,6 +891,10 @@ export default function FormPropsTextFields(props: any) {
               rules={{ required: 'incident type is required' }}
             />
             {/* TODO: add blank item */}
+            <Grid item  style={{ borderColor: 'orange', width: '30ch' }} >
+                    {/* <Paper className={classes.paper}>xs=12 sm=6</Paper> */}
+                    <> </>
+                </Grid>
             <Controller
               control={control}
               name="alarm_bagot"
@@ -950,12 +958,13 @@ export default function FormPropsTextFields(props: any) {
                   <TextField
                     // className={classes.notchedOutline}
                     id="comment_tac"
-                    style={{ borderColor: 'orange' }}
+                    style={{ borderColor: 'orange', width: '100%' }}
+                    fullWidth   
                     type="text"
                     label="comment_tac"
                     value={value}
                     multiline
-                    rows={20}
+                    rows={2}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
