@@ -316,7 +316,50 @@ export default function FormPropsTextFields(props: any) {
                 )}
                 rules={{ required: 'TT is required' }}
               />
-
+              <Controller
+                control={control}
+                name="TT_creator_short"
+                defaultValue={props.operation === 'edit' ? props.values.TT_creator_short : null}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    id="TT_creator_short"
+                    type="text"
+                    label="TT Creator"
+                    value={value}
+                    className={classes.textField}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="hastagTac"
+                defaultValue={props.operation === 'edit' ? props.values.hastagTac : null}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <Autocomplete
+                    value={value}
+                    onChange={(event, item) => {
+                      onChange(item);
+                    }}
+                    id="hastagTac"
+                    options={hashtagTacList}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        label="#"
+                      />
+                    )}
+                  />
+                )}
+              // rules={{ required: '# is required' }}
+              />
             </Grid>
           </Grid>
           <Grid container direction="row" className={classes.mainHeader}>
@@ -371,6 +414,53 @@ export default function FormPropsTextFields(props: any) {
                 />
               )}
             />
+            <Controller
+              control={control}
+              name="no_itv"
+
+              defaultValue={props.operation === 'edit' ? props.values.no_itv : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  id="no_itv"
+                  type="text"
+
+                  label="ITV"
+                  value={value}
+                  className={classes.textField}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              )}
+            />
+
+
+            <Controller
+              control={control}
+              name="technician"
+              defaultValue={props.operation === 'edit' ? props.values.technician : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  id="technician"
+                  type="text"
+                  label="technician (telephone)*"
+                  value={value}
+                  className={classes.textField}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  style={{ borderBottom: '1px solid red' }}
+                />
+              )}
+              rules={{ required: watch('task') === 'Appel' }}
+            />
+
+
+
+
 
           </Grid>
           <Grid container direction="row" className={classes.mainHeader}>
@@ -420,7 +510,61 @@ export default function FormPropsTextFields(props: any) {
                 />
               )}
             />
+            <Controller
+              control={control}
+              name="operation_location"
+              defaultValue={props.operation === 'edit' ? props.values.operation_location : 'OUI'}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="operation_location"
+                  options={['Oui', 'Non', 'Pas complétement']}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="On sait trate*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'On sait traite is required' }}
+            />
+            <Controller
+              control={control}
+              name="collage"
+              defaultValue={props.operation === 'edit' ? props.values.collage : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="collage"
+                  options={['OUI', 'NON']}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="collage*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
 
+              )}
+              rules={{ required: 'collage is required' }}
+            // InputProps={{
+            //   className: classes.mandatory,
+            // }}
+
+            />
 
           </Grid>
           <Grid container direction="row" className={classes.mainHeader}>
@@ -479,7 +623,57 @@ export default function FormPropsTextFields(props: any) {
               rules={{ required: 'region is required' }}
             />
 
+            <Controller
+              control={control}
+              name="NORM"
+              defaultValue={props.operation === 'edit' ? props.values.NORM : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                    setValue("duration", getDurartion(item, watch("task")))
+                  }}
+                  id="NORM"
+                  // FIXME: does not work properly
+                  disabled={(props.operation === 'edit' && props.values.task === null) || (props.operation !== 'edit' && !watch("task"))}
+                  options={['T0', 'T1', 'T2', 'T3']}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="Norm*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'Norm is required' }}
+            />
 
+            <Controller
+              control={control}
+              name="duration"
+
+              defaultValue={props.operation === 'edit' ? props.values.duration : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  id="duration"
+                  type="text"
+                  label="duration"
+                  value={value}
+                  disabled={watch("NORM") !== 'T3'}
+                  className={classes.textField}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              )}
+            />
 
           </Grid>
           <Grid container direction="row" className={classes.mainHeader}>
@@ -530,6 +724,57 @@ export default function FormPropsTextFields(props: any) {
               )}
               rules={{ required: 'problematique is required' }}
             />
+            <Controller
+              control={control}
+              name="main_cause"
+              defaultValue={props.operation === 'edit' ? props.values.main_cause : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="main_cause"
+                  options={mainCauseList}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="Main Cause*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'Main Cause is required' }}
+            />
+            <Controller
+              control={control}
+              name="root_cause"
+              defaultValue={props.operation === 'edit' ? props.values.root_cause : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="root_cause"
+                  options={["Physique", "Logique", "Logique & Physique"]}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="Sous Cause*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'Sous Cause is required' }}
+            />
+
 
           </Grid>
           <Grid container direction="row" className={classes.mainHeader}>
@@ -558,6 +803,59 @@ export default function FormPropsTextFields(props: any) {
               )}
               rules={{ required: 'Constructor is required' }}
             />
+            {/* TODO: add blank item :-?*/}
+            <Controller
+              control={control}
+              name="action"
+              defaultValue={props.operation === 'edit' ? props.values.action : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="action"
+                  options={['OUI', 'NON']}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="Action*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'Action is required' }}
+            />
+            <Controller
+              control={control}
+              name="corrective_action"
+              defaultValue={props.operation === 'edit' ? props.values.corrective_action : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="corrective_action"
+                  options={['OUI', 'NON']}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="Corrective Action*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'Corrective Action is required' }}
+            />
+
+
           </Grid>
           <Grid container direction="row" className={classes.mainHeader}>
             <Controller
@@ -588,9 +886,87 @@ export default function FormPropsTextFields(props: any) {
               )}
               rules={{ required: 'incident type is required' }}
             />
+            {/* TODO: add blank item */}
+            <Controller
+              control={control}
+              name="alarm_bagot"
+              defaultValue={props.operation === 'edit' ? props.values.alarm_bagot : 'NON'}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+
+                  id="alarm_bagot"
+                  options={['OUI', 'NON']}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="Alarm Bagot*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'Alarm bagot is required' }}
+            />
+            <Controller
+              control={control}
+              name="alarm_active"
+              defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="alarm_active"
+                  options={['OUI', 'NON']}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="alarme_active*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'alarm_active is required' }}
+            />
 
           </Grid>
 
+          <Grid  container direction="row">
+              <Controller
+                control={control}
+                name="comment_tac"
+                defaultValue={props.operation === 'edit' ? props.values.comment_tac : null}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    // className={classes.notchedOutline}
+                    id="comment_tac"
+                    style={{ borderColor: 'orange' }}
+                    type="text"
+                    label="comment_tac"
+                    value={value}
+                    multiline
+                    rows={20}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    variant="outlined"
+                  />
+                )}
+              />
+            </Grid>
           <Button type="submit" variant="contained" color="primary">
             Add
           </Button>
