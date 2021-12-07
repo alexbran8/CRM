@@ -10,6 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { InputAdornment } from '@material-ui/core';
 import Grid from "@material-ui/core/Grid";
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 
@@ -118,6 +120,13 @@ const mainCauseList = ["Logicielles - Outils / Bases des dates",
   "Tilt NOK"
 ]
 
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -126,12 +135,12 @@ const useStyles = makeStyles((theme: Theme) =>
         width: '26ch',
         // borderBottom: '1px solid rgb(215 50 50 / 70%)'
       },
-      
+
     },
     mandatory: {
       borderBottom: '1px solid red'
     },
- 
+
   }),
 );
 
@@ -171,7 +180,7 @@ type Profile = {
 
 export default function FormPropsTextFields(props: any) {
   const classes = useStyles();
-  const { handleSubmit, control, setValue, watch } = useForm({});
+  const { handleSubmit, control, setValue, watch, register } = useForm({});
   const [weekGet, setWeek] = useState()
   const [dateValue, setDateValue] = useState()
 
@@ -231,732 +240,365 @@ export default function FormPropsTextFields(props: any) {
 
   return (
     <Grid container>
-      <div className="add-from">
+      <div className="add-form">
         <form
           className={classes.root}
-          autoComplete="on"
+          autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Grid
-            item
-          // xs={12}
-          >
-            <Typography className={classes.primaryColor} >
-              Main Info
-            </Typography>
-            <Divider
-              style={{ marginTop: 20 }}
-            />
+          <Grid item xs={12}>
             <Grid container direction="row" className={classes.mainHeader}>
-              <Grid item xs={2}>
-                <Controller
-                  name="uid"
-                  defaultValue={props.operation === 'edit' ? props.values.uid : null}
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      value={value}
-                      id="uid"
-                      type="text"
-                      disabled={true}
-                      label="uid"
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                // rules={{ required: 'uid is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="task"
-                  defaultValue={props.operation === 'edit' ? props.values.task : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                        setValue("duration", getDurartion(watch("NORM"), item))
-                      }}
-                      id="task"
-                      options={appelList}
-                      
-                      renderInput={(params) => (
-                        <TextField
-                          {...params }
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="appel*"
-                          className={`mandatory ${classes.textField}`}
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
+              <Controller
+                name="uid"
+                defaultValue={props.operation === 'edit' ? props.values.uid : null}
+                control={control}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    value={value}
+                    id="uid"
+                    type="text"
+                    disabled={true}
+                    label="uid"
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                )}
+              // rules={{ required: 'uid is required' }}
+              />
+              <Controller
+                control={control}
+                name="status"
+                defaultValue={props.operation === 'edit' ? props.values.status : null}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <Autocomplete
+                    value={value}
+                    onChange={(event, item) => {
+                      onChange(item);
+                    }}
+                    id="status"
+                    options={statusList}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        label="status*"
+                        style={{ borderBottom: '1px solid red' }}
+                      />
+                    )}
+                  />
+                )}
+                rules={{ required: 'status required' }}
+              />
+              <Controller
+                control={control}
+                name="no_incident"
+                defaultValue={props.operation === 'edit' ? props.values.no_incident : null}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    id="no_incident"
+                    type="text"
+                    label="TT GIR*"
+                    value={value}
+                    className={classes.textField}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    style={{ borderBottom: '1px solid red' }}
+                  />
+                )}
+                rules={{ required: 'TT is required' }}
+              />
 
-                    />
-                  )}
-                  rules={{ required: 'Appel is required' }}
-
-                />
-                <Controller
-                  name="date"
-                  control={control}
-                  defaultValue={props.operation === 'edit' ? props.values.date : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="date"
-                      type="date"
-                      label="date*"
-
-                      value={value}
-                      className={classes.textField}
-                      onChange={(event) => {
-                        onChange(event.target.value);
-                        setValue('week', getWeek(event.target.value))
-                      }}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      style={{ borderBottom: '1px solid red' }}
-                    />
-                  )}
-                  rules={{ required: 'Date is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="responsible_entity"
-                  // defaultValue={props.operation === 'edit' ? 'props.values.responsible_entity' : 'abran'}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="responsible_entity"
-                      options={props.userList ? props.userList : {}}
-                      getOptionLabel={(option) => option.DISTINCT}
-                      defaultValue={props.operation === 'edit' ?  {'DISTINCT':props.values.responsible_entity} : {'DISTINCT': props.user}}
-                      disabled={true}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          // defaultValue={props.operation === 'edit' ? props.values.responsible_entity : props.user}
-                          helperText={error ? error.message : null}
-                          label="responsible*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'Responsible is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="site"
-                  defaultValue={props.operation === 'edit' ? props.values.site : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="site"
-                      type="text"
-                      label="site*"
-                      value={value}
-                      className={classes.textField}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      style={{ borderBottom: '1px solid red' }}
-                    />
-                  )}
-                  rules={{ required: 'Site is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="site_constructor"
-                  defaultValue={props.operation === 'edit' ? props.values.site_constructor : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="site_constructor"
-                      options={constructorList}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="constructor*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'Constructor is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="incident_type"
-                  defaultValue={props.operation === 'edit' ? props.values.incident_type : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="task"
-                      options={incidentTypeList}
-                      renderInput={(params) => (
-                        <TextField
-                          // InputProps={{
-                          //   className: classes.mandatory,
-                          // }}
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="tt type*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'incident type is required' }}
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <Controller
-                  control={control}
-                  name="status"
-                  defaultValue={props.operation === 'edit' ? props.values.status : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="status"
-                      options={statusList}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="status*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'status required' }}
-                />
-                <Controller
-                  name="week"
-                  control={control}
-                  defaultValue={props.operation === 'edit' ? props.values.week : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="week"
-                      type="text"
-                      className={classes.textField}
-                      label="week"
-                      disabled={true}
-                      // style = {{width: 150}}
-                      // defaultValue="2021-05-24"
-                      // variant="filled"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="OMC_engineer"
-                  defaultValue={props.operation === 'edit' ? props.values.OMC_engineer : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="OMC_engineer"
-                      type="text"
-                      label="upalu"
-                      value={value}
-                      className={classes.textField}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="region"
-                  defaultValue={props.operation === 'edit' ? props.values.region : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="region"
-                      options={regionList}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="region*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'region is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="problem"
-                  defaultValue={props.operation === 'edit' ? props.values.problem : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="problem"
-                      options={problemList}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="problematique*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'problematique is required' }}
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <Controller
-                  control={control}
-                  name="no_incident"
-                  defaultValue={props.operation === 'edit' ? props.values.no_incident : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="no_incident"
-                      type="text"
-                      label="TT GIR*"
-                      value={value}
-                      className={classes.textField}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      style={{ borderBottom: '1px solid red' }}
-                    />
-                  )}
-                  rules={{ required: 'TT is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="no_itv"
-
-                  defaultValue={props.operation === 'edit' ? props.values.no_itv : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="no_itv"
-                      type="text"
-
-                      label="ITV"
-                      value={value}
-                      className={classes.textField}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="operation_location"
-                  defaultValue={props.operation === 'edit' ? props.values.operation_location : 'OUI'}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="operation_location"
-                      options={['Oui', 'Non', 'Pas complétement']}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="On sait trate*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'On sait traite is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="NORM"
-                  defaultValue={props.operation === 'edit' ? props.values.NORM : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                        setValue("duration", getDurartion(item, watch("task")))
-                      }}
-                      id="NORM"
-                      // FIXME: does not work properly
-                      disabled={(props.operation === 'edit' && props.values.task === null) || (props.operation !== 'edit' && !watch("task") ) }
-                      options={['T0', 'T1', 'T2', 'T3']}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="Norm*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'Norm is required' }}
-                />
-                {console.log(props.operation === 'edit' && props.values.task == null)}
-                <Controller
-                  control={control}
-                  name="main_cause"
-                  defaultValue={props.operation === 'edit' ? props.values.main_cause : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="main_cause"
-                      options={mainCauseList}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="Main Cause*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'Main Cause is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="action"
-                  defaultValue={props.operation === 'edit' ? props.values.action : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="action"
-                      options={['OUI', 'NON']}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="Action*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'Action is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="alarm_bagot"
-                  defaultValue={props.operation === 'edit' ? props.values.alarm_bagot : 'NON'}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      
-                      id="alarm_bagot"
-                      options={['OUI', 'NON']}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="Alarm Bagot*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'Alarm bagot is required' }}
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <Controller
-                  control={control}
-                  name="TT_creator_short"
-                  defaultValue={props.operation === 'edit' ? props.values.TT_creator_short : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="TT_creator_short"
-                      type="text"
-                      label="TT Creator"
-                      value={value}
-                      className={classes.textField}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                />
-                {/* TODO: make it mandatory when type of task is "Appel" */}
-                <Controller
-                  control={control}
-                  name="technician"
-                  defaultValue={props.operation === 'edit' ? props.values.technician : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="technician"
-                      type="text"
-                      label="technician (telephone)*"
-                      value={value}
-                      className={classes.textField}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      style={{ borderBottom: '1px solid red' }}
-                    />
-                  )}
-                  rules={{ required: watch('task') === 'Appel' }}
-                />
-                <Controller
-                  control={control}
-                  name="collage"
-                  defaultValue={props.operation === 'edit' ? props.values.collage : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="collage"
-                      options={['OUI', 'NON']}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="collage*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-
-                  )}
-                  rules={{ required: 'collage is required' }}
-                // InputProps={{
-                //   className: classes.mandatory,
-                // }}
-
-                />
-                <Controller
-                  control={control}
-                  name="duration"
-
-                  defaultValue={props.operation === 'edit' ? props.values.duration : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      id="duration"
-                      type="text"
-                      label="duration"
-                      value={value}
-                      disabled={watch("NORM") !== 'T3'}
-                      className={classes.textField}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="root_cause"
-                  defaultValue={props.operation === 'edit' ? props.values.root_cause : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="root_cause"
-                      options={["Physique", "Logique", "Logique & Physique"]}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="Sous Cause*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'Sous Cause is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="corrective_action"
-                  defaultValue={props.operation === 'edit' ? props.values.corrective_action : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="corrective_action"
-                      options={['OUI', 'NON']}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="Corrective Action*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'Corrective Action is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="alarm_active"
-                  defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="alarm_active"
-                      options={['OUI', 'NON']}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="alarme_active*"
-                          style={{ borderBottom: '1px solid red' }}
-                        />
-                      )}
-                    />
-                  )}
-                  rules={{ required: 'alarm_active is required' }}
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <Controller
-                  control={control}
-                  name="hastagTac"
-                  defaultValue={props.operation === 'edit' ? props.values.hastagTac : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                      value={value}
-                      onChange={(event, item) => {
-                        onChange(item);
-                      }}
-                      id="hastagTac"
-                      options={hashtagTacList}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="#"
-                        />
-                      )}
-                    />
-                  )}
-                // rules={{ required: '# is required' }}
-                />
-                <Controller
-                  control={control}
-                  name="comment_tac"
-                  defaultValue={props.operation === 'edit' ? props.values.comment_tac : null}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      // className={classes.notchedOutline}
-                      id="comment_tac"
-                      style={{ borderColor: 'orange' }}
-                      type="text"
-                      label="comment_tac"
-                      value={value}
-                      multiline
-                      rows={20}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </Grid>
             </Grid>
+          </Grid>
+          <Grid container direction="row" className={classes.mainHeader}>
+            <Controller
+              control={control}
+              name="task"
+              defaultValue={props.operation === 'edit' ? props.values.task : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                    setValue("duration", getDurartion(watch("NORM"), item))
+                  }}
+                  id="task"
+                  options={appelList}
 
-            <Button type="submit" variant="contained" color="primary">
-              {props.operation}
-            </Button>
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="appel*"
+                      className={`mandatory ${classes.textField}`}
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+
+                />
+              )}
+              rules={{ required: 'Appel is required' }}
+
+            />
+            <Controller
+              name="week"
+              control={control}
+              defaultValue={props.operation === 'edit' ? props.values.week : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  id="week"
+                  type="text"
+                  className={classes.textField}
+                  label="week"
+                  disabled={true}
+                  // style = {{width: 150}}
+                  // defaultValue="2021-05-24"
+                  // variant="filled"
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+            />
+
+          </Grid>
+          <Grid container direction="row" className={classes.mainHeader}>
+            <Controller
+              name="date"
+              control={control}
+              defaultValue={props.operation === 'edit' ? props.values.date : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  id="date"
+                  type="date"
+                  label="date*"
+
+                  value={value}
+                  className={classes.textField}
+                  onChange={(event) => {
+                    onChange(event.target.value);
+                    setValue('week', getWeek(event.target.value))
+                  }}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  style={{ borderBottom: '1px solid red' }}
+                />
+              )}
+              rules={{ required: 'Date is required' }}
+            />
+            <Controller
+              control={control}
+              name="OMC_engineer"
+              defaultValue={props.operation === 'edit' ? props.values.OMC_engineer : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  id="OMC_engineer"
+                  type="text"
+                  label="upalu"
+                  value={value}
+                  className={classes.textField}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              )}
+            />
+
+
+          </Grid>
+          <Grid container direction="row" className={classes.mainHeader}>
+            <Controller
+              control={control}
+              name="responsible_entity"
+              // defaultValue={props.operation === 'edit' ? 'props.values.responsible_entity' : 'abran'}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="responsible_entity"
+                  options={props.userList ? props.userList : {}}
+                  getOptionLabel={(option) => option.DISTINCT}
+                  defaultValue={props.operation === 'edit' ? { 'DISTINCT': props.values.responsible_entity } : { 'DISTINCT': props.user }}
+                  disabled={true}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      // defaultValue={props.operation === 'edit' ? props.values.responsible_entity : props.user}
+                      helperText={error ? error.message : null}
+                      label="responsible*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'Responsible is required' }}
+            />
+            <Controller
+              control={control}
+              name="region"
+              defaultValue={props.operation === 'edit' ? props.values.region : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="region"
+                  options={regionList}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="region*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'region is required' }}
+            />
 
 
 
           </Grid>
+          <Grid container direction="row" className={classes.mainHeader}>
+            <Controller
+              control={control}
+              name="site"
+              defaultValue={props.operation === 'edit' ? props.values.site : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  id="site"
+                  type="text"
+                  label="site*"
+                  value={value}
+                  className={classes.textField}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  style={{ borderBottom: '1px solid red' }}
+                />
+              )}
+              rules={{ required: 'Site is required' }}
+            />
+            <Controller
+              control={control}
+              name="problem"
+              defaultValue={props.operation === 'edit' ? props.values.problem : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="problem"
+                  options={problemList}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="problematique*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'problematique is required' }}
+            />
+
+          </Grid>
+          <Grid container direction="row" className={classes.mainHeader}>
+            <Controller
+              control={control}
+              name="site_constructor"
+              defaultValue={props.operation === 'edit' ? props.values.site_constructor : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="site_constructor"
+                  options={constructorList}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="constructor*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'Constructor is required' }}
+            />
+          </Grid>
+          <Grid container direction="row" className={classes.mainHeader}>
+            <Controller
+              control={control}
+              name="incident_type"
+              defaultValue={props.operation === 'edit' ? props.values.incident_type : null}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="task"
+                  options={incidentTypeList}
+                  renderInput={(params) => (
+                    <TextField
+                      // InputProps={{
+                      //   className: classes.mandatory,
+                      // }}
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="tt type*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'incident type is required' }}
+            />
+
+          </Grid>
+
+          <Button type="submit" variant="contained" color="primary">
+            Add
+          </Button>
 
         </form>
       </div>
-    </Grid>
+    </Grid >
+
 
   );
 }
