@@ -571,17 +571,17 @@ export default function FormPropsTextFields(props: any) {
             <Controller
               control={control}
               name="responsible_entity"
-              // defaultValue={props.operation === 'edit' ? 'props.values.responsible_entity' : 'abran'}
+              defaultValue={props.operation === 'edit' ? { 'DISTINCT': props.values.responsible_entity } : { 'DISTINCT': props.user }}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <Autocomplete
                   value={value}
                   onChange={(event, item) => {
-                    onChange(item);
+                    onChange(item.DISTINCT);
                   }}
                   id="responsible_entity"
                   options={props.userList ? props.userList : {}}
                   getOptionLabel={(option) => option.DISTINCT}
-                  defaultValue={props.operation === 'edit' ? { 'DISTINCT': props.values.responsible_entity } : { 'DISTINCT': props.user }}
+                  // defaultValue={props.operation === 'edit' ? { 'DISTINCT': props.values.responsible_entity } : { 'DISTINCT': props.user }}
                   disabled={true}
                   renderInput={(params) => (
                     <TextField
@@ -903,7 +903,7 @@ export default function FormPropsTextFields(props: any) {
                 <Autocomplete
                   value={value}
                   onChange={(event, item) => {
-                    onChange(item);
+                    onChange(item.title);
                   }}
                   
                   id="alarm_bagot"

@@ -156,10 +156,10 @@ export const Header = () => {
       .then(blob => setPic(URL.createObjectURL(blob)))
       .catch(error => {
         setPic(null);
-        setState({
-          // authenticated: false,
-          error: "Failed to authenticate user"
-        });
+        // setState({
+        //   // authenticated: false,
+        //   // error: "Failed to authenticate user"
+        // });
         console.log(error)
       });
   }
@@ -199,7 +199,8 @@ export const Header = () => {
           </Typography>
           {(state && state.authenticated) ? (
             <div className="avatar">
-              {pic ?
+              {console.log(pic)}
+              {/* {pic ? */}
                 <div className='icon'>
                   <IconButton
                     aria-label="account of current user"
@@ -214,7 +215,7 @@ export const Header = () => {
                       src={pic} /> <div className='avatar-name'>{state.user.first_name}</div>
                   </IconButton>
                 </div>
-                : null}
+                {/* : null} */}
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
