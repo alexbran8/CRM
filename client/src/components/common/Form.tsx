@@ -194,6 +194,10 @@ export default function FormPropsTextFields(props: any) {
     return finalResult
   }
 
+  console.log( props.userList)
+  const newArray = props.userList.map(item => { return item.DISTINCT})
+  console.log(newArray)
+
   const getDurartion = (norm, taskType) => {
 
     switch (true) {
@@ -571,18 +575,18 @@ export default function FormPropsTextFields(props: any) {
             <Controller
               control={control}
               name="responsible_entity"
-              defaultValue={props.operation === 'edit' ? { 'DISTINCT': props.values.responsible_entity } : { 'DISTINCT': props.user }}
+              defaultValue={props.operation === 'edit' ?  props.values.responsible_entity  :  props.user}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <Autocomplete
                   value={value}
                   onChange={(event, item) => {
-                    onChange(item.DISTINCT);
+                    onChange(item);
                   }}
                   id="responsible_entity"
-                  options={props.userList ? props.userList : {}}
-                  getOptionLabel={(option) => option.DISTINCT}
+                  options={props.userList ? props.userList.map(item => { return item.DISTINCT}) : {}}
+                  // getOptionLabel={(option) => option.DISTINCT}
                   // defaultValue={props.operation === 'edit' ? { 'DISTINCT': props.values.responsible_entity } : { 'DISTINCT': props.user }}
-                  disabled={true}
+                  // disabled={true}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -898,18 +902,18 @@ export default function FormPropsTextFields(props: any) {
             <Controller
               control={control}
               name="alarm_bagot"
-              
+              defaultValue={props.operation === 'edit' ? props.values.alarm_bagot : 'NON'}    
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <Autocomplete
                   value={value}
                   onChange={(event, item) => {
-                    onChange(item.title);
+                    onChange(item);
                   }}
                   
                   id="alarm_bagot"
-                  options={[{title: 'OUI'}, {title: 'NON'}]}
-                  defaultValue={props.operation === 'edit' ? {title : props.values.alarm_bagot} : {title: 'NON'}}
-                  getOptionLabel={(option) =>option.title}
+                  options={['OUI', 'NON']}
+                  
+                  // getOptionLabel={(option) =>option}
                   
                   renderInput={(params) => (
                     <TextField
@@ -927,7 +931,7 @@ export default function FormPropsTextFields(props: any) {
             <Controller
               control={control}
               name="alarm_active"
-              
+              defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <Autocomplete
                   value={value}
@@ -935,7 +939,7 @@ export default function FormPropsTextFields(props: any) {
                     onChange(item);
                   }}
                   id="alarm_active"
-                  defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
+               
                   options={['OUI', 'NON']}
                   // getOptionLabel={(option) => option.title}
                   renderInput={(params) => (
