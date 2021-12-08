@@ -194,10 +194,6 @@ export default function FormPropsTextFields(props: any) {
     return finalResult
   }
 
-  console.log( props.userList)
-  const newArray = props.userList.map(item => { return item.DISTINCT})
-  console.log(newArray)
-
   const getDurartion = (norm, taskType) => {
 
     switch (true) {
