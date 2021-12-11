@@ -46,7 +46,7 @@ export const AlertComponent = (props) => {
                         {showAlerts  ?
                                 <Box sx={{ width: '100%' }}>
                                         <Collapse in={open}>
-                                                <Alert severity="info" onClose={() => { setShowAlerts(false) }}>{`${message.type}: ${message.message}`}</Alert>
+                                                <Alert severity={message.type} onClose={() => { setShowAlerts(false) }}>{`${message.type}: ${message.message}`}</Alert>
                                         </Collapse>
                                 </Box>
                                 : null}
