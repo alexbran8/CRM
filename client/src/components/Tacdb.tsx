@@ -491,7 +491,7 @@ const Tac = () => {
         </div>
 
         <AlertComponent
-            messages={[{ message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
+            messages={[{ message: 'Filter by ITV is active', type: 'success' },{ message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
 
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
