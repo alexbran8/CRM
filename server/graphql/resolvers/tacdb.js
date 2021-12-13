@@ -28,14 +28,14 @@ module.exports = {
       // TODO: implement date type in graphql
       let dateFilter = args.date ? { date: dateSearch  } : null
       let weekFilter = args.week ? { week: args.week } : null
-      let itvFilter = args.no_itv ? { no_itv: args.no_itv } : null
+      let incidentFilter = args.no_itv ? { no_incident: args.no_itv } : null
       var statusFilter = args.status ? { status: args.status } : null
       // var statusFilter = args.status === 'null' ? { comment_tac: {[Op.eq]: null} } : null
       let siteFilter = args.site ? { site: args.site } : null
       let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
-      
+      console.log(incidentFilter)
       let result = await db.Tacdb.findAll({
-        where: { [Op.and]: [dateFilter, weekFilter, itvFilter, statusFilter, siteFilter, responsibleFilter] },
+        where: { [Op.and]: [dateFilter, weekFilter, incidentFilter, statusFilter, siteFilter, responsibleFilter] },
         limit: args.first
       });
       return result;

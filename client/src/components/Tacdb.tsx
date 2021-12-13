@@ -7,7 +7,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios'
-import {AlertComponent} from "./common/Alert/Alert"
+import { AlertComponent } from "./common/Alert/Alert"
 // import FileReader from "./FileReader";
 import { useForm, Controller } from 'react-hook-form'
 import SimpleModal from "../components/common/Modal"
@@ -147,7 +147,7 @@ const Tac = () => {
     const [showModal, setShowModal] = React.useState < boolean > (false);
     const [operation, setOperation] = useState < string > (null);
     const [selectedItem, setSelectedItem] = useState();
-    const [itv, setItv] = useState();
+    const [itv, setItv] = useState < string > ();
     const [site, setSite] = useState();
     const newDate = new Date();
     const [date, setDate] = useState(newDate);
@@ -159,7 +159,7 @@ const Tac = () => {
     const [showUploadModal, setShowUploadModal] = useState < boolean > (false)
     const { watch, control, setValue } = useForm({});
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
-        variables: { status: status, week: week, date: date, responsible_entity: responsible }, onCompleted: (
+        variables: { status: status, week: week, date: date, responsible_entity: responsible, no_itv: itv }, onCompleted: (
         ) => {
             setItems(data.getAll)
 
@@ -354,14 +354,14 @@ const Tac = () => {
     }
 
 
-    useEffect(()=>{
+    useEffect(() => {
         setResponsible(user.auth.userName)
-    },[])
+    }, [])
 
 
-    
 
-    const dateToString = d => `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}` 
+
+    const dateToString = d => `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
     const myDate = new Date()
     console.log(dateToString(myDate))
     return (<div>
@@ -379,38 +379,41 @@ const Tac = () => {
                     disabled={true}
                     // getOptionLabel={(option) => option.week}
                     style={{ width: 300 }}
-                    onChange={(e, v) => { setWeek(v); refetch() }}
+                    onChange={(e, v) => { setWeek(e.target.value); refetch() }}
                     className={classes.textField}
                     renderInput={(params) => <TextField {...params} label="select week" variant="outlined" />}
                 />
             </>
             <>
-                <Autocomplete
-                    id="combo-box-demo"
-                    options={itvList}
-                    disabled={true}
-                    // getOptionLabel={(option) => option}
-                    style={{ width: 300 }}
+                <TextField
+                    id="itvFilter"
+                    type="text"
+                    // value={"12-02-2021"}
+                    // defaultValue={}
+                    // defaultValue={dateToString(myDate)}
+                    variant="outlined"
                     className={classes.textField}
-                    onChange={(e, v) => setItv(v)}
-                    renderInput={(params) => <TextField {...params} label="select ITV" variant="outlined" />}
+                    onChange={(e, v) => { setItv(e.target.value); refetch() }}
+                // InputLabelProps={{
+                //     shrink: true,
+                // }}
                 />
             </>
-            
+
             <>
-                        <TextField
-                            id="dateFilter"
-                            type="date"
-                            // value={"12-02-2021"}
-                            // defaultValue={}
-                            defaultValue={dateToString(myDate)}
-                            variant="outlined"
-                            className={classes.textField}
-                            onChange={(e, v) => { setDate(e.target.value); refetch() }}
-                        // InputLabelProps={{
-                        //     shrink: true,
-                        // }}
-                        />
+                <TextField
+                    id="dateFilter"
+                    type="date"
+                    // value={"12-02-2021"}
+                    // defaultValue={}
+                    defaultValue={dateToString(myDate)}
+                    variant="outlined"
+                    className={classes.textField}
+                    onChange={(e, v) => { setDate(e.target.value); refetch() }}
+                // InputLabelProps={{
+                //     shrink: true,
+                // }}
+                />
                 <>
                     <Autocomplete
                         id="status"
@@ -448,31 +451,31 @@ const Tac = () => {
                         name="responsible"
                         
                         render={({ field: { onChange, value }, fieldState: { error } }) => ( */}
-                            <Autocomplete
-                                id="responsible"
-                                options={responsiblesList}
-                                defaultValue={{'DISTINCT': responsible}}
-                                getOptionLabel={(option) => option.DISTINCT}
-                                style={{ width: 300 }}
-                                className={classes.textField}
-                                // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
-                                
-                                onInputChange={(event, newInputValue, reason) => {
-                                    if (reason === 'clear') {
-                                        setResponsible(''); refetch()
-                                        return
-                                    } else {
-                                        setResponsible(newInputValue); refetch()
-                                    }
-                                }}
-                                renderInput={(params) => <TextField {...params}
-                                    label="select responsible"
-                                    variant="outlined"
-                                    
-                                defaultValue={responsible}
-                                />}
-                            />
-                        {/* )} */}
+                    <Autocomplete
+                        id="responsible"
+                        options={responsiblesList}
+                        defaultValue={{ 'DISTINCT': responsible }}
+                        getOptionLabel={(option) => option.DISTINCT}
+                        style={{ width: 300 }}
+                        className={classes.textField}
+                        // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
+
+                        onInputChange={(event, newInputValue, reason) => {
+                            if (reason === 'clear') {
+                                setResponsible(''); refetch()
+                                return
+                            } else {
+                                setResponsible(newInputValue); refetch()
+                            }
+                        }}
+                        renderInput={(params) => <TextField {...params}
+                            label="select responsible"
+                            variant="outlined"
+
+                            defaultValue={responsible}
+                        />}
+                    />
+                    {/* )} */}
                     {/* /> */}
                 </>
             </>
@@ -486,9 +489,9 @@ const Tac = () => {
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
             <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
         </div>
-  
-      <AlertComponent
-      messages={[{message: 'Modal is now responsive', type: 'success'}, {message:'updated filter fields', type: 'success'} , {message:'[planned update] review form options', type: 'info'}]} />
+
+        <AlertComponent
+            messages={[{ message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
 
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
@@ -550,7 +553,7 @@ const Tac = () => {
             <tbody>
                 {items && items.map((item, index) => {
                     return <tr key={index}>
-                        <td>{index+1}</td>
+                        <td>{index + 1}</td>
                         {user.auth.role === 'L3' ? <td> <input
                             type="checkbox"
                             checked={checked.find((y) => y.uid == item.uid) ? true : false}
