@@ -498,6 +498,7 @@ const Tac = () => {
         <Table striped bordered hover className="dash-table">
             <thead >
                 <tr>
+                    <th></th>
                     {user.auth.role === 'L3' ? <th>Select</th> : null}
                     <th></th>
                     <th>
@@ -549,6 +550,7 @@ const Tac = () => {
             <tbody>
                 {items && items.map((item, index) => {
                     return <tr key={index}>
+                        <td>{index+1}</td>
                         {user.auth.role === 'L3' ? <td> <input
                             type="checkbox"
                             checked={checked.find((y) => y.uid == item.uid) ? true : false}
