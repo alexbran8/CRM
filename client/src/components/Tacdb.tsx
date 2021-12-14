@@ -373,15 +373,20 @@ const Tac = () => {
         //   onSubmit={handleSubmit(onSubmit)}
         > */}
             <>
-                <Autocomplete
-                    id="combo-box-demo"
-                    options={weekList}
-                    disabled={true}
-                    // getOptionLabel={(option) => option.week}
-                    style={{ width: 300 }}
-                    onChange={(e, v) => { setWeek(e.target.value); refetch() }}
+     
+            <TextField
+                    id="weekFilter"
+                    type="text"
+                    label="enter week no"
+                    // value={"12-02-2021"}
+                    // defaultValue={}
+                    // defaultValue={dateToString(myDate)}
+                    variant="outlined"
                     className={classes.textField}
-                    renderInput={(params) => <TextField {...params} label="select week" variant="outlined" />}
+                    onChange={(e, v) => { setWeek(e.target.value); refetch() }}
+                // InputLabelProps={{
+                //     shrink: true,
+                // }}
                 />
             </>
             <>
