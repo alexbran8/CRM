@@ -147,8 +147,8 @@ const Tac = () => {
     const [showModal, setShowModal] = React.useState < boolean > (false);
     const [operation, setOperation] = useState < string > (null);
     const [selectedItem, setSelectedItem] = useState();
-    const [itv, setItv] = useState < string > ();
-    const [site, setSite] = useState();
+    const [itv, setItv] = useState < string > (null);
+    const [site, setSite] = useState<string>(null);
     const newDate = new Date();
     const [date, setDate] = useState(newDate);
     const [responsiblesList, setResponsiblesList] = useState([]);
@@ -159,7 +159,7 @@ const Tac = () => {
     const [showUploadModal, setShowUploadModal] = useState < boolean > (false)
     const { watch, control, setValue } = useForm({});
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
-        variables: { status: status, week: week, date: date, responsible_entity: responsible, no_itv: itv }, onCompleted: (
+        variables: { status: status, week: week, date: date, responsible_entity: responsible, no_itv: itv, site: site }, onCompleted: (
         ) => {
             setItems(data.getAll)
 
@@ -440,16 +440,20 @@ const Tac = () => {
                     />
                 </>
                 <>
-                    <Autocomplete
-                        id="combo-box-demo"
-                        options={weekList}
-                        // getOptionLabel={(option) => option}
-                        style={{ width: 300 }}
-                        disabled={true}
-                        className={classes.textField}
-                        onChange={(e, v) => setStite(v)}
-                        renderInput={(params) => <TextField {...params} label="select site" variant="outlined" />}
-                    />
+                <TextField
+                    id="siteFilter"
+                    type="text"
+                    label="enter site no"
+                    // value={"12-02-2021"}
+                    // defaultValue={}
+                    // defaultValue={dateToString(myDate)}
+                    variant="outlined"
+                    className={classes.textField}
+                    onChange={(e, v) => { setSite(e.target.value); refetch() }}
+                // InputLabelProps={{
+                //     shrink: true,
+                // }}
+                />
                 </>
                 <>
                     {/* <Controller
