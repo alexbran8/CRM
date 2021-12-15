@@ -12,6 +12,8 @@ import { AlertComponent } from "./common/Alert/Alert"
 import { useForm, Controller } from 'react-hook-form'
 import SimpleModal from "../components/common/Modal"
 
+import {ExportToExcel} from "../components/common/Export/ExportExcel"
+
 import { config } from "../config"
 
 import "./Tacdb.scss"
@@ -498,6 +500,11 @@ const Tac = () => {
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
             <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
+            <ExportToExcel
+            apiData = {items}
+            fileName= "export_tacdb"
+            operationName="export"
+            />
         </div>
 
         <AlertComponent
