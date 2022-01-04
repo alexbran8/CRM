@@ -106,7 +106,7 @@ class ExcelReader extends Component {
             Close
           </Button>
           <Button variant="primary"
-            onClick={() => { this.handleFile(); this.props.setShowModal(); }}
+            onClick={() => { this.handleFile()}}
           >
             Confirm
           </Button>

@@ -26,7 +26,7 @@ module.exports = {
       console.log(args)
       let dateSearch = new Date(args.date)
       // TODO: implement date type in graphql
-      let dateFilter = args.date ? { date: dateSearch  } : null
+      let dateFilter = args.date ? { date: dateSearch } : null
       let weekFilter = args.week ? { week: args.week } : null
       let incidentFilter = args.no_itv ? { no_incident: args.no_itv } : null
       var statusFilter = args.status ? { status: args.status } : null
@@ -41,83 +41,96 @@ module.exports = {
       return result;
 
     },
-      async getDistinctWeeks(root, args, context) {
-        let result = await db.Tacdb.aggregate({attributes: ['week'], distinct: true})
-        return result
-      },
+    async getDistinctWeeks(root, args, context) {
+      let result = await db.Tacdb.aggregate({ attributes: ['week'], distinct: true })
+      return result
+    },
 
-      async getResponsibles(root, args, context) {
-        let result = await db.Tacdb.aggregate('responsible_entity', 'DISTINCT',{plain: false} )
-        console.log(result)
-        return result
-      }
+    async getResponsibles(root, args, context) {
+      let result = await db.Tacdb.aggregate('responsible_entity', 'DISTINCT', { plain: false })
+      console.log(result)
+      return result
+    }
   },
   Mutation: {
     async addItem(root, data, context) {
       try {
         let new_id = await db.sequelize.query("Select nextval(pg_get_serial_sequence('tacdashboard_item', 'id')) as new_id;")
-        data.data.uid=new_id[0][0].new_id
-        console.log(data.data.id)      
-        db.Tacdb.create(data.data)  
-        const response = {message: 'Notifications have been successfully sent!', success: true}
-        return  response  
+        data.data.uid = new_id[0][0].new_id
+        console.log(data.data.id)
+        db.Tacdb.create(data.data)
+        const response = { message: 'Notifications have been successfully sent!', success: true }
+        return response
       }
-               
+
       catch (error) {
         console.log(error)
-        const response = {message: error, success: false}
-        return  response
+        const response = { message: error, success: false }
+        return response
       }
     },
     async editItem(root, data, context) {
       try {
-        const { id, title, requirements, type, description,  coordinator } = data.data  
+        const { id, title, requirements, type, description, coordinator } = data.data
         const dataToUpdate = data.data
-        let uid = dataToUpdate. uid
+        let uid = dataToUpdate.uid
         console.log(uid)
         db.Tacdb.update(
-            dataToUpdate ,
-          { where: { id: uid  } }
+          dataToUpdate,
+          { where: { id: uid } }
         );
-        const response = {message: 'Notifications have been successfully sent!', success: true}
-        return  response  
+        const response = { message: 'Notifications have been successfully sent!', success: true }
+        return response
       }
-               
+
       catch (error) {
         console.log(error)
-        const response = {message: error, success: false}
-        return  response
+        const response = { message: error, success: false }
+        return response
       }
     },
 
     async deleteItem(root, data, context) {
       try {
         db.Tacdb.destroy({
-          where: {  
-             id: data.uid
+          where: {
+            id: data.uid
           }
-      })
-      const response = { message: 'Item hs been successfully deleted!', uid: data.uid, success: true }
+        })
+        const response = { message: 'Item hs been successfully deleted!', uid: data.uid, success: true }
         return response
       }
       catch (error) {
         console.log(error)
-        const response = {message: error, success: false}
-        return  response
+        const response = { message: error, success: false }
+        return response
+      }
+    },
+
+    async saveItems(root, data, context) {
+      try {
+       console.log(data)
+      
+      const response = { message: 'Items have been successfully deleted!', success: true }
+      return response
+      }
+      catch (error) {
+        console.log(error)
+        const response = { message: error, success: false }
+        return response
       }
     },
 
 
-
     async deleteItems(root, data, context) {
       try {
-        data.data.forEach((x) =>{
-        db.Tacdb.destroy({
-          where: {  
-             id: x.uid
-          }
-      })
-    })
+        data.data.forEach((x) => {
+          db.Tacdb.destroy({
+            where: {
+              id: x.uid
+            }
+          })
+        })
 
         const response = { message: 'Items have been successfully deleted!', success: true }
         return response

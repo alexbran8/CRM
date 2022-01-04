@@ -83,6 +83,11 @@ type tacdb {
     uid: Int!
    }
 
+   input fileSchema {
+    Phase:String
+
+   }
+
 extend  type Query  {
     getAll(first: Int week:String date:String no_itv: String status: String site: String responsible_entity: String): [tacdb]
     getDistinctWeeks:[getDistinct]
@@ -94,6 +99,7 @@ extend type Mutation {
   addItem(data: itemSave):Response!
   editItem(data: itemSave):Response!
   deleteItem(uid: Int):Response!
+  saveItems(data: [fileSchema]):Response!
 }
 
 `;

@@ -12,7 +12,7 @@ import { AlertComponent } from "./common/Alert/Alert"
 import { useForm, Controller } from 'react-hook-form'
 import SimpleModal from "../components/common/Modal"
 
-import {ExportToExcel} from "../components/common/Export/ExportExcel"
+import { ExportToExcel } from "../components/common/Export/ExportExcel"
 
 import { config } from "../config"
 
@@ -88,6 +88,15 @@ mutation ($data: [idArray]) {
     }
 `;
 
+const SAVE_FILE = gql`
+mutation ($data: [fileSchema]) {
+    saveItems (data:$data){
+        success
+        message
+      }
+    }
+`;
+
 const ADD_ITEM = gql`
 mutation ($data: itemSave) {
     addItem (data:$data){
@@ -150,7 +159,7 @@ const Tac = () => {
     const [operation, setOperation] = useState < string > (null);
     const [selectedItem, setSelectedItem] = useState();
     const [itv, setItv] = useState < string > (null);
-    const [site, setSite] = useState<string>(null);
+    const [site, setSite] = useState < string > (null);
     const newDate = new Date();
     const [date, setDate] = useState(newDate);
     const [responsiblesList, setResponsiblesList] = useState([]);
@@ -167,6 +176,8 @@ const Tac = () => {
 
         }
     });
+
+    
 
     const { data: responsibleData, loading: loadingReponsibles, error: ErrorResponsibles, refetch: refetchResponsibles } = useQuery(GET_RESPONSIBLES, {
         // variables: { }, 
@@ -186,6 +197,21 @@ const Tac = () => {
             });
             setItems(newItems => [...newItems, item]);
             setShowModal(false)
+
+        },
+        onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
+    });
+
+    const [saveFileMutation] = useMutation(SAVE_FILE, {
+        onCompleted: (dataRes) => {
+            
+            // update state
+            // const newItems = [...items]
+            // newItems.forEach((item) => {
+            //     item.uid = item.uid + 1;
+            // });
+            // setItems(newItems => [...newItems, item]);
+            // setShowModal(false)
 
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
@@ -305,21 +331,26 @@ const Tac = () => {
 
 
     // FIXME: select does not work
-
+    // FIXME: convert to graphql:D:D
     const sendData = (data) => {
-        var that = this;
-        axios.post(config.baseURL + config.baseLOCATION + '/dailyTasks', {
-            data: data
+    axios.post(config.baseURL + config.baseLOCATION + '/dailyTasks', { data: data }, {
+        withCredentials: true
+      })
+        .then(function (response) {
+          // alert(response.data.message + ' => imported: ' + response.data.imported + '; existing: ' + response.data.existing );
+          console.log(response.data)
+          that.setState({ isLoading: false })
+        //   that.setState({ messageData: response.data })
+        //   update state if everything is ok
+        //   that.props.refetch()
         })
-            .then(function (response) {
-                // alert(response.data.message + ' => imported: ' + response.data.imported + '; existing: ' + response.data.existing );
-                console.log(response.data)
-                that.setState({ messageData: response.data })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+        .catch(function (error) {
+          console.log({error});
+        //   that.setState({ isLoading: false })
+        //   that.setState({ messageData: error.response.data })
+        })
 
+    //    setShowUploadModal(!showUploadModal)
     }
 
     const { data: data2, loading: loading2, error: error2 } = useQuery(GET_DISTINCT, {
@@ -376,8 +407,8 @@ const Tac = () => {
         //   onSubmit={handleSubmit(onSubmit)}
         > */}
             <>
-     
-            <TextField
+
+                <TextField
                     id="weekFilter"
                     type="text"
                     label="enter week no"
@@ -443,20 +474,20 @@ const Tac = () => {
                     />
                 </>
                 <>
-                <TextField
-                    id="siteFilter"
-                    type="text"
-                    label="enter site no"
-                    // value={"12-02-2021"}
-                    // defaultValue={}
-                    // defaultValue={dateToString(myDate)}
-                    variant="outlined"
-                    className={classes.textField}
-                    onChange={(e, v) => { setSite(e.target.value); refetch() }}
-                // InputLabelProps={{
-                //     shrink: true,
-                // }}
-                />
+                    <TextField
+                        id="siteFilter"
+                        type="text"
+                        label="enter site no"
+                        // value={"12-02-2021"}
+                        // defaultValue={}
+                        // defaultValue={dateToString(myDate)}
+                        variant="outlined"
+                        className={classes.textField}
+                        onChange={(e, v) => { setSite(e.target.value); refetch() }}
+                    // InputLabelProps={{
+                    //     shrink: true,
+                    // }}
+                    />
                 </>
                 <>
                     {/* <Controller
@@ -498,18 +529,18 @@ const Tac = () => {
 
         <div className='buttonContainer'>
             <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
-            <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
+            <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
             <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
             <ExportToExcel
-            apiData = {items}
-            fileName= "export_tacdb"
-            operationName="export"
+                apiData={items}
+                fileName="export_tacdb"
+                operationName="export"
             />
         </div>
 
         <AlertComponent
-            messages={[{ message: 'Fixed item delete for single item...', type: 'success' },{ message: 'File Export is now working for admins...', type: 'success' },{ message: 'Filter by site is now active', type: 'success' },{ message: 'Filter by week is now active', type: 'success' },{ message: 'Filter by ITV is active', type: 'success' },{ message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
+            messages={[{ message: 'Fixed item delete for single item...', type: 'success' }, { message: 'File Export is now working for admins...', type: 'success' }, { message: 'Filter by site is now active', type: 'success' }, { message: 'Filter by week is now active', type: 'success' }, { message: 'Filter by ITV is active', type: 'success' }, { message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
 
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
@@ -606,7 +637,7 @@ const Tac = () => {
                                         window.confirm(`Are you sure you want to delete ${item.no_incident} items?
                                       `)
                                     ) {
-                                    deleteItem(item.uid)
+                                        deleteItem(item.uid)
                                     }
                                 }
                                 else { alert('You are not allowed to delete this item...') }
