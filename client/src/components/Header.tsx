@@ -88,13 +88,15 @@ export const Header = () => {
 
 
   useEffect(() => {
-    fetch(config.baseURL + config.baseLOCATION + "/auth/login/success/", {
+    fetch(config.baseURL + config.baseLOCATION + "/auth/login/success/",  {
       method: "GET",
+      // body: JSON.stringify({ title: 'Fetch POST Request Example' }),
       credentials: "include",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": true
+        "Access-Control-Allow-Credentials": true,
+        // "Access-Control-Allow-Origin":true
       }
     })
       .then(response => {
@@ -199,7 +201,6 @@ export const Header = () => {
           </Typography>
           {(state && state.authenticated) ? (
             <div className="avatar">
-              {console.log(pic)}
               {/* {pic ? */}
                 <div className='icon'>
                   <IconButton
