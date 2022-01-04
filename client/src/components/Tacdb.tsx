@@ -193,6 +193,7 @@ const Tac = () => {
 
     const [deleteItemMutation] = useMutation(DELETE_ITEM, {
         onCompleted: (dataRes) => {
+            alert(dataRes.deleteItem.message);
             // update state after item is deleted from db
             let newItems = items.filter(function (el) { return el.uid != dataRes.deleteItem.uid; });
             setItems(newItems)
@@ -508,7 +509,7 @@ const Tac = () => {
         </div>
 
         <AlertComponent
-            messages={[{ message: 'File Export is now working for admins...', type: 'success' },{ message: 'Filter by site is now active', type: 'success' },{ message: 'Filter by week is now active', type: 'success' },{ message: 'Filter by ITV is active', type: 'success' },{ message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
+            messages={[{ message: 'Fixed item delete for single item...', type: 'success' },{ message: 'File Export is now working for admins...', type: 'success' },{ message: 'Filter by site is now active', type: 'success' },{ message: 'Filter by week is now active', type: 'success' },{ message: 'Filter by ITV is active', type: 'success' },{ message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
 
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
@@ -601,7 +602,12 @@ const Tac = () => {
                         <td><Button variant="contained" color="secondary" disabled={user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ? false : true}
                             onClick={() => {
                                 if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3') {
+                                    if (
+                                        window.confirm(`Are you sure you want to delete ${item.no_incident} items?
+                                      `)
+                                    ) {
                                     deleteItem(item.uid)
+                                    }
                                 }
                                 else { alert('You are not allowed to delete this item...') }
                             }}
