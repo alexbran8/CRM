@@ -83,7 +83,7 @@ app.use(
 
 // set up routes
 app.use("/auth", authRoutes);
-// require("./routes/dailyTasks.routes")(app);
+require("./routes/dailyTasks.routes")(app);
 // require("./routes/competence.routes")(app);
 // require("./routes/resource.routes")(app);
 

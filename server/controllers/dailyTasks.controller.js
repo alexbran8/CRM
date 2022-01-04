@@ -25,13 +25,15 @@ exports.create = async (req, res) => {
       //   WHERE task = '${req.body.data[i]["Nom Activite"]}' and tt = '${req.body.data[i]["Num Instance"]}'
       //   `
       // );
+      let newId = await db.sequelize.query("Select nextval(pg_get_serial_sequence('tacdashboard_item', 'id')) as new_id;")
 
 
+      console.log(newId[0][0].new_id)
       const row = {
+        id: newId[0][0].new_id,
         task: req.body.data[i].Task,
         no_incident: req.body.data[i]["N° Incident"],
         no_itv:req.body.data[i]["ITV"],
-        
         week: "",
         TT_creatorL:req.body.data[i]["Auteur"],
         auteur: req.body.data[i]["Auteur"],
@@ -39,7 +41,8 @@ exports.create = async (req, res) => {
         site: req.body.data[i]["Détecté sur"],
         task: req.body.data[i]["Nom Activite"],
         responsible_entity: req.body.data[i]["Utilisateur"],
-        crDate: Date.now(),
+        createdBy: req.user.email,
+        cr_date: new Date(),
       }
       
       // if (check[0].length == 0 ) {
@@ -49,6 +52,9 @@ exports.create = async (req, res) => {
     //     existingEntries.push(row)
     //   }
     }
+
+
+    console.log(project)
 
     db.Tacdb.bulkCreate(project)
       .then(data => {

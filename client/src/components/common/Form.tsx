@@ -175,7 +175,14 @@ type Profile = {
   bagot: string
   active: string
 }
-
+export function getWeek(date) {
+  const currentdate = new Date(date);
+  var oneJan = new Date(currentdate.getFullYear(), 0, 1);
+  var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
+  var result = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
+  var finalResult = result + '-' + currentdate.getFullYear().toString().substr(-2);
+  return finalResult
+}
 
 
 export default function FormPropsTextFields(props: any) {
@@ -185,14 +192,7 @@ export default function FormPropsTextFields(props: any) {
   const [dateValue, setDateValue] = useState()
 
 
-  function getWeek(date) {
-    const currentdate = new Date(date);
-    var oneJan = new Date(currentdate.getFullYear(), 0, 1);
-    var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
-    var result = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
-    var finalResult = result + '-' + currentdate.getFullYear().toString().substr(-2);
-    return finalResult
-  }
+
 
   const getDurartion = (norm, taskType) => {
 

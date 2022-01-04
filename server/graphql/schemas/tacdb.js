@@ -84,7 +84,17 @@ type tacdb {
    }
 
    input fileSchema {
-    Phase:String
+    no_incident:String
+    no_itv:String
+    TT_creator:String
+    auteur:String
+    region:String
+    site:String
+    responsible_entity:String
+    createdBy:String
+    week: String
+    task: String
+    date: String
 
    }
 

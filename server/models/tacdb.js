@@ -42,6 +42,7 @@ module.exports = (sequelize, type) => {
       },
       alarm_bagot: { type: type.STRING },
       createdBy: { type: type.STRING },
+      cr_date:{ type: 'TIMESTAMP', },
       alarm_active: { type: type.STRING },
       incident_type: { type: type.STRING },
       NORM: { type: type.STRING },

@@ -109,10 +109,51 @@ module.exports = {
 
     async saveItems(root, data, context) {
       try {
-       console.log(data)
-      
-      const response = { message: 'Items have been successfully deleted!', success: true }
-      return response
+        console.log(data)
+        let project = [];
+        let existingEntries = [];
+
+        for (var i = 0; i < data.data.length; i++) {
+
+          // check if entry allready exists in datbase
+          // let check = await db.query(
+          //   `SELECT id, task, tt FROM "dailyTasks" 
+          //   WHERE task = '${data[i]["Nom Activite"]}' and tt = '${data[i]["Num Instance"]}'
+          //   `
+          // );
+          let newId = await db.sequelize.query("Select nextval(pg_get_serial_sequence('tacdashboard_item', 'id')) as new_id;")
+
+          const row = {
+            id: newId[0][0].new_id,
+            date:data.data[i].date,
+            task: data.data[i].task,
+            no_incident: data.data[i].no_incident,
+            no_itv: data.data[i].no_itv,
+            week: data.data[i].week,
+            TT_creatorL: data.data[i]["TT_creator"],
+            auteur: data.data[i].auteur,
+            region: data.data[i].region,
+            site: data.data[i].site,
+            task: data.data[i]["Nom Activite"],
+            responsible_entity: data.data[i].responsible_entity,
+            createdBy: data.data[i]["createdBy"],
+            cr_date: new Date(),
+          }
+
+          // if (check[0].length == 0 ) {
+          project.push(row)
+          //   }
+          //   else {
+          //     existingEntries.push(row)
+          //   }
+        }
+
+
+        db.Tacdb.bulkCreate(project)
+
+
+        const response = { message: 'Items have been successfully imported!', success: true }
+        return response
       }
       catch (error) {
         console.log(error)

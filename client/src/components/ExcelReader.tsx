@@ -24,6 +24,7 @@ class ExcelReader extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      disabled: true,
       showHide: false,
       test: "",
       messageData: {
@@ -50,7 +51,11 @@ class ExcelReader extends Component {
 
   handleChange(e) {
     const files = e.target.files;
-    if (files && files[0]) this.setState({ file: files[0] });
+    if (files && files[0]) {
+      this.setState({ file: files[0] });
+      this.setState({ disabled: false })
+    }
+
   };
 
 
@@ -76,9 +81,11 @@ class ExcelReader extends Component {
 
       );
       /* Update state */
+
       this.setState({ data: data, cols: make_cols(ws['!ref']) }, () => {
         // this.sendData(this.state.data);
         this.props.getData(this.state.data)
+        this.setState({ disabled: true })
         //console.log(JSON.stringify(this.state.data, null, 2));
       });
 
@@ -101,12 +108,14 @@ class ExcelReader extends Component {
         <Modal.Body>
           <input type="file" className="form-control" id="file" accept={SheetJSFT} onChange={this.handleChange} />
         </Modal.Body>
+        {this.props.response}
         <Modal.Footer>
           <Button variant="secondary" onClick={() => this.props.setShowModal()}>
             Close
           </Button>
           <Button variant="primary"
-            onClick={() => { this.handleFile()}}
+            onClick={() => { this.handleFile() }}
+            disabled={this.state.disabled}
           >
             Confirm
           </Button>

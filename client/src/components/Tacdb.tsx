@@ -19,6 +19,7 @@ import { config } from "../config"
 import "./Tacdb.scss"
 import ExcelReader from "./ExcelReader";
 
+import { getWeek } from "./common/Form";
 
 const GET_RESPONSIBLES = gql`
 query {
@@ -150,6 +151,7 @@ const Tac = () => {
 
     const classes = useStyles();
     const [checked, setChecked] = useState([])
+    const [disabledConfirm, setDisabledConfirm]= useState<boolean>(true)
     const [items, setItems] = useState([])
     const [selected, setSelected] = useState(0)
     const [weekList, setuWeeksList] = useState([]);
@@ -164,6 +166,7 @@ const Tac = () => {
     const [date, setDate] = useState(newDate);
     const [responsiblesList, setResponsiblesList] = useState([]);
     const [responsible, setResponsible] = useState < string > (user.auth.userName);
+    const [response, setResponse] = useState < string > (user.auth.userName);
     const [week, setWeek] = useState();
     // const [statusClear, setClearStatus] = useState < boolean > (false)
     const [item, setItem] = useState([]);
@@ -177,7 +180,7 @@ const Tac = () => {
         }
     });
 
-    
+
 
     const { data: responsibleData, loading: loadingReponsibles, error: ErrorResponsibles, refetch: refetchResponsibles } = useQuery(GET_RESPONSIBLES, {
         // variables: { }, 
@@ -204,7 +207,7 @@ const Tac = () => {
 
     const [saveFileMutation] = useMutation(SAVE_FILE, {
         onCompleted: (dataRes) => {
-            
+                    setResponse(dataRes.saveItems.message)
             // update state
             // const newItems = [...items]
             // newItems.forEach((item) => {
@@ -301,6 +304,7 @@ const Tac = () => {
                 }), 1);
             })
             setChecked([])
+            setSelected(0)
             console.log(items.length)
 
         },
@@ -327,30 +331,51 @@ const Tac = () => {
     }
 
 
+    function getCollumns(inputArray) {
+        return inputArray.map(item => {
+            return {
+                task: item["Task"],
+                no_incident: item["N° Incident"],
+                no_itv: item["ITV"],
+                date: item["CR_DATE"],
+                week: getWeek(item["CR_DATE"]),
+                TT_creator: item["Auteur"],
+                auteur: item["Auteur"],
+                region: item["Service d'exploitation"],
+                site: item["Détecté sur"],
+                // task: item["Nom Activite"],
+                responsible_entity: item["Utilisateur"],
+                createdBy: user.auth.email
+            }
+        })
+    }
+
 
 
 
     // FIXME: select does not work
     // FIXME: convert to graphql:D:D
     const sendData = (data) => {
-    axios.post(config.baseURL + config.baseLOCATION + '/dailyTasks', { data: data }, {
-        withCredentials: true
-      })
-        .then(function (response) {
-          // alert(response.data.message + ' => imported: ' + response.data.imported + '; existing: ' + response.data.existing );
-          console.log(response.data)
-          that.setState({ isLoading: false })
-        //   that.setState({ messageData: response.data })
-        //   update state if everything is ok
-        //   that.props.refetch()
-        })
-        .catch(function (error) {
-          console.log({error});
-        //   that.setState({ isLoading: false })
-        //   that.setState({ messageData: error.response.data })
-        })
 
-    //    setShowUploadModal(!showUploadModal)
+        saveFileMutation({ variables: { data: getCollumns(data) } })
+        // axios.post(config.baseURL + config.baseLOCATION + '/dailyTasks', { data: data }, {
+        //     withCredentials: true
+        //   })
+        //     .then(function (response) {
+        //       // alert(response.data.message + ' => imported: ' + response.data.imported + '; existing: ' + response.data.existing );
+        //       console.log(response.data)
+        //       that.setState({ isLoading: false })
+        //     //   that.setState({ messageData: response.data })
+        //     //   update state if everything is ok
+        //     //   that.props.refetch()
+        //     })
+        //     .catch(function (error) {
+        //       console.log({error});
+        //     //   that.setState({ isLoading: false })
+        //     //   that.setState({ messageData: error.response.data })
+        //     })
+
+        //    setShowUploadModal(!showUploadModal)
     }
 
     const { data: data2, loading: loading2, error: error2 } = useQuery(GET_DISTINCT, {
@@ -529,7 +554,7 @@ const Tac = () => {
 
         <div className='buttonContainer'>
             <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
-            <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} onClick={() => setShowUploadModal(!showUploadModal)}>Upload</Button>
+            <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} onClick={() => {setShowUploadModal(!showUploadModal);setResponse(null)}}>Upload</Button>
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
             <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
             <ExportToExcel
@@ -545,6 +570,8 @@ const Tac = () => {
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
             getData={sendData}
+            response={response}
+            disabledConfirm={disabledConfirm}
             showModal={showUploadModal} />
 
         <Table striped bordered hover className="dash-table">
