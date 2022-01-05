@@ -84,7 +84,7 @@ class ExcelReader extends Component {
 
       this.setState({ data: data, cols: make_cols(ws['!ref']) }, () => {
         // this.sendData(this.state.data);
-        this.props.getData(this.state.data)
+        this.props.getData(this.state.data, this.state.file.name)
         this.setState({ disabled: true })
         //console.log(JSON.stringify(this.state.data, null, 2));
       });

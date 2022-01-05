@@ -95,6 +95,7 @@ type tacdb {
     week: String
     task: String
     date: String
+    site_constructor: String
 
    }
 

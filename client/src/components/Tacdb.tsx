@@ -151,6 +151,8 @@ const Tac = () => {
 
     const classes = useStyles();
     const [checked, setChecked] = useState([])
+    const [fileData, setFileData]= useState()
+    const [constructor, setConstructor] = useState < string > (null); 
     const [disabledConfirm, setDisabledConfirm]= useState<boolean>(true)
     const [items, setItems] = useState([])
     const [selected, setSelected] = useState(0)
@@ -208,6 +210,12 @@ const Tac = () => {
     const [saveFileMutation] = useMutation(SAVE_FILE, {
         onCompleted: (dataRes) => {
                     setResponse(dataRes.saveItems.message)
+
+                    console.log(fileData)
+
+                    const allItems = [...fileData, ...items]
+                    setItems(allItems)
+                    
             // update state
             // const newItems = [...items]
             // newItems.forEach((item) => {
@@ -329,15 +337,21 @@ const Tac = () => {
         }
         else { alert("please select some tasks...") }
     }
+    function getConstructor  (fileName)  {
+        let constructor =  fileName.includes("HUAWEI") ? "HUAWEI" : fileName.includes("ERICSSON") ? "ERICSSON" : null
+        return constructor
+    }
 
-
-    function getCollumns(inputArray) {
+    function getCollumns(inputArray, fileName) {
+        
         return inputArray.map(item => {
+            let constructor = getConstructor(fileName)
             return {
                 task: item["Task"],
                 no_incident: item["N° Incident"],
                 no_itv: item["ITV"],
                 date: item["CR_DATE"],
+                site_constructor: constructor,
                 week: getWeek(item["CR_DATE"]),
                 TT_creator: item["Auteur"],
                 auteur: item["Auteur"],
@@ -355,9 +369,15 @@ const Tac = () => {
 
     // FIXME: select does not work
     // FIXME: convert to graphql:D:D
-    const sendData = (data) => {
+    const sendData = (data, fileName) => {
 
-        saveFileMutation({ variables: { data: getCollumns(data) } })
+        const getData = getCollumns(data, fileName)
+        console.log(getData)
+
+        setFileData(getData);
+
+        saveFileMutation({ variables: { data: getData } });
+        
         // axios.post(config.baseURL + config.baseLOCATION + '/dailyTasks', { data: data }, {
         //     withCredentials: true
         //   })

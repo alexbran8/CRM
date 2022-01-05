@@ -130,6 +130,7 @@ module.exports = {
             no_incident: data.data[i].no_incident,
             no_itv: data.data[i].no_itv,
             week: data.data[i].week,
+            constructor:data.data[i].c,
             TT_creatorL: data.data[i]["TT_creator"],
             auteur: data.data[i].auteur,
             region: data.data[i].region,
