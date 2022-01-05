@@ -20,6 +20,7 @@ import "./Tacdb.scss"
 import ExcelReader from "./ExcelReader";
 
 import { getWeek } from "./common/Form";
+import { existsSync } from "fs";
 
 const GET_RESPONSIBLES = gql`
 query {
@@ -357,7 +358,6 @@ const Tac = () => {
                 auteur: item["Auteur"],
                 region: item["Service d'exploitation"],
                 site: item["Détecté sur"],
-                // task: item["Nom Activite"],
                 responsible_entity: item["Utilisateur"],
                 createdBy: user.auth.email
             }
@@ -370,6 +370,8 @@ const Tac = () => {
     // FIXME: select does not work
     // FIXME: convert to graphql:D:D
     const sendData = (data, fileName) => {
+
+        // check if mandaory collumns exist in the file..
 
         const getData = getCollumns(data, fileName)
         console.log(getData)
@@ -666,7 +668,7 @@ const Tac = () => {
                         >EDIT</Button></td>
                         <td>{item.week}</td>
                         <td>{item.date}</td>
-                        <td>{item.NORM}</td>
+                        <td>{item.task}</td>
                         <td>{item.responsible_entity}</td>
                         <td>{item.no_incident}</td>
                         <td>{item.no_itv}</td>
