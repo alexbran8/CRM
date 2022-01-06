@@ -359,6 +359,7 @@ const Tac = () => {
                 auteur: item["Auteur"],
                 region: item["Service d'exploitation"],
                 site: item["Détecté sur"],
+                alarm_bagot:'NON',
                 responsible_entity: item["Utilisateur"],
                 createdBy: user.auth.email
             }

@@ -96,6 +96,7 @@ type tacdb {
     task: String
     date: String
     site_constructor: String
+    alarm_bagot:String
 
    }
 
