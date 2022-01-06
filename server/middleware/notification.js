@@ -22,7 +22,7 @@ function notificationEmail(data, user) {
     const metadata = {
         transporter: config.transporterConfig,
         from: "poweremail.ni_gsd_timisoara@nokia.com",
-        to:'alexandru.bran@nokia.com',
+        to:'gsd-ro-bytel-gt-hw@groups.nokia.com, gsd-ro-bytel-gt-er@groups.nokia.com',
         // cc: 'cecilia.crisan@nokia.com',
         subj: `[TACDB notification] This email requires your attention! [TACDB notification]`,
         text: "The following have been imported into web application:",
