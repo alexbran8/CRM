@@ -113,6 +113,7 @@ module.exports = {
     },
 
     async saveItems(root, data, context) {
+      console.log(context)
       try {
         console.log(data)
         let project = [];
