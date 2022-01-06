@@ -11,10 +11,12 @@ import { AlertComponent } from "./common/Alert/Alert"
 // import FileReader from "./FileReader";
 import { useForm, Controller } from 'react-hook-form'
 import SimpleModal from "../components/common/Modal"
-
+import GenericModal from "../designSystems/Modal/Modal";
 import { ExportToExcel } from "../components/common/Export/ExportExcel"
-
+import { reportsModalBody } from "./ReportsModal/ReportsModa";
 import { checkCollumns } from "../utils/checkCollumns"
+import { AddEditModal } from "./AddModal/AddEditModal";
+
 
 import { config } from "../config"
 
@@ -24,7 +26,8 @@ import ExcelReader from "./ExcelReader";
 import { getWeek } from "./common/Form";
 
 
-const collumnsList = ['Constructor','Task', 'N° Incident', 'Détecté sur', "Service d'exploitation", 'Auteur', 'CR_DATE', 'Utilisateur']
+
+const collumnsList = ['Constructor', 'Task', 'N° Incident', 'Détecté sur', "Service d'exploitation", 'Auteur', 'CR_DATE', 'Utilisateur']
 
 const GET_RESPONSIBLES = gql`
 query {
@@ -151,7 +154,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Tac = () => {
     const user = useSelector((state) => ({ auth: state.auth }));
-
+    const [modalLoginShow, setModalLoginShow] = useState < boolean > (false);
     const classes = useStyles();
     const [checked, setChecked] = useState([])
     const [fileData, setFileData] = useState()
@@ -171,7 +174,7 @@ const Tac = () => {
     const [date, setDate] = useState(newDate);
     const [responsiblesList, setResponsiblesList] = useState([]);
     const [responsible, setResponsible] = useState < string > (user.auth.userName);
-    const [response, setResponse] = useState <string>(null);
+    const [response, setResponse] = useState < string > (null);
     const [week, setWeek] = useState();
     // const [statusClear, setClearStatus] = useState < boolean > (false)
     const [item, setItem] = useState([]);
@@ -305,7 +308,7 @@ const Tac = () => {
     const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
         onCompleted: (dataRes) => {
             alert(dataRes.deleteItems.message);
-            
+
             checked.forEach(x => {
                 console.log(items.findIndex(function (i) {
                     return i.uid === parseInt(x.uid);
@@ -359,7 +362,7 @@ const Tac = () => {
                 auteur: item["Auteur"],
                 region: item["Service d'exploitation"],
                 site: item["Détecté sur"],
-                alarm_bagot:'NON',
+                alarm_bagot: 'NON',
                 responsible_entity: item["Utilisateur"],
                 createdBy: user.auth.email
             }
@@ -424,6 +427,18 @@ const Tac = () => {
         setResponsible(user.auth.userName)
     }, [])
 
+    function getModalStyle() {
+        return {
+            width: '50%',
+            maxWidth: '100vw',
+            maxHeight: '100%',
+            position: 'fixed',
+            top: '50%',
+            left: '25%',
+            transform: 'translate(0, -50%)',
+            overflowY: 'auto'
+        };
+    }
 
 
 
@@ -431,6 +446,52 @@ const Tac = () => {
     const myDate = new Date()
     console.log(dateToString(myDate))
     return (<div>
+        {/* reportsmodal */}
+        {modalLoginShow ?
+            <GenericModal
+                open={modalLoginShow}
+                getModalStyle={getModalStyle}
+                title="Hours per tasks"
+                //   handleModal={handleModal}
+                handleClose={() => { setModalLoginShow(false) }}
+                body={reportsModalBody}
+            /> : null
+        }
+        {/* {showModal ?
+            <GenericModal
+                open={showModal}
+                getModalStyle={getModalStyle}
+                body={AddEditModal}
+                // title="Hours per tasks"
+                //   handleModal={handleModal}
+                handleClose={() => { setShowModal(false) }}
+                // body={reportsModalBody}
+                item={selectedItem}
+                user={user.auth.userName}
+                userList={responsiblesList}
+                handleModal={handleModal}
+                handleClose={handleModal}
+                saveFunction={operation === 'add' ? addMoreItems : updateItem}
+                handleInputValues={handleInputValues}
+                operation={operation}
+
+            /> : null
+        } */}
+
+        {showModal ? (
+            <SimpleModal
+                //formValidator={formCheck}
+                // setShowModalOpen={showModal}
+                item={selectedItem}
+                user={user.auth.userName}
+                userList={responsiblesList}
+                handleModal={handleModal}
+                handleClose={handleModal}
+                saveFunction={operation === 'add' ? addMoreItems : updateItem}
+                handleInputValues={handleInputValues}
+                operation={operation}
+            />
+        ) : null}
 
         <div className="filterContainer">
             {/* <form
@@ -562,7 +623,7 @@ const Tac = () => {
         <div className='buttonContainer'>
             <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} onClick={() => { setShowUploadModal(!showUploadModal); setResponse(null) }}>Upload</Button>
-            <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
+            <Button variant="contained" color="primary" onClick={() => { setModalLoginShow(true) }}>Reports</Button>
             <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
             <ExportToExcel
                 apiData={items}
@@ -681,20 +742,7 @@ const Tac = () => {
                 })}
             </tbody>
         </Table>
-        {showModal ? (
-            <SimpleModal
-                //formValidator={formCheck}
-                // setShowModalOpen={showModal}
-                item={selectedItem}
-                user={user.auth.userName}
-                userList={responsiblesList}
-                handleModal={handleModal}
-                handleClose={handleModal}
-                saveFunction={operation === 'add' ? addMoreItems : updateItem}
-                handleInputValues={handleInputValues}
-                operation={operation}
-            />
-        ) : null}
+
 
     </div>)
 }
