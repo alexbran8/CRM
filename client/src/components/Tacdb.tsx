@@ -314,7 +314,7 @@ const Tac = () => {
                     return parseInt(i.uid) === parseInt(x.uid);
                 }), 1);
             })
-            setChecked(0)
+            setChecked([])
             setSelected(0)
 
         },
