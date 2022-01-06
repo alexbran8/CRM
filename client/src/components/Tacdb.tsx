@@ -24,7 +24,7 @@ import ExcelReader from "./ExcelReader";
 import { getWeek } from "./common/Form";
 
 
-const collumnsList = ['Task', 'N° Incident', 'Détecté sur', "Service d'exploitation", 'Auteur', 'CR_DATE', 'Utilisateur']
+const collumnsList = ['Constructor','Task', 'N° Incident', 'Détecté sur', "Service d'exploitation", 'Auteur', 'CR_DATE', 'Utilisateur']
 
 const GET_RESPONSIBLES = gql`
 query {
@@ -347,13 +347,13 @@ const Tac = () => {
     function getCollumns(inputArray, fileName) {
 
         return inputArray.map(item => {
-            let constructor = getConstructor(fileName)
+            // let constructor = getConstructor(fileName)
             return {
                 task: item["Task"],
                 no_incident: item["N° Incident"],
                 no_itv: item["ITV"],
                 date: item["CR_DATE"],
-                site_constructor: constructor,
+                site_constructor: item["Constructor"],
                 week: getWeek(item["CR_DATE"]),
                 TT_creator: item["Auteur"],
                 auteur: item["Auteur"],
