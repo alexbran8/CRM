@@ -14,13 +14,17 @@ import SimpleModal from "../components/common/Modal"
 
 import { ExportToExcel } from "../components/common/Export/ExportExcel"
 
+import { checkCollumns } from "../utils/checkCollumns"
+
 import { config } from "../config"
 
 import "./Tacdb.scss"
 import ExcelReader from "./ExcelReader";
 
 import { getWeek } from "./common/Form";
-import { existsSync } from "fs";
+
+
+const collumnsList = ['Task', 'N° Incident', 'Détecté sur', "Service d'exploitation", 'Auteur', 'CR_DATE', 'Utilisateur']
 
 const GET_RESPONSIBLES = gql`
 query {
@@ -29,8 +33,6 @@ query {
     }
     
 }
-    
-
 `;
 
 const GET_ALL = gql`
@@ -152,9 +154,9 @@ const Tac = () => {
 
     const classes = useStyles();
     const [checked, setChecked] = useState([])
-    const [fileData, setFileData]= useState()
-    const [constructor, setConstructor] = useState < string > (null); 
-    const [disabledConfirm, setDisabledConfirm]= useState<boolean>(true)
+    const [fileData, setFileData] = useState()
+    const [constructor, setConstructor] = useState < string > (null);
+    const [disabledConfirm, setDisabledConfirm] = useState < boolean > (true)
     const [items, setItems] = useState([])
     const [selected, setSelected] = useState(0)
     const [weekList, setuWeeksList] = useState([]);
@@ -169,7 +171,7 @@ const Tac = () => {
     const [date, setDate] = useState(newDate);
     const [responsiblesList, setResponsiblesList] = useState([]);
     const [responsible, setResponsible] = useState < string > (user.auth.userName);
-    const [response, setResponse] = useState < string > (user.auth.userName);
+    const [response, setResponse] = useState <string>(null);
     const [week, setWeek] = useState();
     // const [statusClear, setClearStatus] = useState < boolean > (false)
     const [item, setItem] = useState([]);
@@ -210,13 +212,13 @@ const Tac = () => {
 
     const [saveFileMutation] = useMutation(SAVE_FILE, {
         onCompleted: (dataRes) => {
-                    setResponse(dataRes.saveItems.message)
+            setResponse(dataRes.saveItems.message)
 
-                    console.log(fileData)
+            console.log(fileData)
 
-                    const allItems = [...fileData, ...items]
-                    setItems(allItems)
-                    
+            const allItems = [...fileData, ...items]
+            setItems(allItems)
+
             // update state
             // const newItems = [...items]
             // newItems.forEach((item) => {
@@ -303,7 +305,7 @@ const Tac = () => {
     const [deleteItemsMutation] = useMutation(DELETE_ITEMS, {
         onCompleted: (dataRes) => {
             alert(dataRes.deleteItems.message);
-            console.log({ items })
+            
             checked.forEach(x => {
                 console.log(items.findIndex(function (i) {
                     return i.uid === parseInt(x.uid);
@@ -312,9 +314,8 @@ const Tac = () => {
                     return parseInt(i.uid) === parseInt(x.uid);
                 }), 1);
             })
-            setChecked([])
+            setChecked(0)
             setSelected(0)
-            console.log(items.length)
 
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
@@ -338,13 +339,13 @@ const Tac = () => {
         }
         else { alert("please select some tasks...") }
     }
-    function getConstructor  (fileName)  {
-        let constructor =  fileName.includes("HUAWEI") ? "HUAWEI" : fileName.includes("ERICSSON") ? "ERICSSON" : null
+    function getConstructor(fileName) {
+        let constructor = fileName.includes("HUAWEI") ? "HUAWEI" : fileName.includes("ERICSSON") ? "ERICSSON" : null
         return constructor
     }
 
     function getCollumns(inputArray, fileName) {
-        
+
         return inputArray.map(item => {
             let constructor = getConstructor(fileName)
             return {
@@ -372,32 +373,15 @@ const Tac = () => {
     const sendData = (data, fileName) => {
 
         // check if mandaory collumns exist in the file..
+        if (checkCollumns(data, collumnsList)) {
+            const getData = getCollumns(data, fileName)
+            setFileData(getData);
+            saveFileMutation({ variables: { data: getData } });
+        }
+        else {
+            setResponse("please check collumns in the file...")
+        }
 
-        const getData = getCollumns(data, fileName)
-        console.log(getData)
-
-        setFileData(getData);
-
-        saveFileMutation({ variables: { data: getData } });
-        
-        // axios.post(config.baseURL + config.baseLOCATION + '/dailyTasks', { data: data }, {
-        //     withCredentials: true
-        //   })
-        //     .then(function (response) {
-        //       // alert(response.data.message + ' => imported: ' + response.data.imported + '; existing: ' + response.data.existing );
-        //       console.log(response.data)
-        //       that.setState({ isLoading: false })
-        //     //   that.setState({ messageData: response.data })
-        //     //   update state if everything is ok
-        //     //   that.props.refetch()
-        //     })
-        //     .catch(function (error) {
-        //       console.log({error});
-        //     //   that.setState({ isLoading: false })
-        //     //   that.setState({ messageData: error.response.data })
-        //     })
-
-        //    setShowUploadModal(!showUploadModal)
     }
 
     const { data: data2, loading: loading2, error: error2 } = useQuery(GET_DISTINCT, {
@@ -576,7 +560,7 @@ const Tac = () => {
 
         <div className='buttonContainer'>
             <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
-            <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} onClick={() => {setShowUploadModal(!showUploadModal);setResponse(null)}}>Upload</Button>
+            <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} onClick={() => { setShowUploadModal(!showUploadModal); setResponse(null) }}>Upload</Button>
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} disabled={true} onClick={deleteItems}>Notify</Button>
             <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
             <ExportToExcel
