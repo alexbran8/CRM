@@ -588,13 +588,13 @@ const Tac = () => {
                     {user.auth.role === 'L3' ? <th>Select</th> : null}
                     <th></th>
                     <th>
-                        WEEK
-                    </th>
-                    <th>
                         DATE
                     </th>
                     <th>
                         TYPE
+                    </th>
+                    <th>
+                        NORM
                     </th>
                     <th>
                         RESPONSIBLE
@@ -651,9 +651,9 @@ const Tac = () => {
                                 else { alert('You are not allowed to edit this item...') }
                             }}
                         >EDIT</Button></td>
-                        <td>{item.week}</td>
                         <td>{item.date}</td>
                         <td>{item.task}</td>
+                        <td>{item.NORM}</td>
                         <td>{item.responsible_entity}</td>
                         <td>{item.no_incident}</td>
                         <td>{item.no_itv}</td>

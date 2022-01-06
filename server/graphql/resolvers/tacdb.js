@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const db = require("../../models");
 const { Op } = require("sequelize");
 
-// const notificationEmail = require("../../middleware/notification")
+const notificationEmail = require("../../middleware/notification")
 
 const errorHandler = (err, req, res, next) => {
   const { code, desc = err.message } = err;
@@ -158,7 +158,7 @@ module.exports = {
         db.Tacdb.bulkCreate(project)
 
         // send notification
-        // notificationEmail(project)
+        notificationEmail(project, context.user)
 
 
         const response = { message: 'Items have been successfully imported!', success: true }

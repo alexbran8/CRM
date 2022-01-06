@@ -28,24 +28,21 @@ var config = {
     maxAge: 360000
   },
   serverPort: process.env.PORT || 8080,
-  // transporterConfig: nodemailer.createTransport({
-  //   service: "SMTP",
-  //   host: "smtp.office365.com",
-  //   port: 587,
-  //   secure: false, // true for 465, false for other ports
-  //   auth: {
-  //     //   user: "I_GDC_EUR_TM_IS@internal.nsn.com", // generated ethereal user
-  //     user: "poweremail.ni_gsd_timisoara@nokia.com",
-  //     pass: "WSrd9d79ZL359W", // generated ethereal password
-  //   },
-  //   tls: {
-  //     rejectUnauthorized: false,
-  //   },
-  // })
+ transporterConfig: nodemailer.createTransport({
+    service: "SMTP",
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      //   user: "I_GDC_EUR_TM_IS@internal.nsn.com", // generated ethereal user
+      user: "poweremail.ni_gsd_timisoara@nokia.com",
+      pass: "WSrd9d79ZL359W", // generated ethereal password
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  })
 }
-
-
-
 
 
 module.exports = config

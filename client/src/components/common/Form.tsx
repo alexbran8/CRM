@@ -945,13 +945,11 @@ export default function FormPropsTextFields(props: any) {
             <Grid item  style={{ borderColor: 'orange', width: '30ch' }} >
                     {/* <Paper className={classes.paper}>xs=12 sm=6</Paper> */}
                     <> </>
-                </Grid>
-                {console.log(props.values)}
-           
+                </Grid>       
            
 
           </Grid>
-
+{/* TODO: add this field on the right side of the form, as a new collumn...*/}
           <Grid  container direction="row">
               <Controller
                 control={control}
