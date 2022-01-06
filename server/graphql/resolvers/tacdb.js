@@ -37,7 +37,11 @@ module.exports = {
       console.log(incidentFilter)
       let result = await db.Tacdb.findAll({
         where: { [Op.and]: [dateFilter, weekFilter, incidentFilter, statusFilter, siteFilter, responsibleFilter] },
-        limit: args.first
+        limit: args.first,
+        order: [
+          ['date', 'DESC'],
+          
+        ]
       });
       return result;
 
@@ -133,6 +137,7 @@ module.exports = {
             week: data.data[i].week,
             constructor:data.data[i].site_constructor,
             TT_creator: data.data[i]["TT_creator"],
+            alarm_bagot: data.data[i]["alarm_bagot"],
             TT_creator_short: data.data[i].auteur,
             region: data.data[i].region,
             site: data.data[i].site,
