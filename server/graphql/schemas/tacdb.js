@@ -68,7 +68,6 @@ type tacdb {
     hastagTac: String
     TT_creator: String
     technician: String
-    collage: String
     action: String
     alarm_active: String
     alarm_bagot: String

@@ -336,7 +336,7 @@ export default function FormPropsTextFields(props: any) {
                   />
                 )}
               />
-              <Controller
+              {/* <Controller
                 control={control}
                 name="hastagTac"
                 defaultValue={props.operation === 'edit' ? props.values.hastagTac : null}
@@ -359,7 +359,7 @@ export default function FormPropsTextFields(props: any) {
                   />
                 )}
               // rules={{ required: '# is required' }}
-              />
+              /> */}
             </Grid>
           </Grid>
           <Grid container direction="row" className={classes.mainHeader}>
@@ -535,7 +535,36 @@ export default function FormPropsTextFields(props: any) {
               )}
               rules={{ required: 'On sait traite is required' }}
             />
-            <Controller
+             <Controller
+              control={control}
+              name="alarm_bagot"
+              defaultValue={props.operation === 'edit' ? props.values.alarm_bagot : 'NON'}    
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  
+                  id="alarm_bagot"
+                  options={['OUI', 'NON']}
+                  
+                  // getOptionLabel={(option) =>option}
+                  
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="Alarm Bagot*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'Alarm bagot is required' }}
+            />
+            {/* <Controller
               control={control}
               name="collage"
               defaultValue={props.operation === 'edit' ? props.values.collage : null}
@@ -564,7 +593,7 @@ export default function FormPropsTextFields(props: any) {
             //   className: classes.mandatory,
             // }}
 
-            />
+            /> */}
 
           </Grid>
           <Grid container direction="row" className={classes.mainHeader}>
@@ -804,10 +833,33 @@ export default function FormPropsTextFields(props: any) {
               rules={{ required: 'Constructor is required' }}
             />
             {/* TODO: add blank item :-?*/}
-            <Grid item  style={{ borderColor: 'orange', width: '30ch' }} >
-                    {/* <Paper className={classes.paper}>xs=12 sm=6</Paper> */}
-                    <> </>
-                </Grid>
+            <Controller
+              control={control}
+              name="alarm_active"
+              defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="alarm_active"
+               
+                  options={['OUI', 'NON']}
+                  // getOptionLabel={(option) => option.title}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="alarme_active*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'alarm_active is required' }}
+            />
             <Controller
               control={control}
               name="action"
@@ -895,62 +947,8 @@ export default function FormPropsTextFields(props: any) {
                     <> </>
                 </Grid>
                 {console.log(props.values)}
-            <Controller
-              control={control}
-              name="alarm_bagot"
-              defaultValue={props.operation === 'edit' ? props.values.alarm_bagot : 'NON'}    
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <Autocomplete
-                  value={value}
-                  onChange={(event, item) => {
-                    onChange(item);
-                  }}
-                  
-                  id="alarm_bagot"
-                  options={['OUI', 'NON']}
-                  
-                  // getOptionLabel={(option) =>option}
-                  
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      label="Alarm Bagot*"
-                      style={{ borderBottom: '1px solid red' }}
-                    />
-                  )}
-                />
-              )}
-              rules={{ required: 'Alarm bagot is required' }}
-            />
-            <Controller
-              control={control}
-              name="alarm_active"
-              defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <Autocomplete
-                  value={value}
-                  onChange={(event, item) => {
-                    onChange(item);
-                  }}
-                  id="alarm_active"
-               
-                  options={['OUI', 'NON']}
-                  // getOptionLabel={(option) => option.title}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      label="alarme_active*"
-                      style={{ borderBottom: '1px solid red' }}
-                    />
-                  )}
-                />
-              )}
-              rules={{ required: 'alarm_active is required' }}
-            />
+           
+           
 
           </Grid>
 
