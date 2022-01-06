@@ -29,6 +29,7 @@ function notificationEmail(data, user) {
         html: '<div> TACDB planning update:' +
           '<p>ERICSSSON:'+data.filter(item=> item.constructor == 'ERICSSSON').length +'</p>' +
           '<p>HUAWEI:'+data.filter(item=> item.constructor == 'HUAWEI').length +'</p>' +
+          '<p>Please use / checkout new application: <a href="https://apps.gdceur.eecloud.dynamic.nsn-net.net/dashboard/">NEW TACDB</a></p>' +
           '<p> Regards,</p><p>TACDB, on behalf of ' + user + '  </p></div>'
       };
     // send email
