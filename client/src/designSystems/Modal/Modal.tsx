@@ -35,17 +35,18 @@ export default function GenericModal(props: any) {
         //  style={{display:'flex',alignItems:'center',justifyContent:'center', width:"md"}}
         className="generic-modal"
         // setShowModalOpen={open}
-        body={props.body}
+        // body={props.body}
         open={props.open}
         onClose={props.handleModal}
-      // aria-labelledby="simple-modal-title"
-      // aria-describedby="simple-modal-description"
+      aria-labelledby="simple-modal-title"
+      aria-describedby="simple-modal-description"
       >
         <div style={modalStyle} className={classes.paper}>
           <div><b>{props.title}</b>
             <button className={classes.button} type="button" onClick={props.handleClose}>
               <CloseIcon />
             </button></div>
+            {props.children}
 
           <div>{props.body}</div>
         </div>

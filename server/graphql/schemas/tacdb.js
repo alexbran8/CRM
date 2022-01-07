@@ -3,6 +3,7 @@ const { gql } = require("apollo-server");
 module.exports = gql`
 type tacdb {
     cr_date: String
+    duration: Float
     uid: String
     week: String
     date: String
@@ -10,7 +11,7 @@ type tacdb {
     responsible_entity: String
     no_incident: String
     no_itv: String  
-    status: String
+    status: String  
     site_constructor: String
     region: String
     comment_tac: String

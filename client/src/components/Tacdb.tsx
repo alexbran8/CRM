@@ -13,7 +13,7 @@ import { useForm, Controller } from 'react-hook-form'
 import SimpleModal from "../components/common/Modal"
 import GenericModal from "../designSystems/Modal/Modal";
 import { ExportToExcel } from "../components/common/Export/ExportExcel"
-import { reportsModalBody } from "./ReportsModal/ReportsModa";
+import { ReportsModalBody } from "./ReportsModal/ReportsModal";
 import { checkCollumns } from "../utils/checkCollumns"
 import { AddEditModal } from "./AddModal/AddEditModal";
 
@@ -43,6 +43,7 @@ const GET_ALL = gql`
     getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_itv:$no_itv, status:$status)  {
         uid
         action
+        duration
         week
         date
         NORM
@@ -454,8 +455,12 @@ const Tac = () => {
                 title="Hours per tasks"
                 //   handleModal={handleModal}
                 handleClose={() => { setModalLoginShow(false) }}
-                body={reportsModalBody}
-            /> : null
+                // body={<ReportsModalBody />}
+            >
+                <ReportsModalBody 
+                data={items}/>
+                </GenericModal>
+                 : null
         }
         {/* {showModal ?
             <GenericModal
