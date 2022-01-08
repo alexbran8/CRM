@@ -11,7 +11,9 @@ export const ReportsModalBody = (props) => {
         acc[group] = acc[group] || Object.fromEntries(
           groupKeys.map(k => [k, curr[k]]).concat(sumKeys.map(k => [k, 0])));
         sumKeys.forEach(k => acc[group][k] += curr[k]);
-        acc[group]['no_incident'] += '#T2 ' + curr['duration'] + ': ' + curr['no_incident'] + ', '
+        // acc[group]['comment'] += '#T2 ' + curr['duration'] + ': ' + curr['no_incident'] + ', '
+        acc[group]['comment'] =  '#' + curr['NORM'] +'(' + curr['duration'] + '): ';
+        acc[group]['comment'] +=  curr['no_incident'] + ', '
         // acc[group]['comment'] = arr.filter(item=> item.responsible_entity = curr.responsible_entity && item.date == curr.date).reduce((prev, current)=>{ prev + '-' + current})
         // console.log(arr.filter(item=> item.responsible_entity = curr.responsible_entity && item.date == curr.date).reduce((prev, current)=>{ return current.no_incident}))
         // console.log(acc[group]['comment'])
@@ -39,7 +41,7 @@ export const ReportsModalBody = (props) => {
     <>
       <div>
         total hours: {total}
-        {data && data.map(item => { return <div>{item.responsible_entity},{item.date}, {item.task}, {item.NORM}, {item.no_incident}, {item.duration} </div> })}
+        {data && data.map(item => { return <div>{item.responsible_entity},{item.date}, {item.task}, {item.NORM}, {item.comment}, {item.duration} </div> })}
       </div>
     </>
   )
