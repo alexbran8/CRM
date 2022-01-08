@@ -166,6 +166,7 @@ const Tac = () => {
     const [weekList, setuWeeksList] = useState([]);
     const [itvList, setuitvList] = useState([]);
     const [status, setStatus] = useState();
+    const [task, setTask] = useState<string>('');
     const [showModal, setShowModal] = React.useState < boolean > (false);
     const [operation, setOperation] = useState < string > (null);
     const [selectedItem, setSelectedItem] = useState();
@@ -182,7 +183,7 @@ const Tac = () => {
     const [showUploadModal, setShowUploadModal] = useState < boolean > (false)
     const { watch, control, setValue } = useForm({});
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
-        variables: { status: status, week: week, date: date, responsible_entity: responsible, no_itv: itv, site: site }, onCompleted: (
+        variables: { task: task, status: status, week: week, date: date, responsible_entity: responsible, no_itv: itv, site: site }, onCompleted: (
         ) => {
             setItems(data.getAll)
 
@@ -571,6 +572,27 @@ const Tac = () => {
                         renderInput={(params) => <TextField {...params} label="select status" variant="outlined" />}
                     />
                 </>
+
+                <>
+                    <Autocomplete
+                        id="task"
+                        options={[{ task: 'Problème résolu' }, { task: 'Problème résolu avec réserve' }, { task: 'Problème pas identifié' }, { task: 'Problème identifié' }]}
+                        getOptionLabel={(option) => option.task}
+                        style={{ width: 200 }}
+                        className={classes.textField}
+                        onInputChange={(event, newInputValue, reason) => {
+                            if (reason === 'clear') {
+                                setTask(''); refetch()
+                                return
+                            } else {
+                                setTask(newInputValue); refetch()
+                            }
+                        }}
+                        // onChange={(e, v) => { setStatus(v.status);alert(v.status); refetch() }}
+                        renderInput={(params) => <TextField {...params} label="select tasktype" variant="outlined" />}
+                    />
+                </>
+
                 <>
                     <TextField
                         id="siteFilter"
