@@ -41,10 +41,16 @@ export const ReportsModalBody = (props) => {
   }, [])
   return (
     <>
-      <div>
-        total hours: {total}
-        {data && data.map(item => { return <div>{item.responsible_entity},{item.date}, {item.task}, {item.NORM}, {item.comment1 + '-' + item.comment2.replace("undefined","")}, {item.duration} </div> })}
-      </div>
+      total hours: {total}
+      <table>
+        {data && data.map((item, index) => { return <tr key={index}>
+          <td>{item.responsible_entity}</td>
+          <td>{item.date}</td> 
+          <td>{item.task}</td> 
+          <td>{item.NORM}</td> 
+          <td>{item.comment1 + '-' + item.comment2.replace("undefined","")}</td> 
+        <td>{item.duration}</td> </tr> })}
+      </table>
     </>
   )
 }
