@@ -430,16 +430,16 @@ const Tac = () => {
 
     function getModalStyle() {
         return {
-            width: '50%',
-            maxWidth: '100vw',
-            maxHeight: '100%',
-            position: 'fixed',
-            top: '50%',
-            left: '25%',
-            transform: 'translate(0, -50%)',
-            overflowY: 'auto'
+          width: '80%',
+          maxWidth: '100vw',
+          maxHeight: '100%',
+          position: 'fixed',
+          top: '50%',
+          left:  '10%',
+          transform: 'translate(0, -50%)',
+          overflowY: 'auto'
         };
-    }
+      }
 
 
 
