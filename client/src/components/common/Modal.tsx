@@ -11,7 +11,7 @@ import DoneIcon from '@material-ui/icons/Done';
 //   return Math.round(Math.random() * 20) - 10;
 // }
 
-function getModalStyle() {
+function  () {
   return {
     width: '80%',
     maxWidth: '100vw',
