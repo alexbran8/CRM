@@ -32,7 +32,7 @@ export default function GenericModal(props: any) {
   return (
     <div>
       <Modal
-        //  style={{display:'flex',alignItems:'center',justifyContent:'center', width:"md"}}
+         style={{display:'flex',alignItems:'center',justifyContent:'center', width:"md"}}
         className="generic-modal"
         // setShowModalOpen={open}
         // body={props.body}
