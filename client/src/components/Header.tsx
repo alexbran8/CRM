@@ -141,8 +141,7 @@ export const Header = () => {
   }, [])
 
 
-  const getIcon = (token) => {
-    console.log(token)
+  const getIcon =  async (token) => {
     fetch("https://graph.microsoft.com/v1.0/me/photo/$value", {
       method: "GET",
       // credentials: "include",
