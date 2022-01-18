@@ -3,6 +3,7 @@ import Homepage from "./components/Homepage.jsx";
 import Header from "./components/Header";
 import LoginError from "./components/LoginError";
 import Tac from "./components/Tacdb";
+import {PIP} from "./components/PIP/PIP";
 import { HashRouter, Route } from "react-router-dom";
 import { config } from "./config"
 import authGuard from "./HOCs/authGuard.js";
@@ -14,6 +15,7 @@ export const AppRouter = () => {
         <Route exact path={"/"} component={Homepage} />
         <Route exact path={"/error"} component={LoginError} />
         <Route exact path={ "/tac"} component={authGuard(Tac)} />
+        <Route exact path={ "/prod-indus-planning"} component={authGuard(PIP)} />
     </HashRouter>
   );
 };

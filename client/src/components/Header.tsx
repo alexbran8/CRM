@@ -197,6 +197,7 @@ export const Header = () => {
               <b>NOKIA</b> {config.AppName} {user.auth.type === 'student' ? <div className="header-title"> {t("navbar.students")} </div> : null}
             </Link>
             <Link className="navbar-brand text-white" to={"/tac"}>TAC</Link>
+            <Link className="navbar-brand text-white" to={"/prod-indus-planning"}>PIP</Link>
           </Typography>
           {(state && state.authenticated) ? (
             <div className="avatar">

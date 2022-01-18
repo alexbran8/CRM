@@ -617,6 +617,7 @@ const Tac = () => {
                         render={({ field: { onChange, value }, fieldState: { error } }) => ( */}
                     <Autocomplete
                         id="responsible"
+                        // TODO: update to sort by options
                         options={responsiblesList}
                         defaultValue={{ 'DISTINCT': responsible }}
                         getOptionLabel={(option) => option.DISTINCT}
