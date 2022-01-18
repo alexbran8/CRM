@@ -490,12 +490,15 @@ const Tac = () => {
             /> : null
         } */}
 
+        {console.log(user.auth)}
+
         {showModal ? (
             <SimpleModal
                 //formValidator={formCheck}
                 // setShowModalOpen={showModal}
                 item={selectedItem}
                 user={user.auth.userName}
+                upalu={user.auth.upalu}
                 userList={responsiblesList}
                 handleModal={handleModal}
                 handleClose={handleModal}

@@ -78,6 +78,7 @@ console.log(props)
      <FormPropsTextFields 
      values={props.item.data}
      user={props.user}
+     upalu={props.upalu}
      userList={props.userList}
      operation={props.operation}
      handleInputValues={props.handleInputValues}

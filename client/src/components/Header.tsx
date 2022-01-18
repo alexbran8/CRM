@@ -111,6 +111,7 @@ export const Header = () => {
         });
         sessionStorage.setItem('exp', responseJson.user.exp);
         sessionStorage.setItem('userEmail', responseJson.user.email);
+        sessionStorage.setItem('upalu', responseJson.user.upalu);
         sessionStorage.setItem('userName', responseJson.user.userName);
         sessionStorage.setItem('name', responseJson.user.first_name);
         sessionStorage.setItem('token', responseJson.user.token);
@@ -122,7 +123,8 @@ export const Header = () => {
             role: responseJson.user.roles,
             userName: responseJson.user.userName,
             name: responseJson.user.first_name,
-            email: responseJson.user.email
+            email: responseJson.user.email,
+            upalu: responseJson.user.upalu
           },
 
         })

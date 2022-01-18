@@ -65,6 +65,15 @@ const apolloServer = new ApolloServer({
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+db.sequelize2
+  .authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch((err) => {
+    console.error("Unable to connect to the database:", err);
+  });
+
 db.sequelize
   .authenticate()
   .then(() => {

@@ -511,7 +511,7 @@ export default function FormPropsTextFields(props: any) {
             <Controller
               control={control}
               name="OMC_engineer"
-              defaultValue={props.operation === 'edit' ? props.values.OMC_engineer : null}
+              defaultValue={props.operation === 'edit' && props.values.OMC_engineer  ?  props.values.OMC_engineer  :  props.upalu}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                   id="OMC_engineer"

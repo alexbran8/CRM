@@ -36,6 +36,7 @@ export default (state = DEFAULT_STATE, action) => {
         email: action.payload_email,
         role: action.payload_role,
         nokiaid: action.payload_nokiaid,
+        upalu: action.payload_upalu,
         isAuthenticated: true,
         errorMessage: ""
       };
