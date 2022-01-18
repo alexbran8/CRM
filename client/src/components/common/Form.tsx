@@ -968,6 +968,7 @@ export default function FormPropsTextFields(props: any) {
 
           </Grid>
 {/* TODO: add this field on the right side of the form, as a new collumn...*/}
+{/* TODO: increase max number of characters */}
           <Grid  container direction="row">
               <Controller
                 control={control}

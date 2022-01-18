@@ -262,6 +262,7 @@ const Tac = () => {
 
     const updateItem = (data) => {
         let inputData = data
+        inputData.duration = parseFloat(inputData.duration)
         setItem(inputData)
         updateItemMutation({
             variables: {
@@ -282,12 +283,16 @@ const Tac = () => {
 
     const addMoreItems = (data, index) => {
         let inputData = data
+        
+        inputData.duration = parseFloat(inputData.duration)
+
         setItem((item) => ({
             ...item, ...inputData,
             uid: 0,
 
         }));
         // save to db
+        
         addItemMutation({
             variables: {
                 data: inputData
@@ -344,6 +349,7 @@ const Tac = () => {
         }
         else { alert("please select some tasks...") }
     }
+
     function getConstructor(fileName) {
         let constructor = fileName.includes("HUAWEI") ? "HUAWEI" : fileName.includes("ERICSSON") ? "ERICSSON" : null
         return constructor
@@ -446,7 +452,7 @@ const Tac = () => {
 
     const dateToString = d => `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
     const myDate = new Date()
-    console.log(dateToString(myDate))
+    
     return (<div>
         {/* reportsmodal */}
         {modalLoginShow ?
@@ -523,6 +529,8 @@ const Tac = () => {
                 />
             </>
             <>
+
+            {/* TODO: fix no_itv vs no_incident */}
                 <TextField
                     id="itvFilter"
                     type="text"
