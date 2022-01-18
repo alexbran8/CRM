@@ -70,7 +70,9 @@ const problemList = ["Alarme externe / Environnement", "Autres", "Licence",
   "RET et TMA",
   "TMA"]
 
-const mainCauseList = ["Logicielles - Outils / Bases des dates",
+const mainCauseList = [
+  "BDD",
+  // "Logicielles - Outils / Bases des dates",
   "Voisinage",
   "Unité Radio (MRFU, RRU, RUS)",
   "Triplexeur",
@@ -186,6 +188,20 @@ export function getWeek(date) {
   return finalResult
 }
 
+function dynamicSort(property) {
+  var sortOrder = 1;
+  if(property[0] === "-") {
+      sortOrder = -1;
+      property = property.substr(1);
+  }
+  return function (a,b) {
+      /* next line works with strings and numbers, 
+       * and you may want to customize it to your needs
+       */
+      var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+      return result * sortOrder;
+  }
+}
 
 export default function FormPropsTextFields(props: any) {
   const classes = useStyles();
@@ -377,7 +393,7 @@ export default function FormPropsTextFields(props: any) {
                     setValue("duration", getDurartion(watch("NORM"), item))
                   }}
                   id="task"
-                  options={appelList}
+                  options={appelList.sort()}
 
                   renderInput={(params) => (
                     <TextField
@@ -610,7 +626,7 @@ export default function FormPropsTextFields(props: any) {
                     onChange(item);
                   }}
                   id="responsible_entity"
-                  options={props.userList ? props.userList.map(item => { return item.DISTINCT}) : {}}
+                  options={props.userList ? props.userList.sort(dynamicSort("DISTINCT")).map(item => { return item.DISTINCT}) : {}}
                   // getOptionLabel={(option) => option.DISTINCT}
                   // defaultValue={props.operation === 'edit' ? { 'DISTINCT': props.values.responsible_entity } : { 'DISTINCT': props.user }}
                   // disabled={true}
@@ -639,7 +655,7 @@ export default function FormPropsTextFields(props: any) {
                     onChange(item);
                   }}
                   id="region"
-                  options={regionList}
+                  options={regionList.sort()}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -741,7 +757,7 @@ export default function FormPropsTextFields(props: any) {
                     onChange(item);
                   }}
                   id="problem"
-                  options={problemList}
+                  options={problemList.sort()}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -766,7 +782,7 @@ export default function FormPropsTextFields(props: any) {
                     onChange(item);
                   }}
                   id="main_cause"
-                  options={mainCauseList}
+                  options={mainCauseList.sort()}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -820,7 +836,7 @@ export default function FormPropsTextFields(props: any) {
                     onChange(item);
                   }}
                   id="site_constructor"
-                  options={constructorList}
+                  options={constructorList.sort()}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -927,7 +943,7 @@ export default function FormPropsTextFields(props: any) {
                     onChange(item);
                   }}
                   id="task"
-                  options={incidentTypeList}
+                  options={incidentTypeList.sort()}
                   renderInput={(params) => (
                     <TextField
                       // InputProps={{

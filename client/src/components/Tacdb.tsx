@@ -660,7 +660,7 @@ const Tac = () => {
         </div>
 
         <AlertComponent
-            messages={[{ message: 'Fixed item delete for single item...', type: 'success' }, { message: 'File Export is now working for admins...', type: 'success' }, { message: 'Filter by site is now active', type: 'success' }, { message: 'Filter by week is now active', type: 'success' }, { message: 'Filter by ITV is active', type: 'success' }, { message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
+            messages={[{ message: 'Options in form are now alphabetically sorted.', type: 'success' }, { message: 'File Export is now working for admins...', type: 'success' }, { message: 'Filter by site is now active', type: 'success' }, { message: 'Filter by week is now active', type: 'success' }, { message: 'Filter by ITV is active', type: 'success' }, { message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
 
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
