@@ -40,7 +40,7 @@ const actionList = ["ITV terrain", "Action à distance", "Escalader le ticket", 
 const appelList = ["SSNE", "CLA", "Assigné", "Appel", "LdR", "Pre-check", "Suivi", "Supervision NE", "Taskforce", "Taskforce RdP","VIGIE NOK"]
 const constructorList = ["ERICSSON", "HUAWEI", "NOKIA", "NORTEL", "OTHER"]
 const incidentTypeList = ["Vigie", "Radio", "Transmission", "Cœur", "Performance QoS"]
-const statusList = ['Problème résolu', 'Problème résolu avec réserve', 'Problème pas identifié']
+const statusList = ['Problème résolu', 'Problème résolu avec réserve', 'Problème pas identifié', 'Problème identifié']
 const regionList = ["CTA", "MED", "NOE", "SWE", "WST", "IDF"]
 const hashtagTacList = ["Déjà fermé", "Modifié plus", "Modifié", "Kill TT", "Conforme"]
 
