@@ -20,6 +20,7 @@ export default (state = DEFAULT_STATE, action) => {
         role: action.payload.role,
         userName: action.payload.userName,
         upalu: action.payload.upalu,
+        token: action.payload.token,
         // nokiaid: action.payload_nokiaid,
         isAuthenticated: true,
         errorMessage: "",

@@ -103,12 +103,7 @@ export const Header = () => {
         if (response.status === 200) return response.json();
         throw new Error("failed to authenticate user");
       })
-      .then(responseJson => {
-        console.log(responseJson)
-        setState({
-          authenticated: true,
-          user: responseJson.user
-        });
+      .then(responseJson => {    
         sessionStorage.setItem('exp', responseJson.user.exp);
         sessionStorage.setItem('userEmail', responseJson.user.email);
         sessionStorage.setItem('upalu', responseJson.user.upalu);
@@ -116,7 +111,7 @@ export const Header = () => {
         sessionStorage.setItem('name', responseJson.user.first_name);
         sessionStorage.setItem('token', responseJson.user.token);
         sessionStorage.setItem('roles', responseJson.user.roles);
-        getIcon(responseJson.user.token);
+       
         dispatch({
           type: UPDATE_PROFILE,
           payload: {
@@ -124,10 +119,20 @@ export const Header = () => {
             userName: responseJson.user.userName,
             name: responseJson.user.first_name,
             email: responseJson.user.email,
-            upalu: responseJson.user.upalu
+            upalu: responseJson.user.upalu,
+            token: responseJson.user.token
           },
 
-        })
+        });
+        setState({
+          authenticated: true,
+          user: responseJson.user
+        });
+
+      // get profile picture
+
+   
+      
       }
       )
       .catch(error => {
@@ -138,12 +143,28 @@ export const Header = () => {
         console.log(error)
       });
 
+      // myPromise.then(
+      //   function(value) { /* code if successful */ },
+      //   function(error) { /* code if some error */ }
+      // );
+    //  getIcon(user.auth.token);
 
 
   }, [])
 
+  let myPromise = new Promise(function(myResolve, myReject) {
+    // "Producing Code" (May take some time)
+    // getIcon(user.auth.token)
+      myResolve(); // when successful
+      myReject();  // when error
+    });
 
-  const getIcon =  async (token) => {
+//   useEffect(()=>{
+//  getIcon(user.auth.token)
+//   },[state.authenticated])
+
+
+  const  getIcon = (token) =>  {
     fetch("https://graph.microsoft.com/v1.0/me/photo/$value", {
       method: "GET",
       // credentials: "include",
