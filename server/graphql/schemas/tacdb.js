@@ -101,7 +101,7 @@ type tacdb {
    }
 
 extend  type Query  {
-    getAll(first: Int week:String date:String no_itv: String status: String site: String responsible_entity: String): [tacdb]
+    getAll(first: Int week:String date:String no_incident: String status: String site: String responsible_entity: String): [tacdb]
     getDistinctWeeks:[getDistinct]
     getResponsibles:[getResponsibles]
 } 

@@ -29,7 +29,7 @@ module.exports = {
       // TODO: implement date type in graphql
       let dateFilter = args.date ? { date: dateSearch } : null
       let weekFilter = args.week ? { week: args.week } : null
-      let incidentFilter = args.no_itv ? { no_incident: args.no_itv } : null
+      let incidentFilter = args.no_incident ? { no_incident: args.no_incident } : null
       var statusFilter = args.status ? { status: args.status } : null
       // var statusFilter = args.status === 'null' ? { comment_tac: {[Op.eq]: null} } : null
       let siteFilter = args.site ? { site: args.site } : null

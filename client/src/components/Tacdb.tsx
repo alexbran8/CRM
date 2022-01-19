@@ -39,8 +39,8 @@ query {
 `;
 
 const GET_ALL = gql`
-  query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_itv: String, $status: String) { 
-    getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_itv:$no_itv, status:$status)  {
+  query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_incident: String, $status: String) { 
+    getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_incident:$no_incident, status:$status)  {
         uid
         action
         duration
@@ -170,7 +170,7 @@ const Tac = () => {
     const [showModal, setShowModal] = React.useState < boolean > (false);
     const [operation, setOperation] = useState < string > (null);
     const [selectedItem, setSelectedItem] = useState();
-    const [itv, setItv] = useState < string > (null);
+    const [no_incident, setIncident] = useState < string > (null);
     const [site, setSite] = useState < string > (null);
     const newDate = new Date();
     const [date, setDate] = useState(newDate);
@@ -183,7 +183,7 @@ const Tac = () => {
     const [showUploadModal, setShowUploadModal] = useState < boolean > (false)
     const { watch, control, setValue } = useForm({});
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
-        variables: { task: task, status: status, week: week, date: date, responsible_entity: responsible, no_itv: itv, site: site }, onCompleted: (
+        variables: { task: task, status: status, week: week, date: date, responsible_entity: responsible, no_incident: no_incident, site: site }, onCompleted: (
         ) => {
             setItems(data.getAll)
 
@@ -459,7 +459,7 @@ const Tac = () => {
             <GenericModal
                 open={modalLoginShow}
                 getModalStyle={getModalStyle}
-                title="Hours per tasks"
+                title="Hours per tas;;ks"
                 //   handleModal={handleModal}
                 handleClose={() => { setModalLoginShow(false) }}
                 // body={<ReportsModalBody />}
@@ -535,7 +535,7 @@ const Tac = () => {
 
             {/* TODO: fix no_itv vs no_incident */}
                 <TextField
-                    id="itvFilter"
+                    id="incidentFilter"
                     type="text"
                     label="enter incident no"
                     // value={"12-02-2021"}
@@ -543,7 +543,7 @@ const Tac = () => {
                     // defaultValue={dateToString(myDate)}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={(e, v) => { setItv(e.target.value); refetch() }}
+                    onChange={(e, v) => { setIncident(e.target.value); refetch() }}
                 // InputLabelProps={{
                 //     shrink: true,
                 // }}
