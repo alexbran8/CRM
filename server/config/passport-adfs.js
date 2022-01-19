@@ -33,7 +33,7 @@ module.exports = async function  (
     last_name: userProfile.family_name,
     userName: shortId[0][0].username || "no username",
     // check how to add multiple roles
-    roles: userProfile.roles[0] ,
+    roles: userProfile.roles[0],
     provider: 'adfs',
     exp: new Date(1000*userProfile.exp)
   }
