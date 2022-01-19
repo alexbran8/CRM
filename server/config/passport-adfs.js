@@ -26,12 +26,12 @@ module.exports = async function  (
   var user = {
     id: userProfile.aud,
     token: accessToken,
-    upalu: upalu[0][0].upalu,
+    upalu: upalu[0][0] ? upalu[0][0].upalu : "no upalu",
     groups: userProfile.groups,
     email: userProfile.unique_name,
     first_name: userProfile.given_name,
     last_name: userProfile.family_name,
-    userName: shortId[0][0].username || "no username",
+    userName: shortId[0][0] ? shortId[0][0].username : "no username",
     // check how to add multiple roles
     roles: userProfile.roles[0],
     provider: 'adfs',
@@ -41,8 +41,10 @@ module.exports = async function  (
   console.log(`**ADFS user added...`)
   return done(null, user)
 }
-catch {
+catch (error) {
   console.log('error on login');
+  console.log(error)
+
   return done(null, null)
 }
 }

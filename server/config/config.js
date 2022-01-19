@@ -12,7 +12,7 @@ const baseLocation = process.env.NODE_ENV === `development` ? "" :  '/dashboard'
 
 var config = {
   CLIENT_HOME_PAGE_URL: process.env.NODE_ENV === `development` ? "http://localhost:3000/#/" :  'https://apps.gdceur.eecloud.dynamic.nsn-net.net/dashboard/',
-  CLIENT_ERROR_URL: process.env.NODE_ENV === `development` ? "http://localhost:3000/#/error" :  'https://apps.gdceur.eecloud.dynamic.nsn-net.net/dashboard/#/dashboard/error',
+  CLIENT_ERROR_URL: process.env.NODE_ENV === `development` ? "http://localhost:3000/#/error" :  'https://apps.gdceur.eecloud.dynamic.nsn-net.net/dashboard/#/error',
   azureApp: {
     // Azure Application details
     base: process.env.AAD_AUTH_URL,

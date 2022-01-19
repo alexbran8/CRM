@@ -130,7 +130,7 @@ export const Header = () => {
         });
 
       // get profile picture
-
+      getIcon(responseJson.user.token)
    
       
       }
