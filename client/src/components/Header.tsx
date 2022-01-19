@@ -124,7 +124,7 @@ export const Header = () => {
           },
 
         });
-        setState({
+        setState({ 
           authenticated: true,
           user: responseJson.user
         });

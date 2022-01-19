@@ -21,7 +21,7 @@ module.exports = async function  (
   // get usershortId
   var shortId = await db.sequelize.query(`SELECT username	FROM public.auth_user where email = '${userProfile.unique_name}'`);
   var upalu = await db.sequelize2.query(`SELECT upalu	FROM employees where email = '${userProfile.unique_name}'`);
-  console.log(upalu[0][0])
+  
 
   var user = {
     id: userProfile.aud,
@@ -31,9 +31,9 @@ module.exports = async function  (
     email: userProfile.unique_name,
     first_name: userProfile.given_name,
     last_name: userProfile.family_name,
-    userName: shortId[0][0].username,
+    userName: shortId[0][0].username || "no username",
     // check how to add multiple roles
-    roles: userProfile.roles[0],
+    roles: userProfile.roles[0] ,
     provider: 'adfs',
     exp: new Date(1000*userProfile.exp)
   }
