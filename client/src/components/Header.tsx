@@ -85,7 +85,7 @@ export const Header = () => {
 
   const pages = [
     { link: 'tac', title: 'TAC', roles: 'login' },
-    { link: 'prod-indus-planning', title: 'PIP', roles: 'PIP_user' }
+    { link: 'prod-indus-planning', title: 'PIP', roles: 'PIP' }
   ] as pageItems;
 
 
