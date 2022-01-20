@@ -24,14 +24,14 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
-import Switch from '@material-ui/core/Switch';
+import Box from '@material-ui/core/Box';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-
+import PagesItems from "./Header/interfaces";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,8 +48,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
+
+
+
+
+
 const PopoverContent = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+
 
   return (
     <>
@@ -60,6 +67,7 @@ const PopoverContent = () => {
     </>
   );
 }
+  // var modal = <IModal>{};
 
 
 export const Header = () => {
@@ -68,6 +76,19 @@ export const Header = () => {
   const classes = useStyles();
   const [pic, setPic] = useState();
   const dispatch = useDispatch();
+
+  interface pageItems {
+    items: Array<PagesItems>;
+  
+  }
+  
+
+  const pages = [
+    { link: 'tac', title: 'TAC', roles: 'login' },
+    { link: 'prod-indus-planning', title: 'PIP', roles: 'PIP_user' }
+  ] as pageItems;
+
+
 
   const [anchorEl, setAnchorEl] = React.useState < null | HTMLElement > (null);
   const open = Boolean(anchorEl);
@@ -88,7 +109,7 @@ export const Header = () => {
 
 
   useEffect(() => {
-    fetch(config.baseURL + config.baseLOCATION + "/auth/login/success/",  {
+    fetch(config.baseURL + config.baseLOCATION + "/auth/login/success/", {
       method: "GET",
       // body: JSON.stringify({ title: 'Fetch POST Request Example' }),
       credentials: "include",
@@ -103,7 +124,7 @@ export const Header = () => {
         if (response.status === 200) return response.json();
         throw new Error("failed to authenticate user");
       })
-      .then(responseJson => {    
+      .then(responseJson => {
         sessionStorage.setItem('exp', responseJson.user.exp);
         sessionStorage.setItem('userEmail', responseJson.user.email);
         sessionStorage.setItem('upalu', responseJson.user.upalu);
@@ -111,7 +132,7 @@ export const Header = () => {
         sessionStorage.setItem('name', responseJson.user.first_name);
         sessionStorage.setItem('token', responseJson.user.token);
         sessionStorage.setItem('roles', responseJson.user.roles);
-       
+
         dispatch({
           type: UPDATE_PROFILE,
           payload: {
@@ -124,15 +145,15 @@ export const Header = () => {
           },
 
         });
-        setState({ 
+        setState({
           authenticated: true,
           user: responseJson.user
         });
 
-      // get profile picture
-      getIcon(responseJson.user.token)
-   
-      
+        // get profile picture
+        getIcon(responseJson.user.token)
+
+
       }
       )
       .catch(error => {
@@ -143,28 +164,28 @@ export const Header = () => {
         console.log(error)
       });
 
-      // myPromise.then(
-      //   function(value) { /* code if successful */ },
-      //   function(error) { /* code if some error */ }
-      // );
+    // myPromise.then(
+    //   function(value) { /* code if successful */ },
+    //   function(error) { /* code if some error */ }
+    // );
     //  getIcon(user.auth.token);
 
 
   }, [])
 
-  let myPromise = new Promise(function(myResolve, myReject) {
+  let myPromise = new Promise(function (myResolve, myReject) {
     // "Producing Code" (May take some time)
     // getIcon(user.auth.token)
-      myResolve(); // when successful
-      myReject();  // when error
-    });
+    myResolve(); // when successful
+    myReject();  // when error
+  });
 
-//   useEffect(()=>{
-//  getIcon(user.auth.token)
-//   },[state.authenticated])
+  //   useEffect(()=>{
+  //  getIcon(user.auth.token)
+  //   },[state.authenticated])
 
 
-  const  getIcon = (token) =>  {
+  const getIcon = (token) => {
     fetch("https://graph.microsoft.com/v1.0/me/photo/$value", {
       method: "GET",
       // credentials: "include",
@@ -214,17 +235,38 @@ export const Header = () => {
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            <Link className="navbar-brand text-white" to={"/"}>
-              <b>NOKIA</b> {config.AppName} {user.auth.type === 'student' ? <div className="header-title"> {t("navbar.students")} </div> : null}
-            </Link>
-            <Link className="navbar-brand text-white" to={"/tac"}>TAC</Link>
-            <Link className="navbar-brand text-white" to={"/prod-indus-planning"}>PIP</Link>
-          </Typography>
-          {(state && state.authenticated) ? (
-            <div className="avatar">
-              {/* {pic ? */}
+        <Container maxWidth="xl">
+          <Toolbar>
+            <Typography
+              variant="h6"
+            >
+              <Link className="navbar-brand text-white" to={"/"}>
+                <b>NOKIA</b> {config.AppName} {user.auth.type === 'student' ? <div className="header-title"> {t("navbar.students")} </div> : null}
+              </Link>
+            </Typography>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              {(state && state.authenticated) ?
+                <>
+                  {pages.map((item, index) => (
+                    // check if user has the defined role to view current item
+                    user && (user.auth.role == 'L3' || user.auth.role === item.roles) ?
+                      <Link
+                        key={index + item.title}
+                        className="nav-link text-white"
+                        to={item.link}
+                      >
+                        {state.role} {item.title.toUpperCase()}
+                      </Link>
+                      : null
+                  ))}
+                </>
+                : null}
+            </Box>
+
+
+            {(state && state.authenticated) ? (
+              <div className="avatar">
+                {/* {pic ? */}
                 <div className='icon'>
                   <IconButton
                     aria-label="account of current user"
@@ -240,78 +282,32 @@ export const Header = () => {
                   </IconButton>
                 </div>
                 {/* : null} */}
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={_handleLogoutClick}><span title="log out"><ExitToApp /> Log out</span></MenuItem>
-              </Menu>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={_handleLogoutClick}><span title="log out"><ExitToApp /> Log out</span></MenuItem>
+                </Menu>
 
-            </div>
+              </div>
 
-          ) : (<div><Button variant="contained" color="primary" onClick={_handleSignInClick}><span title="log in">Login</span></Button></div>)}
-        </Toolbar>
+            ) : (<div><Button variant="contained" color="primary" onClick={_handleSignInClick}><span title="log in">Login</span></Button></div>)}
+          </Toolbar>
+        </Container>
       </AppBar>
     </div>
-
-    // <Navbar className="navbar sticky-nav" expand="sm"  fixed="top">
-    //   <Link className="navbar-brand text-white" id="navbar-brand" to={config.baseLOCATION + "/"}>
-    //     <b>NOKIA</b> {config.AppName} {config.appVersion}
-    //     <UncontrolledPopover trigger="hover" placement="top" target="navbar-brand">
-    //     <PopoverContent  />
-    // </UncontrolledPopover>
-    //   </Link>
-    //   <Collapse 
-    //   // isOpen={this.state.isOpen} 
-    //   navbar>
-    //     {state.authenticated ?
-    //     <Nav navbar>
-    //       <ul className="navbar-nav text-center">
-    //         <li className="nav-item">
-    //           <Link
-    //             className="nav-link text-white"
-    //             to={"/tac"}
-    //           >
-    //             TAC
-    //                 </Link>
-    //         </li>
-    //       </ul>
-    //     </Nav>
-    //     : null}
-    //   </Collapse>
-    //   <div className="navbar-text">
-    //     <Nav navbar>
-    //     <li className="nav-item">
-    //       {/* <Link
-    //         className="nav-link text-white"
-    //         to={config.baseLOCATION + "/signup"}
-    //       >
-    //         Reports
-    //       </Link> */}
-    //     </li>
-    //     <ul className="menu">
-    //         {state.authenticated ? (
-    //           <Button color="danger" onClick={_handleLogoutClick}>Logout {state.user.first_name}</Button>
-    //         ) : (
-    //           <Button color="primary" onClick={_handleSignInClick}>Login</Button>
-    //         )}
-    //       </ul>
-    //     </Nav>
-    //   </div>
-    // </Navbar>
-
   );
 }
 
