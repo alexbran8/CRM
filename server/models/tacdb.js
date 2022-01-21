@@ -63,7 +63,8 @@ module.exports = (sequelize, type) => {
       root_cause: {type: type.STRING},
       alarm_bagot: {type: type.STRING},
       alarm_active: {type: type.STRING},
-      corrective_action: {type: type.STRING}     
+      corrective_action: {type: type.STRING},
+      outil_utilise:{type: type.STRING},     
     },
     { timestamps: false,  freezeTableName: true,  tableName: 'tacdashboard_item'},
     // {

@@ -59,7 +59,7 @@ export default function SimpleModal(props:any) {
 
   // pass to child to get values
 
-console.log(props)
+
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <div><b>{props.title}</b></div>

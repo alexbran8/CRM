@@ -37,7 +37,7 @@ import "./Form.scss"
 
 
 const actionList = ["ITV terrain", "Action à distance", "Escalader le ticket", "Ticket déjà fermé/cloturé", "Ticket à fermer", "Analyser au N2/N3", "ITV + Action à distance", "TI Gelé"];
-const appelList = ["SSNE", "CLA", "Assigné", "Appel", "LdR", "Pre-check", "Suivi", "Supervision NE", "Taskforce", "Taskforce RdP","VIGIE NOK"]
+const appelList = ["SSNE", "Non destiné  TAC", "CLA", "Assigné", "Appel", "LdR", "Pre-check", "Suivi", "Supervision NE", "Taskforce", "Taskforce RdP","VIGIE NOK"]
 const constructorList = ["ERICSSON", "HUAWEI", "NOKIA", "NORTEL", "OTHER"]
 const incidentTypeList = ["Vigie", "Radio", "Transmission", "Cœur", "Performance QoS"]
 const statusList = ['Problème résolu', 'Problème résolu avec réserve', 'Problème pas identifié', 'Problème identifié']
@@ -959,6 +959,33 @@ export default function FormPropsTextFields(props: any) {
                 />
               )}
               rules={{ required: 'incident type is required' }}
+            />
+               <Controller
+              control={control}
+              name="outil_utilise"
+              defaultValue={props.operation === 'edit' ? props.values.outil_utilise : 'Hotline'}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Autocomplete
+                  value={value}
+                  onChange={(event, item) => {
+                    onChange(item);
+                  }}
+                  id="outil_utilise"
+               
+                  options={['Hotline', 'En dehors de la Hotline']}
+                  // getOptionLabel={(option) => option.title}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      label="outil_utilise*"
+                      style={{ borderBottom: '1px solid red' }}
+                    />
+                  )}
+                />
+              )}
+              rules={{ required: 'alarm_active is required' }}
             />
             <Grid item  style={{ borderColor: 'orange', width: '30ch' }} >
                     {/* <Paper className={classes.paper}>xs=12 sm=6</Paper> */}

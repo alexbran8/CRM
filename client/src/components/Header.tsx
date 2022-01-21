@@ -78,11 +78,9 @@ export const Header = () => {
   const dispatch = useDispatch();
 
   interface pageItems {
-    items: Array<PagesItems>;
-  
+    items: Array<PagesItems>
   }
   
-
   const pages = [
     { link: 'tac', title: 'TAC', roles: 'login' },
     { link: 'prod-indus-planning', title: 'PIP', roles: 'PIP' }

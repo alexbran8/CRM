@@ -32,6 +32,7 @@ type tacdb {
     corrective_action: String
     main_cause:String
     root_cause:String
+    outil_utilise:String
   }
   type getDistinct {
     week: String
@@ -77,6 +78,7 @@ type tacdb {
     root_cause:String
     main_cause:String
     problem:String
+    outil_utilise:String
   }
 
   input idArray {

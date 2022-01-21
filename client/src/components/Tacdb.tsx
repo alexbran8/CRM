@@ -71,6 +71,7 @@ const GET_ALL = gql`
         alarm_bagot
         corrective_action
         hastagTac
+        outil_utilise
     }
   }
 `;
