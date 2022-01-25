@@ -16,20 +16,6 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 
 
-import ListIcon from '@material-ui/icons/List';
-import FlagIcon from '@material-ui/icons/Flag';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import PersonIcon from '@material-ui/icons/Person';
-import GpsFixedIcon from '@material-ui/icons/GpsFixed';
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
-import LanguageIcon from '@material-ui/icons/Language';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
-
-
 import { useFormControls } from './Create';
 
 import "./Form.scss"
