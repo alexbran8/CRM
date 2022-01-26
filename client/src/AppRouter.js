@@ -17,9 +17,8 @@ export const AppRouter = () => {
   const user = useSelector((state) => ({ auth: state.auth }));
   return (
     /* ErrorBoundary is to render fallback ui incase of errors */
-
+    <ErrorBoundary>
       <React.Suspense fallback={<h1>Loading...</h1>}>
-            <ErrorBoundary>
         <HashRouter  >
           <Header basename={config.baseLOCATION} />
           <Route exact path={"/"} component={Homepage} />
@@ -28,7 +27,7 @@ export const AppRouter = () => {
           {/* {user.auth.role === 'L3' || user.auth.role === 'login' ? <Route exact path={"/tac"} component={authGuard(TAC)} /> : null} */}
           {user.auth.role === 'L3' || user.auth.role === 'PIP' ? <Route exact path={"/prod-indus-planning"} component={authGuard(PIP)} /> : null}
         </HashRouter>
-        </ErrorBoundary>
       </React.Suspense>
+    </ErrorBoundary>
   );
 };
