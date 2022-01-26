@@ -24,6 +24,7 @@ module.exports = {
     path: path.join(__dirname, '/public/dist/'),
     filename: 'main.js',
     publicPath: location,
+    chunkFilename: "[name].chunk.js"
   },
   devServer: {
     compress: true,
