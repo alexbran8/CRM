@@ -15,7 +15,6 @@ console.log('ENV',process.env.NODE_ENV)
 process.env.NODE_ENV == "development" ? location = "/" : location = "/dashboard"
 
 // const location = process.env.NODE_ENV !== 'production'
-
 module.exports = {
   context: __dirname,
   entry: path.resolve(__dirname, "src/index.tsx"),
@@ -24,7 +23,7 @@ module.exports = {
     path: path.join(__dirname, '/public/dist/'),
     filename: 'main.js',
     publicPath: location,
-    chunkFilename: "[name].chunk.js"
+    chunkFilename: "[name].chunks.js"
   },
   devServer: {
     compress: true,
