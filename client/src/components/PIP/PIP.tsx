@@ -44,15 +44,15 @@ const PIP = () => {
 
     const [items, setItems] = useState<PipItem>([])
 
-    const { data, loading, error, refetch } = useQuery(GET_ALL, {
-        variables: { 
-            // task: task, status: status, week: week, date: date, responsible_entity: responsible, no_incident: no_incident, site: site
-        }, onCompleted: (
-        ) => {
-            setItems(data.getAll)
+    // const { data, loading, error, refetch } = useQuery(GET_ALL, {
+    //     variables: { 
+    //         // task: task, status: status, week: week, date: date, responsible_entity: responsible, no_incident: no_incident, site: site
+    //     }, onCompleted: (
+    //     ) => {
+    //         setItems(data.getAll)
 
-        }
-    });
+    //     }
+    // });
 
 
     // getTableData

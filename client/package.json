@@ -43,7 +43,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@apollo/client": "^3.4.8",
+    "@apollo/client": "^3.5.8",
     "@apollo/react-hooks": "^4.0.0",
     "@babel/runtime": "^7.15.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",

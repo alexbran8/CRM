@@ -6,24 +6,24 @@ import { Table } from 'react-bootstrap'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import axios from 'axios'
-import { AlertComponent } from "./common/Alert/Alert"
+
+import { AlertComponent } from "./../common/Alert/Alert"
 // import FileReader from "./FileReader";
 import { useForm, Controller } from 'react-hook-form'
-import SimpleModal from "../components/common/Modal"
-import GenericModal from "../designSystems/Modal/Modal";
-import { ExportToExcel } from "../components/common/Export/ExportExcel"
-import { ReportsModalBody } from "./ReportsModal/ReportsModal";
-import { checkCollumns } from "../utils/checkCollumns"
-import { AddEditModal } from "./AddModal/AddEditModal";
+import SimpleModal from "../../components/common/Modal"
+import GenericModal from "../../designSystems/Modal/Modal";
+import { ExportToExcel } from "../../components/common/Export/ExportExcel"
+import { ReportsModalBody } from "./../ReportsModal/ReportsModal";
+import { checkCollumns } from "../../utils/checkCollumns"
+import { AddEditModal } from "./../AddModal/AddEditModal";
 
 
-import { config } from "../config"
+// import { config } from "../../config"
 
-import "./Tacdb.scss"
-import ExcelReader from "./ExcelReader";
+import "./TAC.scss"
+import ExcelReader from "./../ExcelReader";
 
-import { getWeek } from "./common/Form";
+import { getWeek } from "./../common/Form";
 
 
 
@@ -191,13 +191,11 @@ const Tac = () => {
         }
     });
 
-
-
     const { data: responsibleData, loading: loadingReponsibles, error: ErrorResponsibles, refetch: refetchResponsibles } = useQuery(GET_RESPONSIBLES, {
         // variables: { }, 
         onCompleted: (
         ) => {
-            setResponsiblesList(responsibleData.getResponsibles)
+            responsibleData && setResponsiblesList(responsibleData.getResponsibles)
 
         }
     });
@@ -433,7 +431,8 @@ const Tac = () => {
 
 
     useEffect(() => {
-        setResponsible(user.auth.userName)
+        setResponsible(user.auth.userName);
+        refetchResponsibles();
     }, [])
 
     function getModalStyle() {

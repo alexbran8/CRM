@@ -1,5 +1,5 @@
 import data from "./data.json";
-import "./Table.css"
+// import "./Table.css"
 import React, {useState, useEffect} from "react"
 
 import Button from "@material-ui/core/Button";
