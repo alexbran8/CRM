@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import LoginError from "./components/LoginError";
 import Tac from "./components/Tacdb";
 // import {PIP} from "./components/PIP/PIP";
-const PIP = React.lazy(() => import(/* webpackChunkName: "APage" */ './components/PIP/PIP'));
+const PIP = React.lazy(() => import(/* webpackChunkName: "/APage" */ './components/PIP/PIP'));
 import { HashRouter, Route, Switch } from "react-router-dom";
 import { config } from "./config"
 import authGuard from "./HOCs/authGuard.js";
