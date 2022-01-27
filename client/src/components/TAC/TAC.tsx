@@ -16,7 +16,7 @@ import { ExportToExcel } from "../../components/common/Export/ExportExcel"
 import { ReportsModalBody } from "./../ReportsModal/ReportsModal";
 import { checkCollumns } from "../../utils/checkCollumns"
 import { AddEditModal } from "./../AddModal/AddEditModal";
-
+import { apiclient } from "../..";
 
 // import { config } from "../../config"
 
@@ -167,7 +167,7 @@ const Tac = () => {
     const [weekList, setuWeeksList] = useState([]);
     const [itvList, setuitvList] = useState([]);
     const [status, setStatus] = useState();
-    const [task, setTask] = useState<string>('');
+    const [task, setTask] = useState < string > ('');
     const [showModal, setShowModal] = React.useState < boolean > (false);
     const [operation, setOperation] = useState < string > (null);
     const [selectedItem, setSelectedItem] = useState();
@@ -190,6 +190,14 @@ const Tac = () => {
 
         }
     });
+
+    // const [loadGreeting, { called, loading:isLoading, data:exportData}] = useLazyQuery(GET_ALL, {
+    //     variables: { task: task, status: status, week: week, date: date, responsible_entity: responsible, no_incident: no_incident, site: site }, onCompleted: (
+    //     ) => {
+    //         console.log('x')
+
+    //     }
+    // });
 
     const { data: responsibleData, loading: loadingReponsibles, error: ErrorResponsibles, refetch: refetchResponsibles } = useQuery(GET_RESPONSIBLES, {
         // variables: { }, 
@@ -259,6 +267,16 @@ const Tac = () => {
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
     });
 
+    const getAllExport = async () => {
+
+        let data = await apiclient.query({
+            query: GET_ALL,
+            variables: { task: task, status: status, week: week,  responsible_entity: responsible, no_incident: no_incident, site: site }
+        })
+        console.log(data)
+        console.log('x')
+    }
+
     const updateItem = (data) => {
         let inputData = data
         inputData.duration = parseFloat(inputData.duration)
@@ -282,7 +300,7 @@ const Tac = () => {
 
     const addMoreItems = (data, index) => {
         let inputData = data
-        
+
         inputData.duration = parseFloat(inputData.duration)
 
         setItem((item) => ({
@@ -291,7 +309,7 @@ const Tac = () => {
 
         }));
         // save to db
-        
+
         addItemMutation({
             variables: {
                 data: inputData
@@ -437,22 +455,22 @@ const Tac = () => {
 
     function getModalStyle() {
         return {
-          width: '80%',
-          maxWidth: '100vw',
-          maxHeight: '100%',
-          position: 'fixed',
-          top: '50%',
-          left:  '10%',
-          transform: 'translate(0, -50%)',
-          overflowY: 'auto'
+            width: '80%',
+            maxWidth: '100vw',
+            maxHeight: '100%',
+            position: 'fixed',
+            top: '50%',
+            left: '10%',
+            transform: 'translate(0, -50%)',
+            overflowY: 'auto'
         };
-      }
+    }
 
 
 
     const dateToString = d => `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
     const myDate = new Date()
-    
+
     return (<div>
         {/* reportsmodal */}
         {modalLoginShow ?
@@ -462,12 +480,12 @@ const Tac = () => {
                 title="Hours per tas;;ks"
                 //   handleModal={handleModal}
                 handleClose={() => { setModalLoginShow(false) }}
-                // body={<ReportsModalBody />}
+            // body={<ReportsModalBody />}
             >
-                <ReportsModalBody 
-                data={items}/>
-                </GenericModal>
-                 : null
+                <ReportsModalBody
+                    data={items} />
+            </GenericModal>
+            : null
         }
         {/* {showModal ?
             <GenericModal
@@ -533,7 +551,7 @@ const Tac = () => {
             </>
             <>
 
-            {/* TODO: fix no_itv vs no_incident */}
+                {/* TODO: fix no_itv vs no_incident */}
                 <TextField
                     id="incidentFilter"
                     type="text"
@@ -663,11 +681,12 @@ const Tac = () => {
             <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} onClick={() => { setShowUploadModal(!showUploadModal); setResponse(null) }}>Upload</Button>
             <Button variant="contained" color="primary" onClick={() => { setModalLoginShow(true) }}>Reports</Button>
+            <Button variant="contained" color="primary" onClick={() => { getAllExport() }}>Get ALL EXPORT</Button>
             <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
             <ExportToExcel
                 apiData={items}
                 fileName="export_tacdb"
-                operationName="export"
+                operationName="export all"
             />
         </div>
 
