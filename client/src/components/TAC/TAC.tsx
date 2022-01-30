@@ -31,7 +31,7 @@ import { getWeek } from "./../common/Form";
 // TODO: 2. pre-check => disabled
 // TODO: 3. Supervision NE to SSNE
 // TODO: 4. task force disabled
-// TODO: 5. add task type in filter instead of status
+// TODO: 5. add task type in filter instead of status => DONE!
 // FIXME: 6. fix import
 
 
