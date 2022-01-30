@@ -32,7 +32,7 @@ import { getWeek } from "./../common/Form";
 // TODO: 3. Supervision NE to SSNE => DONE!
 // TODO: 4. task force disabled
 // TODO: 5. add task type in filter instead of status => DONE!
-// FIXME: 6. fix import
+// FIXME: 6. fix import => DONE!
 
 
 const collumnsList = ['Constructor', 'Task', 'N° Incident', 'Détecté sur', "Service d'exploitation", 'Auteur', 'CR_DATE', 'Utilisateur']
@@ -167,7 +167,7 @@ const Tac = () => {
     const [modalLoginShow, setModalLoginShow] = useState < boolean > (false);
     const classes = useStyles();
     const [checked, setChecked] = useState([])
-    const [fileData, setFileData] = useState()
+    const [fileData, setFileData] = useState([])
     const [constructor, setConstructor] = useState < string > (null);
     const [disabledConfirm, setDisabledConfirm] = useState < boolean > (true)
     const [items, setItems] = useState([])
@@ -233,9 +233,6 @@ const Tac = () => {
     const [saveFileMutation] = useMutation(SAVE_FILE, {
         onCompleted: (dataRes) => {
             setResponse(dataRes.saveItems.message)
-
-            console.log(fileData)
-
             const allItems = [...fileData, ...items]
             setItems(allItems)
 
@@ -402,11 +399,6 @@ const Tac = () => {
         })
     }
 
-
-
-
-    // FIXME: select does not work
-    // FIXME: convert to graphql:D:D
     const sendData = (data, fileName) => {
 
         // check if mandaory collumns exist in the file..
