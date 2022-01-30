@@ -31,12 +31,12 @@ module.exports = {
       let weekFilter = args.week ? { week: args.week } : null
       let incidentFilter = args.no_incident ? { no_incident: args.no_incident } : null
       var statusFilter = args.status ? { status: args.status } : null
-      // var statusFilter = args.status === 'null' ? { comment_tac: {[Op.eq]: null} } : null
+      var taskFilter = args.task ? { task: args.task } : null
       let siteFilter = args.site ? { site: args.site } : null
       let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
-      console.log(incidentFilter)
+      console.log(args.task, taskFilter)
       let result = await db.Tacdb.findAll({
-        where: { [Op.and]: [dateFilter, weekFilter, incidentFilter, statusFilter, siteFilter, responsibleFilter] },
+        where: { [Op.and]: [dateFilter, weekFilter, incidentFilter, statusFilter, siteFilter, responsibleFilter, taskFilter] },
         limit: args.first,
         order: [
           ['date', 'DESC'],

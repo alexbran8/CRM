@@ -1,0 +1,1 @@
+export const appelList = ["SSNE", "Appel non destiné  TAC", "CLA", "Assigné", "Appel", "LdR", "Pre-check", "Suivi", "Supervision NE", "Taskforce", "Taskforce RdP","VIGIE NOK"]

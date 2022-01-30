@@ -18,6 +18,8 @@ import { checkCollumns } from "../../utils/checkCollumns"
 import { AddEditModal } from "./../AddModal/AddEditModal";
 import { apiclient } from "../..";
 
+import { appelList } from "./types";
+
 // import { config } from "../../config"
 
 import "./TAC.scss"
@@ -25,6 +27,12 @@ import ExcelReader from "./../ExcelReader";
 
 import { getWeek } from "./../common/Form";
 
+// TODO: 1. check pre-check on upload (needs to be prise en compte)
+// TODO: 2. pre-check => disabled
+// TODO: 3. Supervision NE to SSNE
+// TODO: 4. task force disabled
+// TODO: 5. add task type in filter instead of status
+// FIXME: 6. fix import
 
 
 const collumnsList = ['Constructor', 'Task', 'N° Incident', 'Détecté sur', "Service d'exploitation", 'Auteur', 'CR_DATE', 'Utilisateur']
@@ -39,8 +47,8 @@ query {
 `;
 
 const GET_ALL = gql`
-  query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_incident: String, $status: String) { 
-    getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_incident:$no_incident, status:$status)  {
+  query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_incident: String, $status: String, $task: String) { 
+    getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_incident:$no_incident, status:$status, task:$task)  {
         uid
         action
         duration
@@ -605,8 +613,8 @@ const Tac = () => {
                 <>
                     <Autocomplete
                         id="task"
-                        options={[{ task: 'Problème résolu' }, { task: 'Problème résolu avec réserve' }, { task: 'Problème pas identifié' }, { task: 'Problème identifié' }]}
-                        getOptionLabel={(option) => option.task}
+                        options={appelList}
+                        // getOptionLabel={(option) => option.value}
                         style={{ width: 200 }}
                         className={classes.textField}
                         onInputChange={(event, newInputValue, reason) => {
