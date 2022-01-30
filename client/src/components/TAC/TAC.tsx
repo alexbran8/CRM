@@ -29,7 +29,7 @@ import { getWeek } from "./../common/Form";
 
 // TODO: 1. check pre-check on upload (needs to be prise en compte)
 // TODO: 2. pre-check => disabled
-// TODO: 3. Supervision NE to SSNE
+// TODO: 3. Supervision NE to SSNE => DONE!
 // TODO: 4. task force disabled
 // TODO: 5. add task type in filter instead of status => DONE!
 // FIXME: 6. fix import
