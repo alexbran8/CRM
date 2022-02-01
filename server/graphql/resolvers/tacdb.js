@@ -34,10 +34,11 @@ module.exports = {
       var taskFilter = args.task ? { task: args.task } : null
       let siteFilter = args.site ? { site: args.site } : null
       let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
+      let firstFilter = args.first > 0 ? args.first : null
       console.log(args.task, taskFilter)
       let result = await db.Tacdb.findAll({
         where: { [Op.and]: [dateFilter, weekFilter, incidentFilter, statusFilter, siteFilter, responsibleFilter, taskFilter] },
-        limit: args.first,
+        limit: firstFilter,
         order: [
           ['date', 'DESC'],
           

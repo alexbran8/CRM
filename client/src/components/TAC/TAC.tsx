@@ -47,8 +47,8 @@ query {
 `;
 
 const GET_ALL = gql`
-  query ($date: String, $responsible_entity:String, $site: String, $week:String, $no_incident: String, $status: String, $task: String) { 
-    getAll(first:50, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_incident:$no_incident, status:$status, task:$task)  {
+  query ($first: Int $date: String, $responsible_entity:String, $site: String, $week:String, $no_incident: String, $status: String, $task: String) { 
+    getAll(first:$first, date:$date, responsible_entity:$responsible_entity, week:$week, site:$site, no_incident:$no_incident, status:$status, task:$task)  {
         uid
         action
         duration
@@ -192,7 +192,7 @@ const Tac = () => {
     const [showUploadModal, setShowUploadModal] = useState < boolean > (false)
     const { watch, control, setValue } = useForm({});
     const { data, loading, error, refetch } = useQuery(GET_ALL, {
-        variables: { task: task, status: status, week: week, date: date, responsible_entity: responsible, no_incident: no_incident, site: site }, onCompleted: (
+        variables: { first: 100, task: task, status: status, week: week, date: date, responsible_entity: responsible, no_incident: no_incident, site: site }, onCompleted: (
         ) => {
             setItems(data.getAll)
 
@@ -272,15 +272,7 @@ const Tac = () => {
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
     });
 
-    const getAllExport = async () => {
 
-        let data = await apiclient.query({
-            query: GET_ALL,
-            variables: { task: task, status: status, week: week,  responsible_entity: responsible, no_incident: no_incident, site: site }
-        })
-        console.log(data)
-        console.log('x')
-    }
 
     const updateItem = (data) => {
         let inputData = data
@@ -339,9 +331,9 @@ const Tac = () => {
             alert(dataRes.deleteItems.message);
 
             checked.forEach(x => {
-                console.log(items.findIndex(function (i) {
-                    return i.uid === parseInt(x.uid);
-                }))
+                // console.log(items.findIndex(function (i) {
+                //     return i.uid === parseInt(x.uid);
+                // }))
                 items.splice(items.findIndex(function (i) {
                     return parseInt(i.uid) === parseInt(x.uid);
                 }), 1);
@@ -425,20 +417,20 @@ const Tac = () => {
 
     const createArr = (uid, item) => {
         if (checked.find((y) => y.uid == item.uid)) {
-            console.log(uid, item.uid)
+            // console.log(uid, item.uid)
             // checked.find((y) => checked.splice(y, 1))
             checked.splice(checked.findIndex(function (i) {
                 return i.uid === parseInt(uid);
             }), 1);
             setSelected(checked.length)
-            console.log(checked)
+            // console.log(checked)
         } else {
 
             checked.push({
                 uid: parseInt(uid)
             })
             setSelected(checked.length)
-            console.log(checked)
+            // console.log(checked)
         }
     }
 
@@ -471,6 +463,18 @@ const Tac = () => {
     const dateToString = d => `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
     const myDate = new Date()
 
+
+    const getAllExport = async () => {
+
+        let data = await apiclient.query({
+            query: GET_ALL,
+            variables: { first: null, task: task, status: status, week: week, responsible_entity: responsible, no_incident: no_incident, site: site, first: null }
+        })
+        console.log('xx')
+        return data.data
+    }
+
+
     return (<div>
         {/* reportsmodal */}
         {modalLoginShow ?
@@ -487,28 +491,7 @@ const Tac = () => {
             </GenericModal>
             : null
         }
-        {/* {showModal ?
-            <GenericModal
-                open={showModal}
-                getModalStyle={getModalStyle}
-                body={AddEditModal}
-                // title="Hours per tasks"
-                //   handleModal={handleModal}
-                handleClose={() => { setShowModal(false) }}
-                // body={reportsModalBody}
-                item={selectedItem}
-                user={user.auth.userName}
-                userList={responsiblesList}
-                handleModal={handleModal}
-                handleClose={handleModal}
-                saveFunction={operation === 'add' ? addMoreItems : updateItem}
-                handleInputValues={handleInputValues}
-                operation={operation}
 
-            /> : null
-        } */}
-
-        {console.log(user.auth)}
 
         {showModal ? (
             <SimpleModal
@@ -527,11 +510,7 @@ const Tac = () => {
         ) : null}
 
         <div className="filterContainer">
-            {/* <form
-        //   className={classes.root}
-          autoComplete="on"
-        //   onSubmit={handleSubmit(onSubmit)}
-        > */}
+
             <>
 
                 <TextField
@@ -681,10 +660,9 @@ const Tac = () => {
             <Button variant="contained" color="secondary" hidden={user.auth.role === 'L3' ? false : true} onClick={deleteItems}>Delete {selected}</Button>
             <Button variant="contained" color="primary" hidden={user.auth.role === 'L3' ? false : true} onClick={() => { setShowUploadModal(!showUploadModal); setResponse(null) }}>Upload</Button>
             <Button variant="contained" color="primary" onClick={() => { setModalLoginShow(true) }}>Reports</Button>
-            <Button variant="contained" color="primary" onClick={() => { getAllExport() }}>Get ALL EXPORT</Button>
             <Button variant="contained" color="primary" onClick={() => { setOperation('add'); handleModal({ title: 'Add New Item', }) }}>Add</Button>
             <ExportToExcel
-                apiData={items}
+                getData={getAllExport()}
                 fileName="export_tacdb"
                 operationName="export all"
             />
