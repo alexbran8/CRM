@@ -474,6 +474,18 @@ const Tac = () => {
         return data.data
     }
 
+    const clearFilters = () => {
+        setDate();
+        setTask();
+        setWeek();
+        setSite();
+        setStatus();
+        setIncident();
+        setResponsible();
+
+        refetch();
+    }
+
 
     return (<div>
         {/* reportsmodal */}
@@ -648,6 +660,7 @@ const Tac = () => {
                             defaultValue={responsible}
                         />}
                     />
+                    <Button variant="contained" color="primary" onClick={() => { clearFilters() }}>CLEAR</Button>
                     {/* )} */}
                     {/* /> */}
                 </>
