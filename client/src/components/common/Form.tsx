@@ -23,11 +23,6 @@ import "./Form.scss"
 import { appelList } from '../TAC/types';
 
 const actionList = ["ITV terrain", "Action à distance", "Escalader le ticket", "Ticket déjà fermé/cloturé", "Ticket à fermer", "Analyser au N2/N3", "ITV + Action à distance", "TI Gelé"];
-// const appelList = ["SSNE", "Appel non destiné  TAC", "CLA", "Assigné", "Appel", "LdR", 
-// // "Pre-check", 
-// "Suivi", 
-// // "Taskforce", "Taskforce RdP"
-// ,"VIGIE NOK"]
 const constructorList = ["ERICSSON", "HUAWEI", "NOKIA", "NORTEL", "OTHER"]
 const incidentTypeList = ["Vigie", "Radio", "Transmission", "Cœur", "Performance QoS"]
 const statusList = ['Problème résolu', 'Problème résolu avec réserve', 'Problème pas identifié', 'Problème identifié']
