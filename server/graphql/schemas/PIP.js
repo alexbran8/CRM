@@ -1,5 +1,7 @@
 const { gql } = require("apollo-server");
 
+// pip schema
+
 module.exports = gql`
 type pip {
     cr_date: String
