@@ -1,3 +1,3 @@
 const tacdb = require("./tacdb");
-
-module.exports = [tacdb]
+const pip = require("./PIP");
+module.exports = [tacdb, pip]

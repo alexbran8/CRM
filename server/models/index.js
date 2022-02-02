@@ -32,6 +32,7 @@ db.sequelize2 = database2;
 
 // db.dailyTasks.model = require("./dailyTasks.model.js")(sequelize, Sequelize);
 db.Tacdb = require("./tacdb.js")(sequelize, Sequelize);
+db.Pip = require("./pip.js")(sequelize, Sequelize);
 
 // db.gallery = require("./gallery.js")(sequelize, Sequelize);
 // db.cartItem = require("./cartItem.js")(sequelize, Sequelize);

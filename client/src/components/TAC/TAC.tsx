@@ -27,6 +27,8 @@ import ExcelReader from "./../ExcelReader";
 
 import { getWeek } from "./../common/Form";
 
+
+import {GET_ALL_EXPORT} from "./queries"
 // TODO: 1. check pre-check on upload (needs to be prise en compte)
 // TODO: 2. pre-check => disabled
 // TODO: 3. Supervision NE to SSNE => DONE!
@@ -467,13 +469,15 @@ const Tac = () => {
     const getAllExport = async () => {
 
         let data = await apiclient.query({
-            query: GET_ALL,
+            query: GET_ALL_EXPORT,
             variables: { first: null, task: task, status: status, week: week, responsible_entity: responsible, no_incident: no_incident, site: site, first: null }
         })
         console.log('xx')
         return data.data
     }
 
+
+    // FIXME: does not clear form filters values
     const clearFilters = () => {
         setDate();
         setTask();
@@ -481,8 +485,7 @@ const Tac = () => {
         setSite();
         setStatus();
         setIncident();
-        setResponsible();
-
+        setResponsible('');
         refetch();
     }
 
@@ -630,16 +633,17 @@ const Tac = () => {
                     />
                 </>
                 <>
-                    {/* <Controller
+                {/* FIXME:  after first clear can reselect other responsible, but clear does not work again*/}
+                    <Controller
                         control={control}
                         name="responsible"
                         
-                        render={({ field: { onChange, value }, fieldState: { error } }) => ( */}
+                        render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                         id="responsible"
                         // TODO: update to sort by options
                         options={responsiblesList}
-                        defaultValue={{ 'DISTINCT': responsible }}
+                        defaultValue={{ 'DISTINCT': responsible  || ''}}
                         getOptionLabel={(option) => option.DISTINCT}
                         style={{ width: 300 }}
                         className={classes.textField}
@@ -647,7 +651,7 @@ const Tac = () => {
 
                         onInputChange={(event, newInputValue, reason) => {
                             if (reason === 'clear') {
-                                setResponsible(''); refetch()
+                                setResponsible(null); refetch()
                                 return
                             } else {
                                 setResponsible(newInputValue); refetch()
@@ -660,6 +664,10 @@ const Tac = () => {
                             defaultValue={responsible}
                         />}
                     />
+                    )}
+                    // rules={{ required: 'On sait traite is required' }}
+                  />
+                    
                     <Button variant="contained" color="primary" onClick={() => { clearFilters() }}>CLEAR</Button>
                     {/* )} */}
                     {/* /> */}
