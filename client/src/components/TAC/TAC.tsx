@@ -28,7 +28,7 @@ import ExcelReader from "./../ExcelReader";
 import { getWeek } from "./../common/Form";
 
 
-import {GET_ALL_EXPORT} from "./queries"
+import {GET_ALL_EXPORT} from "./queries.tsx"
 // TODO: 1. check pre-check on upload (needs to be prise en compte)
 // TODO: 2. pre-check => disabled
 // TODO: 3. Supervision NE to SSNE => DONE!
