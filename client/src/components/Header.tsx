@@ -99,14 +99,14 @@ export const Header = () => {
   };
 const MINUTE_MS = sessionStorage.getItem('token_refresh');
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('check login');
-      authGuard();
-    }, MINUTE_MS);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     console.log('check login');
+  //     // authGuard();
+  //   }, MINUTE_MS);
   
-    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  }, [])
+  //   return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  // }, [])
 
   useEffect(() => {
     login();
