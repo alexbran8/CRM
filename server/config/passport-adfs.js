@@ -35,9 +35,10 @@ module.exports = async function  (
     // check how to add multiple roles
     roles: userProfile.roles[0],
     provider: 'adfs',
-    exp: new Date(1000*userProfile.exp)
+    exp: new Date(1000*params.expires_on),
+    token_refresh: new Date(1000*params.expires_on) - new Date() 
   }
-  // console.log(userProfile)
+  // console.log(new Date(1000*params.expires_on) - new Date())
   console.log(`**ADFS user added...`)
   return done(null, user)
 }

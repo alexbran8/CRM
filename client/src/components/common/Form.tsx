@@ -133,6 +133,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+// TODO:[6:11 PM] Mircea, Cristian (EXT - RO/Timisoara)
+// si inca o problema : la Apel nu este obligatoriu sa introduci numarul de telefon
+
+
+
 
 type Profile = {
   appel: string
