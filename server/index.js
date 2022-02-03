@@ -25,7 +25,7 @@ const { ApolloServer } = require("apollo-server-express");
 const typeDefs = require("./graphql/schemas");
 const resolvers = require("./graphql/resolvers");
 const context = require("./graphql/context");
-
+const jwt = require('jsonwebtoken')
 const db = require("./models");
 
 
@@ -34,18 +34,22 @@ const apolloServer = new ApolloServer({
   resolvers,
   context: ({ req }) => {
     // get the user token from the headers
-    // const token = req.headers.authorization || '';
-    const user = req.headers.username || '';
+    const token = req.headers.authorization || '';
+    const user = req.headers || '';
     // console.log(user)
+    // console.log(token)
    
     // try to retrieve a user with the token
     // const user = getUser(token);
-    // var decoded = jwt_decode(token);
-    // console.log(decoded);
+    var decoded = jwt.decode(token)
+    console.log(new Date(1000 * decoded.exp));
+    console.log(new Date());
+
+    if (new Date(1000 * decoded.exp) < new Date() )throw new AuthenticationError('token has expired');
    
     // optionally block the user
     // we could also check user roles/permissions here
-    // if (!user) throw new AuthenticationError('you must be logged in');
+    if (!user) throw new AuthenticationError('you must be logged in');
    
     // add the user to the context
     return { user };

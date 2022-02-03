@@ -32,6 +32,8 @@ import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import PagesItems from "./Header/interfaces";
+import history from './history';
+import authGuard from "../HOCs/authGuard.js";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -95,12 +97,12 @@ export const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-const MINUTE_MS =  sessionStorage.getItem('token_refresh');
+const MINUTE_MS = sessionStorage.getItem('token_refresh');
 
   useEffect(() => {
     const interval = setInterval(() => {
       console.log('check login');
-      login();
+      authGuard();
     }, MINUTE_MS);
   
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
@@ -109,13 +111,6 @@ const MINUTE_MS =  sessionStorage.getItem('token_refresh');
   useEffect(() => {
     login();
   }, [])
-
-  let myPromise = new Promise(function (myResolve, myReject) {
-    // "Producing Code" (May take some time)
-    // getIcon(user.auth.token)
-    myResolve(); // when successful
-    myReject();  // when error
-  });
 
   //   useEffect(()=>{
   //  getIcon(user.auth.token)
@@ -140,7 +135,7 @@ function login() {
     })
     .then(responseJson => {
       sessionStorage.setItem('exp', responseJson.user.exp);
-      sessionStorage.setItem('token_refresh', responseJson.user.token_refresh-10000);
+      sessionStorage.setItem('token_refresh', responseJson.user.token_refresh);
       sessionStorage.setItem('userEmail', responseJson.user.email);
       sessionStorage.setItem('upalu', responseJson.user.upalu);
       sessionStorage.setItem('userName', responseJson.user.userName);

@@ -29,7 +29,7 @@ const userName = sessionStorage.getItem('email'),
     operation.setContext({
       headers: {
         userName: token ? `${userName}` : '',
-        authorization: token ? `Bearer ${token}` : ''
+        authorization: token ? `${token}` : ''
       }
     })
   }
