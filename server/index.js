@@ -29,6 +29,11 @@ const jwt = require('jsonwebtoken')
 const db = require("./models");
 
 
+const options = {
+  port: 4000,
+  bodyParserOptions: { limit: "10mb", type: "application/json" },
+};
+
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
@@ -55,7 +60,10 @@ const apolloServer = new ApolloServer({
     return { user };
    },
 
-  // uploads: false,
+    uploads: {
+      maxFieldSize: 1000000000,
+      maxFileSize: 1000000000
+    }
   // context,
   // introspection: true,
   // playground: {
@@ -66,8 +74,9 @@ const apolloServer = new ApolloServer({
   // },
 });
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json({ limit: "50mb", extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 db.sequelize2
   .authenticate()
@@ -156,4 +165,4 @@ apolloServer.applyMiddleware({ app, path: "/graphql" });
 
 
 // connect react to nodejs express server
-app.listen(port, () => console.log(`Server is running on port ${port}!`));
+app.listen(options, () => console.log(`Server is running on port ${port}!`));
