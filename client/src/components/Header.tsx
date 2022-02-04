@@ -62,7 +62,7 @@ const PopoverContent = () => {
     </>
   );
 }
-  // var modal = <IModal>{};
+// var modal = <IModal>{};
 
 
 export const Header = () => {
@@ -75,7 +75,7 @@ export const Header = () => {
   interface pageItems {
     items: Array<PagesItems>
   }
-  
+
   const pages = [
     { link: 'tac', title: 'TAC', roles: 'tacdb-user' },
     { link: 'prod-indus-planning', title: 'PIP', roles: 'PIP' }
@@ -97,18 +97,23 @@ export const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-const MINUTE_MS = sessionStorage.getItem('token_refresh');
+  const MINUTE_MS = sessionStorage.getItem('token_refresh');
 
 
-// check if token has expired and redirect to token expired page
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     console.log('check login');
-  //     // history.push('/login')
-  //   }, MINUTE_MS);
-  
-  //   return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  // }, [])
+  // check if token has expired and redirect to token expired page
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log(new Date() > new Date(1000*(sessionStorage.getItem('token_refresh'))))
+      console.log(new Date(1000*(sessionStorage.getItem('token_refresh'))))
+      if ( new Date() > new Date(1000*(sessionStorage.getItem('token_refresh')))) {
+        console.log('check login');
+        sessionStorage.clear()
+        _handleLogoutClick()
+      }
+    }, 25000);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [])
 
   useEffect(() => {
     login();
@@ -118,65 +123,65 @@ const MINUTE_MS = sessionStorage.getItem('token_refresh');
   //  getIcon(user.auth.token)
   //   },[state.authenticated])
 
-// gets login details
-function login() {
-  fetch(config.baseURL + config.baseLOCATION + "/auth/login/success/", {
-    method: "GET",
-    // body: JSON.stringify({ title: 'Fetch POST Request Example' }),
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Credentials": true,
-      // "Access-Control-Allow-Origin":true
-    }
-  })
-    .then(response => {
-      if (response.status === 200) return response.json();
-      throw new Error("failed to authenticate user");
+  // gets login details
+  function login() {
+    fetch(config.baseURL + config.baseLOCATION + "/auth/login/success/", {
+      method: "GET",
+      // body: JSON.stringify({ title: 'Fetch POST Request Example' }),
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+        // "Access-Control-Allow-Origin":true
+      }
     })
-    .then(responseJson => {
-      sessionStorage.setItem('exp', responseJson.user.exp);
-      sessionStorage.setItem('token_refresh', responseJson.user.token_refresh);
-      sessionStorage.setItem('userEmail', responseJson.user.email);
-      sessionStorage.setItem('upalu', responseJson.user.upalu);
-      sessionStorage.setItem('userName', responseJson.user.userName);
-      sessionStorage.setItem('name', responseJson.user.first_name);
-      sessionStorage.setItem('token', responseJson.user.token);
-      sessionStorage.setItem('roles', responseJson.user.roles);
+      .then(response => {
+        if (response.status === 200) return response.json();
+        throw new Error("failed to authenticate user");
+      })
+      .then(responseJson => {
+        sessionStorage.setItem('exp', responseJson.user.exp);
+        sessionStorage.setItem('token_refresh', responseJson.user.token_refresh);
+        sessionStorage.setItem('userEmail', responseJson.user.email);
+        sessionStorage.setItem('upalu', responseJson.user.upalu);
+        sessionStorage.setItem('userName', responseJson.user.userName);
+        sessionStorage.setItem('name', responseJson.user.first_name);
+        sessionStorage.setItem('token', responseJson.user.token);
+        sessionStorage.setItem('roles', responseJson.user.roles);
 
-      dispatch({
-        type: UPDATE_PROFILE,
-        payload: {
-          role: responseJson.user.roles,
-          userName: responseJson.user.userName,
-          name: responseJson.user.first_name,
-          email: responseJson.user.email,
-          upalu: responseJson.user.upalu,
-          token: responseJson.user.token
-        },
+        dispatch({
+          type: UPDATE_PROFILE,
+          payload: {
+            role: responseJson.user.roles,
+            userName: responseJson.user.userName,
+            name: responseJson.user.first_name,
+            email: responseJson.user.email,
+            upalu: responseJson.user.upalu,
+            token: responseJson.user.token
+          },
 
+        });
+        setState({
+          authenticated: true,
+          user: responseJson.user
+        });
+
+        // get profile picture
+        getIcon(responseJson.user.token)
+
+
+      }
+      )
+      .catch(error => {
+        setState({
+          authenticated: false,
+          error: "Failed to authenticate user"
+        });
+        console.log(error);
+        _handleLogoutClick();
       });
-      setState({
-        authenticated: true,
-        user: responseJson.user
-      });
-
-      // get profile picture
-      getIcon(responseJson.user.token)
-
-
-    }
-    )
-    .catch(error => {
-      setState({
-        authenticated: false,
-        error: "Failed to authenticate user"
-      });
-      console.log(error);
-      _handleLogoutClick();
-    });
-}
+  }
 
 
   const getIcon = (token) => {

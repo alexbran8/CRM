@@ -36,7 +36,7 @@ module.exports = async function  (
     roles: userProfile.roles[0],
     provider: 'adfs',
     exp: new Date(1000*params.expires_on),
-    token_refresh: new Date(1000*params.expires_on) - new Date() 
+    token_refresh: params.expires_on
   }
   // console.log(new Date(1000*params.expires_on) - new Date())
   console.log(`**ADFS user added...`)
