@@ -59,7 +59,7 @@ module.exports = {
     }
   },
   Mutation: {
-    async addItem(root, data, context) {
+    async addItemPIP(root, data, context) {
       try {
         let new_id = await db.sequelize.query("Select nextval(pg_get_serial_sequence('tacdashboard_item', 'id')) as new_id;")
         data.data.uid = new_id[0][0].new_id
@@ -75,7 +75,7 @@ module.exports = {
         return response
       }
     },
-    async editItem(root, data, context) {
+    async editItemPIP(root, data, context) {
       try {
         const { id, title, requirements, type, description, coordinator } = data.data
         const dataToUpdate = data.data
