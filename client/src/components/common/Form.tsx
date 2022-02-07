@@ -702,7 +702,7 @@ export default function FormPropsTextFields(props: any) {
                       type="text"
                       label="duration"
                       value={value}
-                      disabled={props.values.NORM != 'T3' && watch("NORM") !== 'T3'}
+                      disabled={props.values && props.values.NORM != 'T3' && watch("NORM") !== 'T3'}
                       className={classes.textField}
                       onChange={onChange}
                       error={!!error}
@@ -846,7 +846,7 @@ export default function FormPropsTextFields(props: any) {
                 <Controller
                   control={control}
                   name="alarm_active"
-                  defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'NON'}
+                  defaultValue={props.operation === 'edit' ? props.values.alarm_active : 'OUI'}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                       value={value}
@@ -873,7 +873,7 @@ export default function FormPropsTextFields(props: any) {
                 <Controller
                   control={control}
                   name="action"
-                  defaultValue={props.operation === 'edit' ? props.values.action : null}
+                  defaultValue={props.operation === 'edit' ? props.values.action : 'OUI'}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Autocomplete
                       value={value}

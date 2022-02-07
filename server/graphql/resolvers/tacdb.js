@@ -24,7 +24,6 @@ const emailHandler = async (metadata) => {
 module.exports = {
   Query: {
     async getAll(root, args, context) {
-      console.log(args)
       let dateSearch = new Date(args.date)
       // TODO: implement date type in graphql
       let dateFilter = args.date ? { date: dateSearch } : null

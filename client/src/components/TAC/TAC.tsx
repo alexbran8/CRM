@@ -237,6 +237,7 @@ const Tac = () => {
             setResponse(dataRes.saveItems.message)
             const allItems = [...fileData, ...items]
             setItems(allItems)
+            // TODO: update import data so that corrective action and action are 'OUI'
 
             // update state
             // const newItems = [...items]
@@ -472,7 +473,6 @@ const Tac = () => {
             query: GET_ALL_EXPORT,
             variables: { first: null, task: task, status: status, week: week, responsible_entity: responsible, no_incident: no_incident, site: site, first: null }
         })
-        console.log('xx')
         return data.data
     }
 
