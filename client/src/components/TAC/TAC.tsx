@@ -280,6 +280,7 @@ const Tac = () => {
     const updateItem = (data) => {
         let inputData = data
         inputData.duration = parseFloat(inputData.duration)
+        inputData.createdBy = user.auth.email
         setItem(inputData)
         updateItemMutation({
             variables: {
@@ -302,7 +303,7 @@ const Tac = () => {
         let inputData = data
 
         inputData.duration = parseFloat(inputData.duration)
-
+        inputData.createdBy = user.auth.email
         setItem((item) => ({
             ...item, ...inputData,
             uid: 0,

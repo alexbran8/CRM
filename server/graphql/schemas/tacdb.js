@@ -79,6 +79,7 @@ type tacdb {
     main_cause:String
     problem:String
     outil_utilise:String
+    createdBy:String
   }
 
   input idArray {

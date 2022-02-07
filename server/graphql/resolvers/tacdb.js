@@ -79,12 +79,13 @@ module.exports = {
         const { id, title, requirements, type, description, coordinator } = data.data
         const dataToUpdate = data.data
         let uid = dataToUpdate.uid
-        console.log(uid)
+        dataToUpdate.process_status = 'user'
+        console.log(dataToUpdate.process_status,'xxxx')
         db.Tacdb.update(
           dataToUpdate,
           { where: { id: uid } }
         );
-        const response = { message: 'Notifications have been successfully sent!', success: true }
+        const response = { message: 'Item has been successfully updated!', success: true }
         return response
       }
 
