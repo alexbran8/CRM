@@ -24,6 +24,7 @@ const emailHandler = async (metadata) => {
 module.exports = {
   Query: {
     async getAll(root, args, context) {
+      try {
       let dateSearch = new Date(args.date)
       // TODO: implement date type in graphql
       let dateFilter = args.date ? { date: dateSearch } : null
@@ -44,6 +45,12 @@ module.exports = {
         ]
       });
       return result;
+    }
+    catch (error) {
+      console.log(error)
+      const response = { message: error, success: false }
+      return response
+    }
 
     },
     async getDistinctWeeks(root, args, context) {
@@ -62,7 +69,7 @@ module.exports = {
       try {
         let new_id = await db.sequelize.query("Select nextval(pg_get_serial_sequence('tacdashboard_item', 'id')) as new_id;")
         data.data.uid = new_id[0][0].new_id
-        console.log(data.data.id)
+        // console.log(data.data.id)
         db.Tacdb.create(data.data)
         const response = { message: 'Notifications have been successfully sent!', success: true }
         return response

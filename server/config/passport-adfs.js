@@ -22,14 +22,15 @@ module.exports = async function  (
 
   // get usershortId
   var shortId = await db.sequelize.query(`SELECT username	FROM public.auth_user where email = '${userProfile.unique_name}'`);
-  var upalu = await db.sequelize2.query(`SELECT upalu	FROM employees where email = '${userProfile.unique_name}'`);
+  // var upalu = await db.sequelize2.query(`SELECT upalu	FROM employees where email = '${userProfile.unique_name}'`);
+  var upalu = null
   
   let step1 = performance.now()
 
   var user = {
     id: userProfile.aud,
     token: accessToken,
-    upalu: upalu[0][0] ? upalu[0][0].upalu : "no upalu",
+    // upalu: upalu[0][0] ? upalu[0][0].upalu : "no upalu",
     groups: userProfile.groups,
     email: userProfile.unique_name,
     first_name: userProfile.given_name,

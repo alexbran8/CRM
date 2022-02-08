@@ -28,7 +28,7 @@ import ExcelReader from "./../ExcelReader";
 import { getWeek } from "./../common/Form";
 
 
-import {GET_ALL_EXPORT} from "./queries.tsx"
+import { GET_ALL_EXPORT } from "./queries.tsx"
 // TODO: 1. check pre-check on upload (needs to be prise en compte)
 // TODO: 2. pre-check => disabled
 // TODO: 3. Supervision NE to SSNE => DONE!
@@ -220,13 +220,19 @@ const Tac = () => {
 
     const [addItemMutation] = useMutation(ADD_ITEM, {
         onCompleted: (dataRes) => {
+            if (dataRes.addItem.success === "true") {
             // update state
             const newItems = [...items]
             newItems.forEach((item) => {
                 item.uid = item.uid + 1;
             });
             setItems(newItems => [...newItems, item]);
+            console.log(dataRes)
             setShowModal(false)
+        }
+        else {
+            console.error("Error creating a post"); alert("Error creating a post request; Please login / logout...")
+        }
 
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
@@ -264,6 +270,8 @@ const Tac = () => {
     const [updateItemMutation] = useMutation(EDIT_ITEM, {
         onCompleted: (dataRes) => {
             // update state
+            if (dataRes.editItem.success === "true") {
+
             const newItems = [...items]
             let index = newItems.findIndex((y) => y.uid === item.uid)
 
@@ -271,6 +279,10 @@ const Tac = () => {
 
             setItems(newItems)
             setShowModal(false)
+            }
+            else {
+                console.error("Error creating a post"); alert("Error creating a post request; Please login / logout...")
+            }
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
     });
@@ -634,41 +646,41 @@ const Tac = () => {
                     />
                 </>
                 <>
-                {/* FIXME:  after first clear can reselect other responsible, but clear does not work again*/}
+                    {/* FIXME:  after first clear can reselect other responsible, but clear does not work again*/}
                     <Controller
                         control={control}
                         name="responsible"
-                        
+
                         render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <Autocomplete
-                        id="responsible"
-                        // TODO: update to sort by options
-                        options={responsiblesList}
-                        defaultValue={{ 'DISTINCT': responsible  || ''}}
-                        getOptionLabel={(option) => option.DISTINCT}
-                        style={{ width: 300 }}
-                        className={classes.textField}
-                        // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
+                            <Autocomplete
+                                id="responsible"
+                                // TODO: update to sort by options
+                                options={responsiblesList}
+                                defaultValue={{ 'DISTINCT': responsible || '' }}
+                                getOptionLabel={(option) => option.DISTINCT}
+                                style={{ width: 300 }}
+                                className={classes.textField}
+                                // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
 
-                        onInputChange={(event, newInputValue, reason) => {
-                            if (reason === 'clear') {
-                                setResponsible(null); refetch()
-                                return
-                            } else {
-                                setResponsible(newInputValue); refetch()
-                            }
-                        }}
-                        renderInput={(params) => <TextField {...params}
-                            label="select responsible"
-                            variant="outlined"
+                                onInputChange={(event, newInputValue, reason) => {
+                                    if (reason === 'clear') {
+                                        setResponsible(null); refetch()
+                                        return
+                                    } else {
+                                        setResponsible(newInputValue); refetch()
+                                    }
+                                }}
+                                renderInput={(params) => <TextField {...params}
+                                    label="select responsible"
+                                    variant="outlined"
 
-                            defaultValue={responsible}
-                        />}
-                    />
-                    )}
+                                    defaultValue={responsible}
+                                />}
+                            />
+                        )}
                     // rules={{ required: 'On sait traite is required' }}
-                  />
-                    
+                    />
+
                     <Button variant="contained" color="primary" onClick={() => { clearFilters() }}>CLEAR</Button>
                     {/* )} */}
                     {/* /> */}
