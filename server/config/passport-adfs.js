@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const db = require("../models");
-const loginLogEmail = require("../middleware/loginLog")
+
 
 module.exports = async function  (
   accessToken,
@@ -10,7 +10,7 @@ module.exports = async function  (
   done
 ) {
   try {
-  console.log(`**Passport ADFS strategy...`)
+  console.log(`**Step 1: Passport ADFS strategy...`)
   let start = performance.now()
   // console.log(params)
   const userProfile = jwt.decode(params.id_token, '', true)
@@ -46,10 +46,13 @@ module.exports = async function  (
   let step2Time = `${end - step1} milliseconds`;
   let userEmail =  userProfile.unique_name
   // console.log('step2', `${end - step1} milliseconds`)
-  loginLogEmail({step1Time, step2Time, userEmail})
+
   // send email with results
   // console.log(new Date(1000*params.expires_on) - new Date())
   console.log(`**ADFS user added...`)
+  user.step1Time = step1Time
+  user.step2Time = step2Time
+  user.userEmail = userEmail
   
   return done(null, user)
 }

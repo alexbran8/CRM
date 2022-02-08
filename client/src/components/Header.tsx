@@ -226,7 +226,7 @@ export const Header = () => {
     sessionStorage.removeItem('name')
     sessionStorage.removeItem('token')
     sessionStorage.removeItem('roles')
-    handleNotAuthenticated();
+    _handleNotAuthenticated();
   };
   const _handleNotAuthenticated = () => {
     setState({ authenticated: false });

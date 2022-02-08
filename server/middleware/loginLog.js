@@ -17,8 +17,7 @@ const errorHandler = (err, req, res, next) => {
 
 
 function loginLogEmail(data) {
-    console.log(data)
-    const {step1Time, step2Time, userEmail} = data
+    const {step1Time, step2Time,  finalStepTime, userEmail} = data
     
     // create email
     const metadata = {
@@ -31,6 +30,8 @@ function loginLogEmail(data) {
         html: '<div> Azure Login Log:' +
           '<p>Step1:'+step1Time+'</p>' +
           '<p>Step2:'+step2Time+'</p>' +
+          // '<p>Step3:'+step3Time+'</p>' +
+          '<p>finalStep:'+finalStepTime+'</p>' +
           '<p>User:'+userEmail+'</p>' +
           '<p>Total Time:</p></div>'
       };

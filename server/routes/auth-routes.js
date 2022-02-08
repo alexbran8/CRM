@@ -1,12 +1,13 @@
 const router = require("express").Router();
 const passport = require("passport");
 const config = require("../config/config")
-
+const loginLogEmail = require("../middleware/loginLog")
 // when login is successful, retrieve user info
 router.get("/login/success", (req, res) => {
-  // get first time
   if (req.user) {
     // get second time
+    var midTime = performance.now()
+    // var step3Time  = midTime -  req.user.step2Time
     res.json({
       success: true,
       message: "user has successfully been authenticated",
@@ -14,7 +15,13 @@ router.get("/login/success", (req, res) => {
       cookies: req.cookies
     });
     // get total time
+    let endTime = performance.now()
+    var finalStepTime = endTime - midTime
+    var step1Time = req.user.step1Time
+    var step2Time = req.user.step2Time
+    var userEmail = req.user.userEmail
   }
+  step1Time ? loginLogEmail({step1Time, step2Time, finalStepTime, userEmail}) : null
 });
 
 // when login failed, send failed msg
