@@ -43,8 +43,8 @@ type tacdb {
   }
 
   type Response {
-    success: String!
-    message: String!
+    success: String
+    message: String
     uid: Int
   }
 
@@ -112,7 +112,7 @@ extend  type Query  {
 extend type Mutation {
   deleteItems (data: [idArray]):Response!
   addItem(data: itemSave):Response!
-  editItem(data: itemSave):Response!
+  editItem(data: itemSave):Response
   deleteItem(uid: Int):Response!
   saveItems(data: [fileSchema]):Response!
 }

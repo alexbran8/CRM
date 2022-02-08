@@ -25,32 +25,32 @@ module.exports = {
   Query: {
     async getAll(root, args, context) {
       try {
-      let dateSearch = new Date(args.date)
-      // TODO: implement date type in graphql
-      let dateFilter = args.date ? { date: dateSearch } : null
-      let weekFilter = args.week ? { week: args.week } : null
-      let incidentFilter = args.no_incident ? { no_incident: args.no_incident } : null
-      var statusFilter = args.status ? { status: args.status } : null
-      var taskFilter = args.task ? { task: args.task } : null
-      let siteFilter = args.site ? { site: args.site } : null
-      let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
-      let firstFilter = args.first > 0 ? args.first : null
-      console.log(args.task, taskFilter)
-      let result = await db.Tacdb.findAll({
-        where: { [Op.and]: [dateFilter, weekFilter, incidentFilter, statusFilter, siteFilter, responsibleFilter, taskFilter] },
-        limit: firstFilter,
-        order: [
-          ['date', 'DESC'],
-          
-        ]
-      });
-      return result;
-    }
-    catch (error) {
-      console.log(error)
-      const response = { message: error, success: false }
-      return response
-    }
+        let dateSearch = new Date(args.date)
+        // TODO: implement date type in graphql
+        let dateFilter = args.date ? { date: dateSearch } : null
+        let weekFilter = args.week ? { week: args.week } : null
+        let incidentFilter = args.no_incident ? { no_incident: args.no_incident } : null
+        var statusFilter = args.status ? { status: args.status } : null
+        var taskFilter = args.task ? { task: args.task } : null
+        let siteFilter = args.site ? { site: args.site } : null
+        let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
+        let firstFilter = args.first > 0 ? args.first : null
+        console.log(args.task, taskFilter)
+        let result = await db.Tacdb.findAll({
+          where: { [Op.and]: [dateFilter, weekFilter, incidentFilter, statusFilter, siteFilter, responsibleFilter, taskFilter] },
+          limit: firstFilter,
+          order: [
+            ['date', 'DESC'],
+
+          ]
+        });
+        return result;
+      }
+      catch (error) {
+        console.log(error)
+        const response = { message: error, success: false }
+        return response
+      }
 
     },
     async getDistinctWeeks(root, args, context) {
@@ -67,12 +67,19 @@ module.exports = {
   Mutation: {
     async addItem(root, data, context) {
       try {
+
         let new_id = await db.sequelize.query("Select nextval(pg_get_serial_sequence('tacdashboard_item', 'id')) as new_id;")
         data.data.uid = new_id[0][0].new_id
-        // console.log(data.data.id)
-        db.Tacdb.create(data.data)
-        const response = { message: 'Notifications have been successfully sent!', success: true }
-        return response
+
+        return new Promise((resolve, reject) => {
+
+          db.Tacdb.create(data.data).then(res => {
+
+            return resolve({ message: 'OK', success: true })
+          }).catch(function (err) {
+            return reject({ message: err, success: false })
+          });
+        })
       }
 
       catch (error) {
@@ -83,17 +90,30 @@ module.exports = {
     },
     async editItem(root, data, context) {
       try {
-        const { id, title, requirements, type, description, coordinator } = data.data
-        const dataToUpdate = data.data
-        let uid = dataToUpdate.uid
-        dataToUpdate.process_status = 'user'
-        console.log(dataToUpdate.process_status,'xxxx')
-        db.Tacdb.update(
-          dataToUpdate,
-          { where: { id: uid } }
-        );
-        const response = { message: 'Item has been successfully updated!', success: true }
-        return response
+        return new Promise((resolve, reject) => {
+
+          const { id, title, requirements, type, description, coordinator } = data.data
+          const dataToUpdate = data.data
+          let uid = dataToUpdate.uid
+          dataToUpdate.process_status = 'user'
+          // console.log(dataToUpdate.process_status,'xxxx')
+          db.Tacdb.update(
+            dataToUpdate,
+            { where: { id: uid } }
+          ).then(res => {
+            // console.log(data)    
+            return resolve({ message: 'OK', success: true })
+            // console.log(response)
+            //   response
+          }
+          )
+            .catch(function (err) {
+              // handle error;
+              console.log(err)
+              var response = { message: err, success: false }
+              return reject({ message: err, success: false })
+            });
+        })
       }
 
       catch (error) {
@@ -139,12 +159,12 @@ module.exports = {
 
           const row = {
             id: newId[0][0].new_id,
-            date:data.data[i].date,
+            date: data.data[i].date,
             task: data.data[i].task,
             no_incident: data.data[i].no_incident,
             no_itv: data.data[i].no_itv,
             week: data.data[i].week,
-            constructor:data.data[i].site_constructor,
+            constructor: data.data[i].site_constructor,
             TT_creator: data.data[i]["TT_creator"],
             alarm_bagot: data.data[i]["alarm_bagot"],
             TT_creator_short: data.data[i].auteur,
