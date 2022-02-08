@@ -16,7 +16,7 @@ router.get("/login/success", (req, res) => {
     });
     // get total time
     let endTime = performance.now()
-    var finalStepTime = endTime - midTime
+    var finalStepTime = `${endTime - midTime} milliseconds`
     var step1Time = req.user.step1Time
     var step2Time = req.user.step2Time
     var userEmail = req.user.userEmail
