@@ -146,6 +146,8 @@ module.exports = {
             responsible_entity: data.data[i].responsible_entity,
             createdBy: data.data[i]["createdBy"],
             cr_date: new Date(),
+            // TODO: check if this works
+            // process_status: 'user'
           }
 
           // if (check[0].length == 0 ) {

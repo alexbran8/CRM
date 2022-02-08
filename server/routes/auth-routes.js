@@ -4,13 +4,16 @@ const config = require("../config/config")
 
 // when login is successful, retrieve user info
 router.get("/login/success", (req, res) => {
+  // get first time
   if (req.user) {
+    // get second time
     res.json({
       success: true,
       message: "user has successfully been authenticated",
       user: req.user,
       cookies: req.cookies
     });
+    // get total time
   }
 });
 

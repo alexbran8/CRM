@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const db = require("../models");
+const loginLogEmail = require("../middleware/loginLog")
 
 module.exports = async function  (
   accessToken,
@@ -10,18 +11,20 @@ module.exports = async function  (
 ) {
   try {
   console.log(`**Passport ADFS strategy...`)
-  console.log(params)
+  let start = performance.now()
+  // console.log(params)
   const userProfile = jwt.decode(params.id_token, '', true)
   
   // New user
   // console.log(`**New ADFS user...`, userProfile)
 
-  console.log(userProfile)
+  // console.log(userProfile)
 
   // get usershortId
   var shortId = await db.sequelize.query(`SELECT username	FROM public.auth_user where email = '${userProfile.unique_name}'`);
   var upalu = await db.sequelize2.query(`SELECT upalu	FROM employees where email = '${userProfile.unique_name}'`);
   
+  let step1 = performance.now()
 
   var user = {
     id: userProfile.aud,
@@ -38,8 +41,16 @@ module.exports = async function  (
     exp: new Date(1000*params.expires_on),
     token_refresh: params.expires_on
   }
+  let end = performance.now()
+  let step1Time = `${step1 - start} milliseconds`;
+  let step2Time = `${end - step1} milliseconds`;
+  let userEmail =  userProfile.unique_name
+  // console.log('step2', `${end - step1} milliseconds`)
+  loginLogEmail({step1Time, step2Time, userEmail})
+  // send email with results
   // console.log(new Date(1000*params.expires_on) - new Date())
   console.log(`**ADFS user added...`)
+  
   return done(null, user)
 }
 catch (error) {
