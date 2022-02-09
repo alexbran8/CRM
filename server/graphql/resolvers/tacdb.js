@@ -79,6 +79,7 @@ module.exports = {
           }).catch(function (err) {
             console.log(err)
             // send notification error
+            sendNotificationError(err, data.data.createdBy);
             return reject({ message: err, success: false })
 
           });
@@ -87,6 +88,7 @@ module.exports = {
 
       catch (error) {
         console.log(error)
+        sendNotificationError(error, data.data.createdBy);
         const response = { message: error, success: false }
         return response
       }
