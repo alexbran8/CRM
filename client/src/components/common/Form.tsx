@@ -250,6 +250,7 @@ export default function FormPropsTextFields(props: any) {
     <>
        <form
             className={classes.root}
+            // noValidate
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
           >

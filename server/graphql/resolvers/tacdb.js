@@ -1,10 +1,10 @@
 const e = require("cors");
-const nodemailer = require("nodemailer");
+// const nodemailer = require("nodemailer");
 const db = require("../../models");
 const { Op } = require("sequelize");
 
-const notificationEmail = require("../../middleware/notification")
-
+// const notificationEmail = require("../../middleware/notification")
+const {sendNotificationError, notificationEmail} = require("../../middleware/notification")
 const errorHandler = (err, req, res, next) => {
   const { code, desc = err.message } = err;
   res.status(code || 500).json({ data: null, error: desc });
@@ -77,7 +77,10 @@ module.exports = {
 
             return resolve({ message: 'OK', success: true })
           }).catch(function (err) {
+            console.log(err)
+            // send notification error
             return reject({ message: err, success: false })
+
           });
         })
       }
@@ -91,7 +94,6 @@ module.exports = {
     async editItem(root, data, context) {
       try {
         return new Promise((resolve, reject) => {
-
           const { id, title, requirements, type, description, coordinator } = data.data
           const dataToUpdate = data.data
           let uid = dataToUpdate.uid
@@ -101,16 +103,15 @@ module.exports = {
             dataToUpdate,
             { where: { id: uid } }
           ).then(res => {
-            // console.log(data)    
             return resolve({ message: 'OK', success: true })
-            // console.log(response)
-            //   response
+
           }
           )
             .catch(function (err) {
               // handle error;
-              console.log(err)
-              var response = { message: err, success: false }
+              console.log(err);
+              console.log(data.data)
+              sendNotificationError(err, data.data.createdBy);
               return reject({ message: err, success: false })
             });
         })
@@ -118,6 +119,7 @@ module.exports = {
 
       catch (error) {
         console.log(error)
+        sendNotificationError(error, data.data.createdBy);
         const response = { message: error, success: false }
         return response
       }
