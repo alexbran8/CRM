@@ -45,9 +45,9 @@ function sendNotificationError(err, user) {
     transporter: config.transporterConfig,
     from: "poweremail.ni_gsd_timisoara@nokia.com",
     to: 'alexandru.bran@nokia.com',
-    // cc: 'cecilia.crisan@nokia.com',
+    cc: 'cecilia.crisan@nokia.com',
     subj: `[DASHBOARD ERROR] This email requires your attention! [DASHBOARD ERROR]`,
-    text: "The following have been imported into web application:",
+    text: "Please take a look at the following:",
     html: '<div> DASHBOARD ERROR:' + err +
       '<p> Regards,</p><p>TACDB, on behalf of ' + user  + '  </p></div>'
   }
