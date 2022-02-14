@@ -40,7 +40,7 @@ export default class HomePage extends Component {
               <h2>Welcome {this.state.user.email}!</h2>
             </div>
           )}
-          <h3>This web application is still under development...</h3>
+          <h3 style={{color:"orange"}}>One of the issues regarding to the login experience has been pottentialy solved ... </h3>
         </div>
       </div>
     );
