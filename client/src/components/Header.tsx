@@ -110,14 +110,53 @@ export const Header = () => {
         sessionStorage.clear()
         _handleLogoutClick()
       }
-    }, 25000);
+    }, 35000);
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [])
 
   useEffect(() => {
-    login();
+    fetchAuthUser();
   }, [])
+
+  const fetchAuthUser = async () => {
+    const response = await login ()
+    .catch((err) => {
+      console.log("Not properly authenticated");
+      // dispatch(setIsAuthenticated(false));
+      // dispatch(setAuthUser(null));
+      history.push("/login/error");
+    });
+
+  if (response && response.data) {
+    console.log("User: ", response.data);
+    dispatch(setIsAuthenticated(true));
+    dispatch(setAuthUser(response.data));
+    history.push("/welcome");
+  }
+};
+
+const redirectToGoogleSSO = async () => {
+  let timer: NodeJS.Timeout | null = null;
+  // window.open(config.baseURL + config.baseLOCATION + "/auth/azure"
+  const googleLoginURL = config.baseURL + config.baseLOCATION + "/auth/azure";
+  const newWindow = window.open(
+    googleLoginURL,
+    "_blank",
+    "width=500,height=600"
+  );
+
+  if (newWindow) {
+    timer = setInterval(() => {
+      if (newWindow.closed) {
+        console.log("Yay we're authenticated");
+        history.push("/");
+        fetchAuthUser();
+        if (timer) clearInterval(timer);
+      }
+    }, 500);
+  }
+};
 
   //   useEffect(()=>{
   //  getIcon(user.auth.token)
@@ -127,7 +166,7 @@ export const Header = () => {
   function login() {
     fetch(config.baseURL + config.baseLOCATION + "/auth/login/success/", {
       method: "GET",
-      // body: JSON.stringify({ title: 'Fetch POST Request Example' }),
+      // body: JSON.stringify({ start: performance.now() }),
       credentials: "include",
       headers: {
         Accept: "application/json",
@@ -137,10 +176,13 @@ export const Header = () => {
       }
     })
       .then(response => {
-        if (response.status === 200) return response.json();
-        throw new Error("failed to authenticate user");
-      })
+        if (response.status) return response.json();
+        // if (response.status === 401) return response.json()
+    })
       .then(responseJson => {
+        console.log('here',responseJson);
+        if(responseJson.success === true) {
+          getIcon(responseJson.user.token)
         sessionStorage.setItem('exp', responseJson.user.exp);
         sessionStorage.setItem('token_refresh', responseJson.user.token_refresh);
         sessionStorage.setItem('userEmail', responseJson.user.email);
@@ -159,28 +201,37 @@ export const Header = () => {
             email: responseJson.user.email,
             upalu: responseJson.user.upalu,
             token: responseJson.user.token
-          },
-
-        });
-        setState({
-          authenticated: true,
-          user: responseJson.user
-        });
-
-        // get profile picture
-        getIcon(responseJson.user.token)
-
-
+          }
+ 
       }
+      );
+      setState({
+        authenticated: true,
+        user: responseJson.user
+      });
+    }
+    else 
+    {
+      setState({
+        authenticated: false,
+        error: "Failed to authenticate user"
+      });
+    }
+  }
+    
       )
-      .catch(error => {
+      .catch(err => {
         setState({
           authenticated: false,
           error: "Failed to authenticate user"
         });
-        console.log(error);
+        console.log(err);
         _handleLogoutClick();
       });
+  }
+
+  const setProfile = async (user) => {
+    await console.log(user)
   }
 
 
@@ -304,7 +355,10 @@ export const Header = () => {
 
               </div>
 
-            ) : (<div><Button variant="contained" color="primary" onClick={_handleSignInClick}><span title="log in">Login</span></Button></div>)}
+            ) : (<div><Button variant="contained" color="primary" 
+            onClick={_handleSignInClick}
+            // onClick={() => {redirectToGoogleSSO()}}
+            ><span title="log in">Login</span></Button></div>)}
           </Toolbar>
         </Container>
       </AppBar>
