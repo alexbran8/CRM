@@ -121,19 +121,19 @@ export const Header = () => {
 
   const fetchAuthUser = async () => {
     const response = await login ()
-    .catch((err) => {
-      console.log("Not properly authenticated");
-      // dispatch(setIsAuthenticated(false));
-      // dispatch(setAuthUser(null));
-      history.push("/login/error");
-    });
+  //   .catch((err) => {
+  //     console.log("Not properly authenticated");
+  //     // dispatch(setIsAuthenticated(false));
+  //     // dispatch(setAuthUser(null));
+  //     history.push("/login/error");
+  //   });
 
-  if (response && response.data) {
-    console.log("User: ", response.data);
-    dispatch(setIsAuthenticated(true));
-    dispatch(setAuthUser(response.data));
-    history.push("/welcome");
-  }
+  // if (response && response.data) {
+  //   console.log("User: ", response.data);
+  //   // dispatch(setIsAuthenticated(true));
+  //   // dispatch(setAuthUser(response.data));
+  //   // history.push("/welcome");
+  // }
 };
 
 const redirectToGoogleSSO = async () => {
@@ -229,11 +229,6 @@ const redirectToGoogleSSO = async () => {
         _handleLogoutClick();
       });
   }
-
-  const setProfile = async (user) => {
-    await console.log(user)
-  }
-
 
   const getIcon = (token) => {
     fetch("https://graph.microsoft.com/v1.0/me/photo/$value", {

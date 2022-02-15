@@ -503,7 +503,7 @@ const Tac = () => {
     }
 
 
-    return (<div>
+    return (<div className="tac-container">
         {/* reportsmodal */}
         {modalLoginShow ?
             <GenericModal
