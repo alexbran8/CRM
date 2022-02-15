@@ -103,9 +103,9 @@ export const Header = () => {
   // check if token has expired and redirect to token expired page
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log(new Date() > new Date(1000*(sessionStorage.getItem('token_refresh'))))
-      console.log(new Date(1000*(sessionStorage.getItem('token_refresh'))))
-      if ( new Date() > new Date(1000*(sessionStorage.getItem('token_refresh')))) {
+      console.log(new Date() > new Date(1000 * (sessionStorage.getItem('token_refresh'))))
+      console.log(new Date(1000 * (sessionStorage.getItem('token_refresh'))))
+      if (new Date() > new Date(1000 * (sessionStorage.getItem('token_refresh')))) {
         console.log('check login');
         sessionStorage.clear()
         _handleLogoutClick()
@@ -116,47 +116,30 @@ export const Header = () => {
   }, [])
 
   useEffect(() => {
-    fetchAuthUser();
+    login();
   }, [])
 
-  const fetchAuthUser = async () => {
-    const response = await login ()
-  //   .catch((err) => {
-  //     console.log("Not properly authenticated");
-  //     // dispatch(setIsAuthenticated(false));
-  //     // dispatch(setAuthUser(null));
-  //     history.push("/login/error");
-  //   });
+  const redirectToGoogleSSO = async () => {
+    let timer: NodeJS.Timeout | null = null;
+    // window.open(config.baseURL + config.baseLOCATION + "/auth/azure"
+    const googleLoginURL = config.baseURL + config.baseLOCATION + "/auth/azure";
+    const newWindow = window.open(
+      googleLoginURL,
+      "_blank",
+      "width=500,height=600"
+    );
 
-  // if (response && response.data) {
-  //   console.log("User: ", response.data);
-  //   // dispatch(setIsAuthenticated(true));
-  //   // dispatch(setAuthUser(response.data));
-  //   // history.push("/welcome");
-  // }
-};
-
-const redirectToGoogleSSO = async () => {
-  let timer: NodeJS.Timeout | null = null;
-  // window.open(config.baseURL + config.baseLOCATION + "/auth/azure"
-  const googleLoginURL = config.baseURL + config.baseLOCATION + "/auth/azure";
-  const newWindow = window.open(
-    googleLoginURL,
-    "_blank",
-    "width=500,height=600"
-  );
-
-  if (newWindow) {
-    timer = setInterval(() => {
-      if (newWindow.closed) {
-        console.log("Yay we're authenticated");
-        history.push("/");
-        fetchAuthUser();
-        if (timer) clearInterval(timer);
-      }
-    }, 500);
-  }
-};
+    if (newWindow) {
+      timer = setInterval(() => {
+        if (newWindow.closed) {
+          console.log("Yay we're authenticated");
+          history.push("/");
+          fetchAuthUser();
+          if (timer) clearInterval(timer);
+        }
+      }, 500);
+    }
+  };
 
   //   useEffect(()=>{
   //  getIcon(user.auth.token)
@@ -178,47 +161,46 @@ const redirectToGoogleSSO = async () => {
       .then(response => {
         if (response.status) return response.json();
         // if (response.status === 401) return response.json()
-    })
+      })
       .then(responseJson => {
-        console.log('here',responseJson);
-        if(responseJson.success === true) {
+        console.log('here', responseJson);
+        if (responseJson.success === true) {
           getIcon(responseJson.user.token)
-        sessionStorage.setItem('exp', responseJson.user.exp);
-        sessionStorage.setItem('token_refresh', responseJson.user.token_refresh);
-        sessionStorage.setItem('userEmail', responseJson.user.email);
-        sessionStorage.setItem('upalu', responseJson.user.upalu);
-        sessionStorage.setItem('userName', responseJson.user.userName);
-        sessionStorage.setItem('name', responseJson.user.first_name);
-        sessionStorage.setItem('token', responseJson.user.token);
-        sessionStorage.setItem('roles', responseJson.user.roles);
+          sessionStorage.setItem('exp', responseJson.user.exp);
+          sessionStorage.setItem('token_refresh', responseJson.user.token_refresh);
+          sessionStorage.setItem('userEmail', responseJson.user.email);
+          sessionStorage.setItem('upalu', responseJson.user.upalu);
+          sessionStorage.setItem('userName', responseJson.user.userName);
+          sessionStorage.setItem('name', responseJson.user.first_name);
+          sessionStorage.setItem('token', responseJson.user.token);
+          sessionStorage.setItem('roles', responseJson.user.roles);
 
-        dispatch({
-          type: UPDATE_PROFILE,
-          payload: {
-            role: responseJson.user.roles,
-            userName: responseJson.user.userName,
-            name: responseJson.user.first_name,
-            email: responseJson.user.email,
-            upalu: responseJson.user.upalu,
-            token: responseJson.user.token
+          dispatch({
+            type: UPDATE_PROFILE,
+            payload: {
+              role: responseJson.user.roles,
+              userName: responseJson.user.userName,
+              name: responseJson.user.first_name,
+              email: responseJson.user.email,
+              upalu: responseJson.user.upalu,
+              token: responseJson.user.token
+            }
+
           }
- 
+          );
+          setState({
+            authenticated: true,
+            user: responseJson.user
+          });
+        }
+        else {
+          setState({
+            authenticated: false,
+            error: "Failed to authenticate user"
+          });
+        }
       }
-      );
-      setState({
-        authenticated: true,
-        user: responseJson.user
-      });
-    }
-    else 
-    {
-      setState({
-        authenticated: false,
-        error: "Failed to authenticate user"
-      });
-    }
-  }
-    
+
       )
       .catch(err => {
         setState({
@@ -288,10 +270,13 @@ const redirectToGoogleSSO = async () => {
               variant="h6"
             >
               <Link className="navbar-brand text-white" to={"/"}>
-                <b>NOKIA</b> {config.AppName} {user.auth.type === 'student' ? <div className="header-title"> {t("navbar.students")} </div> : null}
+                <b>NOKIA</b>
+              </Link>
+              <Link to={"/"} className="text-white"  style={{"text-decoration":"none"}}>
+               {config.AppName}
               </Link>
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box  m={2} sx={{ flexGrow: 2, display: { xs: 'none', md: 'flex' } }}>
               {(state && state.authenticated) ?
                 <>
                   {pages.map((item, index) => (
@@ -350,8 +335,8 @@ const redirectToGoogleSSO = async () => {
 
               </div>
 
-            ) : (<div><Button variant="contained" color="primary" 
-            onClick={_handleSignInClick}
+            ) : (<div><Button variant="contained" color="primary"
+              onClick={_handleSignInClick}
             // onClick={() => {redirectToGoogleSSO()}}
             ><span title="log in">Login</span></Button></div>)}
           </Toolbar>
