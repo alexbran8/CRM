@@ -98,6 +98,7 @@ type tacdb {
     region: String
     comment_tac: String
     OMC_engineer: String
+    collage:String
     TT_creator_short: String
     site: String
     task: String
