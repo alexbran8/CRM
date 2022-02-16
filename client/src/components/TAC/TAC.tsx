@@ -123,6 +123,36 @@ mutation ($data: itemSave) {
         message
         data {
             uid
+        action
+        duration
+        week
+        date
+        NORM
+        operation_location
+        responsible_entity
+        no_incident
+        no_itv
+        status
+        site_constructor
+        TT_creator_short
+        OMC_engineer
+        site
+        region
+        comment_tac
+        task
+        incident_type
+        hastagTac
+        TT_creator
+        technician
+        collage
+        problem
+        main_cause
+        root_cause
+        alarm_active
+        alarm_bagot
+        corrective_action
+        hastagTac
+        outil_utilise
         }
       }
     }
@@ -137,6 +167,36 @@ mutation ($data: itemSave) {
         message
         data {
             uid
+            action
+            duration
+            week
+            date
+            NORM
+            operation_location
+            responsible_entity
+            no_incident
+            no_itv
+            status
+            site_constructor
+            TT_creator_short
+            OMC_engineer
+            site
+            region
+            comment_tac
+            task
+            incident_type
+            hastagTac
+            TT_creator
+            technician
+            collage
+            problem
+            main_cause
+            root_cause
+            alarm_active
+            alarm_bagot
+            corrective_action
+            hastagTac
+            outil_utilise
         }
       }
     }
@@ -232,8 +292,8 @@ const Tac = () => {
             console.log(dataRes)
             const newItems = [...items]
             const updatedItem = item
-            updatedItem.uid = dataRes.addItem.data.uid
-            setItems(newItems => [...newItems, updatedItem]);
+            // updatedItem.uid = dataRes.addItem.data.uid
+            setItems(newItems => [...newItems,  dataRes.addItem.data]);
             console.log(dataRes)
             setShowModal(false)
         }
@@ -282,7 +342,7 @@ const Tac = () => {
             const newItems = [...items]
             let index = newItems.findIndex((y) => y.uid === dataRes.editItem.data.uid)
 
-            newItems[index] = item
+            newItems[index] = dataRes.editItem.data
 
             setItems(newItems)
             dataRes && dataRes.edit && setOperationStatus(dataRes.edit.message)
