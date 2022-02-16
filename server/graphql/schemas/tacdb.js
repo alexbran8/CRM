@@ -46,9 +46,44 @@ type tacdb {
     success: String
     message: String
     uid: Int
+    data: tacdbItem
   }
 
   input itemSave {
+    cr_date: String
+    uid: String
+    week: String
+    date: String
+    NORM: String
+    duration: Float
+    responsible_entity: String
+    no_incident: String
+    no_itv: String  
+    status: String
+    site_constructor: String
+    region: String
+    comment_tac: String
+    OMC_engineer: String
+    TT_creator_short: String
+    site: String
+    task: String
+    incident_type: String
+    hastagTac: String
+    TT_creator: String
+    technician: String
+    action: String
+    alarm_active: String
+    alarm_bagot: String
+    operation_location: String
+    corrective_action:String
+    root_cause:String
+    main_cause:String
+    problem:String
+    outil_utilise:String
+    createdBy:String
+  }
+
+  type tacdbItem {
     cr_date: String
     uid: String
     week: String

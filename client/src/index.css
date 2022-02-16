@@ -22,5 +22,5 @@ code {
 .menu li {
   margin: 0 10px;
   cursor: pointer;
-  text-decoration: underline;
+  textDecoration: underline;
 }

@@ -272,7 +272,7 @@ export const Header = () => {
               <Link className="navbar-brand text-white" to={"/"}>
                 <b>NOKIA</b>
               </Link>
-              <Link to={"/"} className="text-white"  style={{"text-decoration":"none"}}>
+              <Link to={"/"} className="text-white"  style={{"textDecoration":"none"}}>
                {config.AppName}
               </Link>
             </Typography>

@@ -121,6 +121,9 @@ mutation ($data: itemSave) {
     addItem (data:$data){
         success
         message
+        data {
+            uid
+        }
       }
     }
 
@@ -132,6 +135,9 @@ mutation ($data: itemSave) {
     editItem (data:$data){
         success
         message
+        data {
+            uid
+        }
       }
     }
 `;
@@ -187,6 +193,7 @@ const Tac = () => {
     const [date, setDate] = useState(newDate);
     const [responsiblesList, setResponsiblesList] = useState([]);
     const [responsible, setResponsible] = useState < string > (user.auth.userName);
+    const [operationStatus, setOperationStatus] = useState<boolean>(null)
     const [response, setResponse] = useState < string > (null);
     const [week, setWeek] = useState();
     // const [statusClear, setClearStatus] = useState < boolean > (false)
@@ -222,11 +229,11 @@ const Tac = () => {
         onCompleted: (dataRes) => {
             if (dataRes.addItem.success === "true") {
             // update state
+            console.log(dataRes)
             const newItems = [...items]
-            newItems.forEach((item) => {
-                item.uid = item.uid + 1;
-            });
-            setItems(newItems => [...newItems, item]);
+            const updatedItem = item
+            updatedItem.uid = dataRes.addItem.data.uid
+            setItems(newItems => [...newItems, updatedItem]);
             console.log(dataRes)
             setShowModal(false)
         }
@@ -273,15 +280,17 @@ const Tac = () => {
             if (dataRes.editItem.success === "true") {
 
             const newItems = [...items]
-            let index = newItems.findIndex((y) => y.uid === item.uid)
+            let index = newItems.findIndex((y) => y.uid === dataRes.editItem.data.uid)
 
             newItems[index] = item
 
             setItems(newItems)
+            dataRes && dataRes.edit && setOperationStatus(dataRes.edit.message)
+            console.log(dataRes)
             setShowModal(false)
             }
             else {
-                console.error("Error creating a post"); alert("Error creating a post request; Please login / logout...")
+                console.error("Error creating a post"); alert("Error creating a post request; ")
             }
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
@@ -291,6 +300,7 @@ const Tac = () => {
 
     const updateItem = (data) => {
         let inputData = data
+        console.log(data)
         inputData.duration = parseFloat(inputData.duration)
         inputData.createdBy = user.auth.email
         setItem(inputData)
@@ -509,7 +519,7 @@ const Tac = () => {
             <GenericModal
                 open={modalLoginShow}
                 getModalStyle={getModalStyle}
-                title="Hours per tas;;ks"
+                title="Hours per tasks"
                 //   handleModal={handleModal}
                 handleClose={() => { setModalLoginShow(false) }}
             // body={<ReportsModalBody />}

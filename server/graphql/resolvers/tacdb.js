@@ -4,7 +4,7 @@ const db = require("../../models");
 const { Op } = require("sequelize");
 
 // const notificationEmail = require("../../middleware/notification")
-const {sendNotificationError, notificationEmail} = require("../../middleware/notification")
+const { sendNotificationError, notificationEmail } = require("../../middleware/notification")
 const errorHandler = (err, req, res, next) => {
   const { code, desc = err.message } = err;
   res.status(code || 500).json({ data: null, error: desc });
@@ -75,7 +75,7 @@ module.exports = {
 
           db.Tacdb.create(data.data).then(res => {
 
-            return resolve({ message: 'OK', success: true })
+            return resolve({ message: 'OK', success: true, data: data.data })
           }).catch(function (err) {
             console.log(err)
             // send notification error
@@ -93,28 +93,31 @@ module.exports = {
         return response
       }
     },
-    async editItem(root, data, context) {
+    editItem(root, data, context) {
       try {
         return new Promise((resolve, reject) => {
           const { id, title, requirements, type, description, coordinator } = data.data
           const dataToUpdate = data.data
+          // console.log (dataToUpdate.uid)
           let uid = dataToUpdate.uid
           dataToUpdate.process_status = 'user'
+         
           // console.log(dataToUpdate.process_status,'xxxx')
           db.Tacdb.update(
             dataToUpdate,
             { where: { id: uid } }
-          ).then(res => {
-            return resolve({ message: 'OK', success: true })
-
-          }
           )
+            .then(res => {
+              console.log(res)
+              return resolve({ message: 'OK', success: true, data: dataToUpdate });
+            }
+            )
             .catch(function (err) {
               // handle error;
               console.log(err);
               console.log(data.data)
               sendNotificationError(err, data.data.createdBy);
-              return reject({ message: err, success: false })
+              return reject({ message: err, success: false, data:null })
             });
         })
       }
@@ -122,7 +125,7 @@ module.exports = {
       catch (error) {
         console.log(error)
         sendNotificationError(error, data.data.createdBy);
-        const response = { message: error, success: false }
+        const response = { message: error, success: false, data: null }
         return response
       }
     },

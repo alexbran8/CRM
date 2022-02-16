@@ -1,0 +1,1 @@
+update  public.tacdashboard_item set week = '0' || EXTRACT("week" from "date") || '-' || '22' where EXTRACT ("YEAR" FROM date) = 2022 

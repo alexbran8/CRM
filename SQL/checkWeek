@@ -1,0 +1,10 @@
+SELECT * FROM (
+SELECT id, date, "EXISTING_WEEK", '0' || "CALC_WEEK" || '-' || '22' AS "New Week", cast("EXISTING_WEEK" as double precision) - "CALC_WEEK" AS "diff" FROM (
+SELECT id, week, left(week,2) AS "EXISTING_WEEK", date,EXTRACT("week" from "date") as "CALC_WEEK" FROM public.tacdashboard_item
+		as sub1
+	where EXTRACT ("YEAR" FROM date) = 2022
+) as sub2 
+) as finalQuery
+where diff <> 0
+
+
