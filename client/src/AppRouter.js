@@ -1,5 +1,5 @@
 import React from "react";
-import Homepage from "./components/Homepage.jsx";
+import {HomePage} from "./components/Homepage";
 import Header from "./components/Header";
 import LoginError from "./components/LoginError";
 import TAC from "./components/TAC/TAC";
@@ -21,7 +21,7 @@ export const AppRouter = () => {
       <React.Suspense fallback={<h1>Loading...</h1>}>
         <HashRouter  >
           <Header basename={config.baseLOCATION} />
-          <Route exact path={"/"} component={Homepage} />
+          <Route exact path={"/"} component={HomePage} />
           <Route exact path={"/error"} component={LoginError} />
           <Route exact path={"/tac"} component={authGuard(TAC)} />
           {/* {user.auth.role === 'L3' || user.auth.role === 'login' ? <Route exact path={"/tac"} component={authGuard(TAC)} /> : null} */}
