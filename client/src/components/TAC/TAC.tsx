@@ -7,7 +7,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import { AlertComponent } from "./../common/Alert/Alert"
 // import FileReader from "./FileReader";
 import { useForm, Controller } from 'react-hook-form'
 import SimpleModal from "../../components/common/Modal"
@@ -771,9 +770,6 @@ const Tac = () => {
                 operationName="export all"
             />
         </div>
-
-        <AlertComponent
-            messages={[{ message: 'Options in form are now alphabetically sorted.', type: 'success' }, { message: 'File Export is now working for admins...', type: 'success' }, { message: 'Filter by site is now active', type: 'success' }, { message: 'Filter by week is now active', type: 'success' }, { message: 'Filter by ITV is active', type: 'success' }, { message: 'Modal is now responsive', type: 'success' }, { message: 'updated filter fields', type: 'success' }, { message: '[planned update] review form options', type: 'info' }]} />
 
         <ExcelReader
             setShowModal={() => setShowUploadModal(!showUploadModal)}
