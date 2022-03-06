@@ -29,7 +29,7 @@ export const HomePage = () => {
         )}
         <div className="notification-container">
           <h3 style={{ color: "orange" }}>Working on refactoring the authentification check once token expires so that it will refresh automatically... </h3>
-          <h3 style={{ color: "red" }}>"Data loose" has been tracked down and worked around. Most likely, the issue is now solved... </h3>
+          <h3 style={{ color: "red" }}>Please refresh page / login logout if filter does not work... Token lifetime has been extended until refresh will be implemented. :)</h3>
         </div>
       </div>
     </div>
