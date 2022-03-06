@@ -252,6 +252,7 @@ export const Header = () => {
       .then(blob => setPic(URL.createObjectURL(blob)))
       .catch(error => {
         setPic(null);
+        _handleNotAuthenticated();
         // setState({
         //   // authenticated: false,
         //   // error: "Failed to authenticate user"

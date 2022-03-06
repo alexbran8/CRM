@@ -23,13 +23,13 @@ module.exports = async function  (
   try {
   console.log(`**Step 1: Passport ADFS strategy...`)
 
-  console.log(new Date(1000*params.expires_on))
-  // console.log(msToTime(params.ext_expires_in))
-  console.log(new Date())
+  // console.log(new Date(1000*params.expires_on))
+  // // console.log(msToTime(params.ext_expires_in))
+  // console.log(new Date())
   
   // console.log(params)
   const userProfile = jwt.decode(params.id_token, '', true)
-  console.log(userProfile)
+  // console.log(userProfile)
   
   // New user
   // console.log(`**New ADFS user...`, userProfile)
