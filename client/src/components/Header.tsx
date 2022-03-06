@@ -100,6 +100,8 @@ export const Header = () => {
   const MINUTE_MS = sessionStorage.getItem('token_refresh');
 
 
+
+
   // check if token has expired and redirect to token expired page
   useEffect(() => {
     const interval = setInterval(() => {
@@ -110,7 +112,7 @@ export const Header = () => {
         sessionStorage.clear()
         _handleLogoutClick()
       }
-    }, 35000);
+    },  1000 * 60 * 50);
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [])
@@ -122,7 +124,7 @@ export const Header = () => {
   const redirectToGoogleSSO = async () => {
     let timer: NodeJS.Timeout | null = null;
     // window.open(config.baseURL + config.baseLOCATION + "/auth/azure"
-    const googleLoginURL = config.baseURL + config.baseLOCATION + "/auth/azure";
+    const googleLoginURL = config.baseURL + config.baseLOCATION + "/auth/refresh";
     const newWindow = window.open(
       googleLoginURL,
       "_blank",
@@ -145,11 +147,32 @@ export const Header = () => {
   //  getIcon(user.auth.token)
   //   },[state.authenticated])
 
+  function refreshToken(refreshToken) {
+    fetch(config.baseURL + config.baseLOCATION + "/auth/refresh", {
+      method: "POST",
+      body: JSON.stringify({ refreshToken: refreshToken }),
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+        // "Access-Control-Allow-Origin":true
+      }
+    })
+      .then(response => {
+        if (response.status) return response.json();
+        // if (response.status === 401) return response.json()
+      })
+      .then(responseJson => {
+        console.log(responseJson)
+      })
+  }
+
   // gets login details
   function login() {
     fetch(config.baseURL + config.baseLOCATION + "/auth/login/success/", {
-      method: "GET",
-      // body: JSON.stringify({ start: performance.now() }),
+      method: "POST",
+      // body: JSON.stringify({  }),
       credentials: "include",
       headers: {
         Accept: "application/json",
@@ -168,6 +191,7 @@ export const Header = () => {
           getIcon(responseJson.user.token)
           sessionStorage.setItem('exp', responseJson.user.exp);
           sessionStorage.setItem('token_refresh', responseJson.user.token_refresh);
+          // localStorage.setItem('refreshToken', responseJson.user.refresh_Token)
           sessionStorage.setItem('userEmail', responseJson.user.email);
           sessionStorage.setItem('upalu', responseJson.user.upalu);
           sessionStorage.setItem('userName', responseJson.user.userName);

@@ -5,8 +5,8 @@ const express = require("express");
 const app = express();
 const port = 4000;
 const passport = require("passport");
+const refresh = require('passport-oauth2-refresh');
 const passportSetup = require("./config/passport-setup");
-const session = require("express-session");
 const authRoutes = require("./routes/auth-routes");
 
 const sequelize = require("sequelize");
@@ -28,6 +28,9 @@ const context = require("./graphql/context");
 const jwt = require('jsonwebtoken')
 const db = require("./models");
 
+// const strategy = require("./config/passport-setup");
+
+// const refresh = require('passport-oauth2-refresh');
 
 const options = {
   port: 4000,
@@ -73,10 +76,23 @@ const apolloServer = new ApolloServer({
   //   },
   // },
 });
+var getRawBody = require('raw-body')
 
-app.use(bodyParser.json({ limit: "50mb", extended: true }));
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(express.limit('4M'));
+// app.use(function (req, res, next) {
+//   getRawBody(req, {
+//     // length: req.headers['content-length'],
+//     limit: '2mb',
+//     // encoding: contentType.parse(req).parameters.charset
+//   }, function (err, string) {
+//     if (err) return next(err)
+//     req.text = string
+//     next()
+//   })
+// })
 
+app.use(express.json({limit: 2000000}));
+app.use(express.urlencoded({limit: 2000000, extended: true}));
 
 // db.sequelize2
 //   .authenticate()
@@ -97,28 +113,30 @@ db.sequelize
   });
 
 
+// define session
 app.use(
   cookieSession({
     name: "session",
     keys: [keys.COOKIE_KEY],
-    maxAge: 24 * 60 * 60 * 100
+    maxAge: 24 * 60 * 60 * 1000
   })
-);
+)
 
 // parse cookies
 app.use(cookieParser());
 
 // initalize passport
 app.use(passport.initialize());
+
 // deserialize cookie from the browser
 app.use(passport.session());
-
+// app.use(passport.refresh.initialize())
 // set up cors to allow us to accept requests from our client
 app.use(
   cors({
     origin: "http://localhost:3000", // allow to server to accept request from different origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true // allow session cookie from browser to pass through
+    credentials: true, // allow session cookie from browser to pass through
   })
 );
 
@@ -161,8 +179,13 @@ app.get("/", authCheck, (req, res) => {
   });
 });
 
-apolloServer.applyMiddleware({ app, path: "/graphql" });
+// apolloServer.applyMiddleware({ app, path: "/graphql" });
 
+
+apolloServer.start().then(res => {
+  apolloServer.applyMiddleware({ app, path: "/graphql" });
+  app.listen(options, () => console.log(`Server is running on port ${port}!`));
+ })
 
 // connect react to nodejs express server
-app.listen(options, () => console.log(`Server is running on port ${port}!`));
+// app.listen(options, () => console.log(`Server is running on port ${port}!`));

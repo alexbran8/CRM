@@ -1,6 +1,17 @@
 const jwt = require('jsonwebtoken')
 const db = require("../models");
+function msToTime(duration) {
+  var milliseconds = Math.floor((duration % 1000) / 100),
+    seconds = Math.floor((duration / 1000) % 60),
+    minutes = Math.floor((duration / (1000 * 60)) % 60),
+    hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
+  hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+}
 
 module.exports = async function  (
   accessToken,
@@ -11,9 +22,14 @@ module.exports = async function  (
 ) {
   try {
   console.log(`**Step 1: Passport ADFS strategy...`)
-  let start = performance.now()
+
+  console.log(new Date(1000*params.expires_on))
+  // console.log(msToTime(params.ext_expires_in))
+  console.log(new Date())
+  
   // console.log(params)
   const userProfile = jwt.decode(params.id_token, '', true)
+  console.log(userProfile)
   
   // New user
   // console.log(`**New ADFS user...`, userProfile)
@@ -24,8 +40,6 @@ module.exports = async function  (
   var shortId = await db.sequelize.query(`SELECT username	FROM public.auth_user where email = '${userProfile.unique_name}'`);
   // var upalu = await db.sequelize2.query(`SELECT upalu	FROM employees where email = '${userProfile.unique_name}'`);
   var upalu = null
-  
-  let step1 = performance.now()
 
   var user = {
     id: userProfile.aud,
@@ -42,17 +56,13 @@ module.exports = async function  (
     exp: new Date(1000*params.expires_on),
     token_refresh: params.expires_on
   }
-  let end = performance.now()
-  let step1Time = `${step1 - start} milliseconds`;
-  let step2Time = `${end - step1} milliseconds`;
+
   let userEmail =  userProfile.unique_name
   // console.log('step2', `${end - step1} milliseconds`)
 
   // send email with results
   // console.log(new Date(1000*params.expires_on) - new Date())
   console.log(`**ADFS user added...`)
-  user.step1Time = step1Time
-  user.step2Time = step2Time
   user.userEmail = userEmail
   
   return done(null, user)

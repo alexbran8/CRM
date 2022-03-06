@@ -842,7 +842,8 @@ const Tac = () => {
                         </td> : null}
                         <td><Button variant="contained" color="primary"
                             onClick={(event) => {
-                                if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3') {
+                                // FIXME: should this check be happenning in the backend? (YES => move check to backend)
+                                if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3' || item.responsible_entity === null) {
                                     setOperation('edit'); setItem(item); handleModal({ title: 'Edit Item', data: item });
                                 }
                                 else { alert('You are not allowed to edit this item...') }

@@ -1,4 +1,4 @@
-import Axios from 'axios'
+
 import { AUTH_SIGN_UP, AUTH_SIGN_IN, AUTH_SIGN_OUT, AUTH_ERROR } from './types'
 import { config } from '../config'
 // var jwtDecode = require('jwt-decode')
@@ -9,15 +9,6 @@ export const SignUp = data => {
   return dispatch => {
     try {
       console.log('data',data)
-      Axios.post(`${config.baseURL + config.baseLOCATION}/users/signup`, data, { withCredentials: true })
-        .then(function (response) {
-          console.log('res', response.data.message)
-          alert(response.data.message)
-        })
-        .catch(err => {
-          console.log(err.response.data.message);
-          alert(err.response.data.message)
-        })
       // const decode = jwtDecode(res.data.token)
       // dispatch({
       //   type: AUTH_SIGN_UP,
@@ -51,7 +42,6 @@ export const SignUp = data => {
 export const SignIn = data => {
   return async dispatch => {
     try {
-      const res = await Axios.get(`${config.baseURL   }/login`,)
       
       console.log(res, 'dashboard')
       // const decode = jwtDecode(res.data.token)

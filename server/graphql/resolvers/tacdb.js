@@ -25,6 +25,7 @@ module.exports = {
   Query: {
     async getAll(root, args, context) {
       try {
+       
         let dateSearch = new Date(args.date)
         // TODO: implement date type in graphql
         let dateFilter = args.date ? { date: dateSearch } : null
@@ -35,7 +36,7 @@ module.exports = {
         let siteFilter = args.site ? { site: args.site } : null
         let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
         let firstFilter = args.first > 0 ? args.first : null
-        console.log(args.task, taskFilter)
+        
         let result = await db.Tacdb.findAll({
           where: { [Op.and]: [dateFilter, weekFilter, incidentFilter, statusFilter, siteFilter, responsibleFilter, taskFilter] },
           limit: firstFilter,
@@ -101,7 +102,7 @@ module.exports = {
           // console.log (dataToUpdate.uid)
           let uid = dataToUpdate.uid
           dataToUpdate.process_status = 'user'
-         
+
           // console.log(dataToUpdate.process_status,'xxxx')
           db.Tacdb.update(
             dataToUpdate,
@@ -117,7 +118,7 @@ module.exports = {
               console.log(err);
               console.log(data.data)
               sendNotificationError(err, data.data.createdBy);
-              return reject({ message: err, success: false, data:null })
+              return reject({ message: err, success: false, data: null })
             });
         })
       }
