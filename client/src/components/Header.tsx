@@ -252,7 +252,7 @@ export const Header = () => {
       .then(blob => setPic(URL.createObjectURL(blob)))
       .catch(error => {
         setPic(null);
-        _handleNotAuthenticated();
+        // _handleNotAuthenticated();
         // setState({
         //   // authenticated: false,
         //   // error: "Failed to authenticate user"
@@ -283,7 +283,8 @@ export const Header = () => {
   };
   const _handleNotAuthenticated = () => {
     setState({ authenticated: false });
-  };
+    // TODO: check if this is working...
+    history.push('/')
 
 
   return (
