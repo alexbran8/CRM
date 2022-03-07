@@ -119,6 +119,7 @@ export const Header = () => {
 
   useEffect(() => {
     login();
+    getIcon(sessionStorage.getItem('token'));
   }, [])
 
   const redirectToGoogleSSO = async () => {
@@ -281,10 +282,12 @@ export const Header = () => {
     sessionStorage.removeItem('roles')
     _handleNotAuthenticated();
   };
+
   const _handleNotAuthenticated = () => {
     setState({ authenticated: false });
     // TODO: check if this is working...
-    history.push('/')
+    // history.push('/')
+  }
 
 
   return (
