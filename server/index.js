@@ -27,7 +27,7 @@ const resolvers = require("./graphql/resolvers");
 const context = require("./graphql/context");
 const jwt = require('jsonwebtoken')
 const db = require("./models");
-
+const { AuthenticationError } = require('apollo-server-express')
 // const strategy = require("./config/passport-setup");
 
 // const refresh = require('passport-oauth2-refresh');
