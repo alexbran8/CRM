@@ -27,10 +27,10 @@ function notificationEmail  (data, user)  {
     subj: `[TACDB notification] This email requires your attention! [TACDB notification]`,
     text: "The following have been imported into web application:",
     html: '<div> TACDB planning update:' +
-      '<p>ERICSSSON:' + data.filter(item => item.constructor == 'ERICSSSON').length + '</p>' +
-      '<p>HUAWEI:' + data.filter(item => item.constructor == 'HUAWEI').length + '</p>' +
+      '<p>ERICSSSON:' + data.filter(item => item.constructor.toUpperCase() == 'ERICSSSON').length + '</p>' +
+      '<p>HUAWEI:' + data.filter(item => item.constructor.toUpperCase() == 'HUAWEI').length + '</p>' +
       '<p>Please use / checkout new application: <a href="https://apps.gdceur.eecloud.dynamic.nsn-net.net/dashboard/">NEW TACDB</a></p>' +
-      '<p> Regards,</p><p>TACDB, on behalf of ' + user + '  </p></div>'
+      '<p> Regards,</p><p>TACDB, on behalf of ' + user && user.username + '  </p></div>'
   };
 
   // send email
