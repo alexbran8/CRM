@@ -50,8 +50,8 @@ const apolloServer = new ApolloServer({
     // try to retrieve a user with the token
     // const user = getUser(token);
     var decoded = jwt.decode(token)
-    console.log(new Date(1000 * decoded.exp));
-    console.log(new Date());
+    console.log('exp',new Date(1000 * decoded.exp));
+    console.log('now',new Date());
 
     if (new Date(1000 * decoded.exp) < new Date() )throw new AuthenticationError('token has expired');
    
@@ -94,14 +94,14 @@ var getRawBody = require('raw-body')
 app.use(express.json({limit: 2000000}));
 app.use(express.urlencoded({limit: 2000000, extended: true}));
 
-// db.sequelize2
-//   .authenticate()
-//   .then(() => {
-//     console.log("Connection has been established successfully.");
-//   })
-//   .catch((err) => {
-//     console.error("Unable to connect to the database:", err);
-//   });
+db.sequelize2
+  .authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch((err) => {
+    console.error("Unable to connect to the database:", err);
+  });
 
 db.sequelize
   .authenticate()

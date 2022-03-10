@@ -13,22 +13,22 @@ const sequelize = new Sequelize(process.env.DB, process.env.DB_USER, process.env
   },
 });
 
-// const database2 = new Sequelize(process.env.DB2, process.env.DB_USER, process.env.DB_PASSWORD, {
-//   host: process.env.DB_HOST,
-//   dialect: "postgres",
-//   pool: {
-//     max: 5,
-//     min: 0,
-//     acquire: 30000,
-//     idle: 10000,
-//   },
-// });
+const database2 = new Sequelize(process.env.DB2, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: "postgres",
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
+});
 
 const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-// db.sequelize2 = database2;
+db.sequelize2 = database2;
 
 // db.dailyTasks.model = require("./dailyTasks.model.js")(sequelize, Sequelize);
 db.Tacdb = require("./tacdb.js")(sequelize, Sequelize);
