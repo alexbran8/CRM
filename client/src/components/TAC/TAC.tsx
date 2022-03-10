@@ -281,7 +281,8 @@ const Tac = () => {
         ) => {
             responsibleData && setResponsiblesList(responsibleData.getResponsibles)
 
-        }
+        },
+        onError: (error) => { console.error("Error creating a request", error); alert("Error creating a post request " + error.message) }
     });
 
     const [addItemMutation] = useMutation(ADD_ITEM, {
