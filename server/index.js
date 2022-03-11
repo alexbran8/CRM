@@ -53,6 +53,8 @@ const apolloServer = new ApolloServer({
     console.log('exp',new Date(1000 * decoded.exp));
     console.log('now',new Date());
 
+    // eliminated token expire check
+    // TODO: check if this has been the issue...
     if (new Date(1000 * decoded.exp) < new Date() )throw new AuthenticationError('token has expired');
    
     // optionally block the user
