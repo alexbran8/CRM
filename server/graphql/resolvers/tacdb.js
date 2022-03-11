@@ -183,6 +183,8 @@ module.exports = {
             cr_date: new Date(),
             // TODO: check if this works
             // process_status: 'user'
+            corrective_action: 'OUI',
+            ac
           }
 
           // if (check[0].length == 0 ) {
