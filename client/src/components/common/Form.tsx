@@ -349,6 +349,7 @@ export default function FormPropsTextFields(props: any) {
                         }}
                       />
                     )}
+                    rules={{ required: 'TT creator is required' }}
                   />
                   {/* <Controller
                 control={control}
