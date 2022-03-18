@@ -234,6 +234,11 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
+"@types/validator@^13.7.1":
+  "integrity" "sha512-I6OUIZ5cYRk5lp14xSOAiXjWrfVoMZVjDuevBYgQDYzZIjsf2CAISpEcXOkFAtpAHbmWIDLcZObejqny/9xq5Q=="
+  "resolved" "https://registry.npmjs.org/@types/validator/-/validator-13.7.1.tgz"
+  "version" "13.7.1"
+
 "abbrev@1":
   "integrity" "sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q=="
   "resolved" "https://registry.npmjs.org/abbrev/-/abbrev-1.1.1.tgz"
@@ -306,10 +311,10 @@
   dependencies:
     "lru-cache" "^6.0.0"
 
-"apollo-server-core@^3.6.3":
-  "integrity" "sha512-TFJmAlI6vPp1MHOSXqYkE6leAyMekWv/D/3ma11uETkcd3EPjERGmxtTXPJElMVEkOK9BEElYKthCrH7bjYLuw=="
-  "resolved" "https://registry.npmjs.org/apollo-server-core/-/apollo-server-core-3.6.3.tgz"
-  "version" "3.6.3"
+"apollo-server-core@^3.6.4":
+  "integrity" "sha512-zttpu/3IeDGhRgIGK84z9HwTgvETDl9zntXiQ0G1tBJgOhDvehSkMiOmy+FKR1HW9+94ao1Olz6ZIyhP0dvzSg=="
+  "resolved" "https://registry.npmjs.org/apollo-server-core/-/apollo-server-core-3.6.4.tgz"
+  "version" "3.6.4"
   dependencies:
     "@apollographql/apollo-tools" "^0.5.1"
     "@apollographql/graphql-playground-html" "1.6.29"
@@ -344,10 +349,10 @@
   "resolved" "https://registry.npmjs.org/apollo-server-errors/-/apollo-server-errors-3.3.1.tgz"
   "version" "3.3.1"
 
-"apollo-server-express@^3.6.3":
-  "integrity" "sha512-3CjahZ+n+1T7pHH1qW1B6Ns0BzwOMeupAp2u0+M8ruOmE/e7VKn0OSOQQckZ8Z2AcWxWeno9K89fIv3PoSYgYA=="
-  "resolved" "https://registry.npmjs.org/apollo-server-express/-/apollo-server-express-3.6.3.tgz"
-  "version" "3.6.3"
+"apollo-server-express@^3.6.4":
+  "integrity" "sha512-lN73Ka7UZJINJzvMeRFIFn7898hGjTxVtRQwAzzmw5XSpWZZHZkTcAkoDxUs0GwU6h2LE14ogu2WJ4G8AZVl1Q=="
+  "resolved" "https://registry.npmjs.org/apollo-server-express/-/apollo-server-express-3.6.4.tgz"
+  "version" "3.6.4"
   dependencies:
     "@types/accepts" "^1.3.5"
     "@types/body-parser" "1.19.2"
@@ -355,7 +360,7 @@
     "@types/express" "4.17.13"
     "@types/express-serve-static-core" "4.17.28"
     "accepts" "^1.3.5"
-    "apollo-server-core" "^3.6.3"
+    "apollo-server-core" "^3.6.4"
     "apollo-server-types" "^3.5.1"
     "body-parser" "^1.19.0"
     "cors" "^2.8.5"
@@ -377,13 +382,13 @@
     "apollo-server-caching" "^3.3.0"
     "apollo-server-env" "^4.2.1"
 
-"apollo-server@^3.6.3":
-  "integrity" "sha512-kNvOiDNkIaO+MsfR9v40Vz4ArlDdc9VwVKGJy5dniLW9AoDa/tSF99m8ItfGoMypqlRPMgrNGxkMuToBnvYXNQ=="
-  "resolved" "https://registry.npmjs.org/apollo-server/-/apollo-server-3.6.3.tgz"
-  "version" "3.6.3"
+"apollo-server@^3.6.4":
+  "integrity" "sha512-PIEDWtfiiiKt0uEMJ7/qiyULPat/ichDN/h9GrrroOFiz/tfU/yJXuHpoq8R/uzVyn4GpEc4OoibC2zOr59zig=="
+  "resolved" "https://registry.npmjs.org/apollo-server/-/apollo-server-3.6.4.tgz"
+  "version" "3.6.4"
   dependencies:
-    "apollo-server-core" "^3.6.3"
-    "apollo-server-express" "^3.6.3"
+    "apollo-server-core" "^3.6.4"
+    "apollo-server-express" "^3.6.4"
     "express" "^4.17.1"
 
 "array-flatten@1.1.1":
@@ -1236,10 +1241,10 @@
   "resolved" "https://registry.npmjs.org/imurmurhash/-/imurmurhash-0.1.4.tgz"
   "version" "0.1.4"
 
-"inflection@^1.13.1":
-  "integrity" "sha512-dldYtl2WlN0QDkIDtg8+xFwOS2Tbmp12t1cHa5/YClU6ZQjTFm7B66UcVbh9NQB+HvT5BAd2t5+yKsBkw5pcqA=="
-  "resolved" "https://registry.npmjs.org/inflection/-/inflection-1.13.1.tgz"
-  "version" "1.13.1"
+"inflection@^1.13.2":
+  "integrity" "sha512-cmZlljCRTBFouT8UzMzrGcVEvkv6D/wBdcdKG7J1QH5cXjtU75Dm+P27v9EKu/Y43UYyCJd1WC4zLebRrC8NBw=="
+  "resolved" "https://registry.npmjs.org/inflection/-/inflection-1.13.2.tgz"
+  "version" "1.13.2"
 
 "inherits@^2.0.1", "inherits@^2.0.3", "inherits@2.0.4":
   "integrity" "sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ=="
@@ -1987,7 +1992,7 @@
   "resolved" "https://registry.npmjs.org/range-parser/-/range-parser-1.2.1.tgz"
   "version" "1.2.1"
 
-"raw-body@^2.4.1", "raw-body@^2.5.0":
+"raw-body@^2.4.1":
   "integrity" "sha512-XpyZ6O7PVu3ItMQl0LslfsRoKxMOxi3SzDkrOtxMES5AqLFpYjQCryxI4LGygUN2jL+RgFsPkMPPlG7cg/47+A=="
   "resolved" "https://registry.npmjs.org/raw-body/-/raw-body-2.5.0.tgz"
   "version" "2.5.0"
@@ -2165,15 +2170,16 @@
   "resolved" "https://registry.npmjs.org/sequelize-pool/-/sequelize-pool-7.1.0.tgz"
   "version" "7.1.0"
 
-"sequelize@^6.16.2":
-  "integrity" "sha512-0fCdO4qrkuMWizq3blDVHPC4NvrDkRnrFucoJKlaukdatrDpluBw2GXQ53rBQeizbHGefdgehhFiyFzyo0COKg=="
-  "resolved" "https://registry.npmjs.org/sequelize/-/sequelize-6.16.2.tgz"
-  "version" "6.16.2"
+"sequelize@^6.17.0":
+  "integrity" "sha512-AZus+0YZDq91Zg0hzDaO5atTzHgJruI23V8nBlAhkLuI81Z53nSRdAe/4R1A6vGOZ/RfCLP9idF4tfQnoAsM5A=="
+  "resolved" "https://registry.npmjs.org/sequelize/-/sequelize-6.17.0.tgz"
+  "version" "6.17.0"
   dependencies:
     "@types/debug" "^4.1.7"
+    "@types/validator" "^13.7.1"
     "debug" "^4.3.3"
     "dottie" "^2.0.2"
-    "inflection" "^1.13.1"
+    "inflection" "^1.13.2"
     "lodash" "^4.17.21"
     "moment" "^2.29.1"
     "moment-timezone" "^0.5.34"

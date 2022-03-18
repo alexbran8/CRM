@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 
 export const AppRouter = () => {
   const user = useSelector((state) => ({ auth: state.auth }));
+  const isAuthentificated  = useSelector((state) =>   state.auth.isAuthenticated );
   return (
     /* ErrorBoundary is to render fallback ui incase of errors */
     <ErrorBoundary>
@@ -24,8 +25,8 @@ export const AppRouter = () => {
           <Routes>
             <Route exact path={"/"} element={<HomePage />} />
             <Route exact path={"/error"} element={<LoginError />} />
-            {/* TODO: make route private */}
-            <Route exact path={"/tac"} element={<TAC />} />
+            {/* TODO: make route prireact-datepickervate */}
+            <Route exact path={"/tac"} element={isAuthentificated ?<TAC /> :<HomePage />} />
             {/* {user.auth.role === 'L3' || user.auth.role === 'login' ? <Route exact path={"/tac"} component={authGuard(TAC)} /> : null} */}
             {/* {user.auth.role === 'L3' || user.auth.role === 'PIP' ? <Route exact path={"/prod-indus-planning"} component={authGuard(PIP)} /> : null} */}
           </Routes>
