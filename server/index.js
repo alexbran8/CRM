@@ -78,24 +78,12 @@ const apolloServer = new ApolloServer({
   //   },
   // },
 });
-// var getRawBody = require('raw-body')
 
-// app.use(express.limit('4M'));
-// app.use(function (req, res, next) {
-//   getRawBody(req, {
-//     // length: req.headers['content-length'],
-//     limit: '2mb',
-//     // encoding: contentType.parse(req).parameters.charset
-//   }, function (err, string) {
-//     if (err) return next(err)
-//     req.text = string
-//     next()
-//   })
-// })
 
 app.use(express.json({limit: 2000000}));
 app.use(express.urlencoded({limit: 2000000, extended: true}));
 
+// db connection
 db.sequelize2
   .authenticate()
   .then(() => {
@@ -105,6 +93,7 @@ db.sequelize2
     console.error("Unable to connect to the database:", err);
   });
 
+  // db connection
 db.sequelize
   .authenticate()
   .then(() => {
@@ -129,10 +118,8 @@ app.use(cookieParser());
 
 // initalize passport
 app.use(passport.initialize());
-
-// deserialize cookie from the browser
 app.use(passport.session());
-// app.use(passport.refresh.initialize())
+
 // set up cors to allow us to accept requests from our client
 app.use(
   cors({
@@ -144,9 +131,6 @@ app.use(
 
 // set up routes
 app.use("/auth", authRoutes);
-// require("./routes/dailyTasks.routes")(app);
-// require("./routes/competence.routes")(app);
-// require("./routes/resource.routes")(app);
 
 
 const authCheck = (req, res, next) => {
@@ -159,12 +143,6 @@ const authCheck = (req, res, next) => {
     next();
   }
 };
-
-const authCheckMiddleware = require('./middleware/auth-check')
-// app.use("/users", authCheck,  require("./controllers/users"));
-// app.use("/usersPrivate", authCheck, require("./controllers/usersPrivate"));
-// app.use("/schedule",  authCheck, require("./controllers/schedule"));
-// app.use("/types", find(Types));
 
 
 app.use("/", express.static(path.resolve(__dirname, "../client/public/dist")));
@@ -181,13 +159,8 @@ app.get("/", authCheck, (req, res) => {
   });
 });
 
-// apolloServer.applyMiddleware({ app, path: "/graphql" });
-
-
+// connect react to nodejs express server
 apolloServer.start().then(res => {
   apolloServer.applyMiddleware({ app, path: "/graphql" });
   app.listen(options, () => console.log(`Server is running on port ${port}!`));
  })
-
-// connect react to nodejs express server
-// app.listen(options, () => console.log(`Server is running on port ${port}!`));

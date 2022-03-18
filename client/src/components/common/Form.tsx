@@ -347,6 +347,7 @@ export default function FormPropsTextFields(props: any) {
                         InputLabelProps={{
                           shrink: true,
                         }}
+                        style={{ borderBottom: '1px solid red' }}
                       />
                     )}
                     rules={{ required: 'TT creator is required' }}
