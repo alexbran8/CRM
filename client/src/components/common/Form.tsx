@@ -24,7 +24,7 @@ import { appelList } from '../TAC/types';
 
 const actionList = ["ITV terrain", "Action à distance", "Escalader le ticket", "Ticket déjà fermé/cloturé", "Ticket à fermer", "Analyser au N2/N3", "ITV + Action à distance", "TI Gelé"];
 const constructorList = ["ERICSSON", "HUAWEI", "NOKIA", "NORTEL", "OTHER"]
-const incidentTypeList = ["Vigie", "Radio", "Transmission", "Cœur", "Performance QoS", "Suspicions SFR", "DCI-DED", "QoS" ]
+const incidentTypeList = ["Vigie", "Radio", "Transmission", "Cœur",  "Suspicions SFR", "DCI-DED", "QoS", "SSNE", "CLA"]
 const statusList = ['Problème résolu', 'Problème résolu avec réserve', 'Problème pas identifié', 'Problème identifié']
 const regionList = ["CTA", "MED", "NOE", "SWE", "WST", "IDF"]
 const hashtagTacList = ["Déjà fermé", "Modifié plus", "Modifié", "Kill TT", "Conforme"]
