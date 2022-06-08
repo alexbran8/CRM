@@ -3,13 +3,11 @@ require('dotenv').config({ path: '../.env' });
 const nodemailer = require("nodemailer");
 /* 
  * create a `.env` file with environment variables in order to laod at runtime.
+add all url in env. :)
 */
 
 const hostUrl = process.env.NODE_ENV === `development` ? "http://localhost:4000/auth/azure/redirect" :  process.env.HOST_URL;
 const baseLocation = process.env.NODE_ENV === `development` ? "" :  '/dashboard';
-
-
-
 var config = {
   CLIENT_HOME_PAGE_URL: process.env.NODE_ENV === `development` ? "http://localhost:3000/#/" :  'https://apps.gdceur.eecloud.dynamic.nsn-net.net/dashboard/',
   CLIENT_ERROR_URL: process.env.NODE_ENV === `development` ? "http://localhost:3000/#/error" :  'https://apps.gdceur.eecloud.dynamic.nsn-net.net/dashboard/#/error',
