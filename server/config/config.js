@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
  * create a `.env` file with environment variables in order to laod at runtime.
 */
 
-const hostUrl = process.env.NODE_ENV === `development` ? "http://localhost:4000/auth/azure/redirect" :  'https://apps.gdceur.eecloud.dynamic.nsn-net.net/dashboard/auth/azure/redirect';
+const hostUrl = process.env.NODE_ENV === `development` ? "http://localhost:4000/auth/azure/redirect" :  process.env.HOST_URL;
 const baseLocation = process.env.NODE_ENV === `development` ? "" :  '/dashboard';
 
 
