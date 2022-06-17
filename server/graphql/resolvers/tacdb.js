@@ -184,7 +184,6 @@ module.exports = {
             // TODO: check if this works
             // process_status: 'user'
             corrective_action: 'OUI',
-            ac
           }
 
           // if (check[0].length == 0 ) {
