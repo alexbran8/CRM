@@ -9,7 +9,7 @@ add all url in env. :)
 const hostUrl = process.env.NODE_ENV === `development` ? "http://localhost:4000/auth/azure/redirect" :  `${process.env.HOST_URL}/auth/azure/redirect`;
 const baseLocation = process.env.NODE_ENV === `development` ? "" :  '/dashboard';
 var config = {
-  CLIENT_HOME_PAGE_URL: process.env.NODE_ENV === `development` ? "http://localhost:3000/#/" :  `${process.env.HOST_URL}/dashboard/`,
+  CLIENT_HOME_PAGE_URL: process.env.NODE_ENV === `development` ? "http://localhost:3000/#/" :  `${process.env.HOST_URL}/auth/azure/redirect/auth/cbAdfs`,
   CLIENT_ERROR_URL: process.env.NODE_ENV === `development` ? "http://localhost:3000/#/error" :  `${process.env.HOST_URL}/dashboard/#/error`,
   azureApp: {
     // Azure Application details
