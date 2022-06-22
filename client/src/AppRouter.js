@@ -20,6 +20,7 @@ export const AppRouter = () => {
     /* ErrorBoundary is to render fallback ui incase of errors */
     <ErrorBoundary>
       <React.Suspense fallback={<h1>Loading...</h1>}>
+        {window.location.href.includes('dev')? <div className="dev-env">DEV ENV</div> :null}
         <HashRouter  >
         <Header basename={config.baseLOCATION} />
           <Routes>
