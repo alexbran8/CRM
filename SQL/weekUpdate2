@@ -1,0 +1,4 @@
+SELECT week_old, date, week, extract('week' from date)-1  || '-' ||  to_char(date, 'YY') FROM public.tacdashboard_item;
+
+
+update public.tacdashboard_item set week = extract('week' from date)-1  || '-' ||  to_char(date, 'YY')
