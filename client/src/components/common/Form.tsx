@@ -174,9 +174,11 @@ export function getWeek(date) {
   var oneJan = new Date(currentdate.getFullYear(), 0, 1);
   var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
   var result = Math.ceil((currentdate.getDay() -2 + numberOfDays) / 7);
+
+  console.log(result-1)
   // add leading 0 if week is below 10
   result < 10  ?  result = '0' + result : result;
-  var finalResult = result + '-' + currentdate.getFullYear().toString().substr(-2);
+  var finalResult = result-1 + '-' + currentdate.getFullYear().toString().substr(-2);
   return finalResult
 }
 

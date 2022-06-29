@@ -36,6 +36,7 @@ module.exports = {
         let siteFilter = args.site ? { site: args.site } : null
         let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
         let firstFilter = args.first > 0 ? args.first : null
+
         
         let result = await db.Tacdb.findAll({
           where: { [Op.and]: [dateFilter, weekFilter, incidentFilter, statusFilter, siteFilter, responsibleFilter, taskFilter] },
@@ -62,7 +63,8 @@ module.exports = {
     async getResponsibles(root, args, context) {
       let result = await db.Tacdb.aggregate('responsible_entity', 'DISTINCT', { plain: false })
       console.log(result)
-      return result
+      let sortedResult = await result.sort(function(a,b){return a.DISTINCT < b.DISTINCT ? -1 : 1});
+      return sortedResult
     }
   },
   Mutation: {

@@ -638,7 +638,7 @@ const Tac = () => {
                     // defaultValue={dateToString(myDate)}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={(e, v) => { setIncident(e.target.value); refetch() }}
+                    onChange={(e, v) => { setIncident(e.target.value) }}
                 // InputLabelProps={{
                 //     shrink: true,
                 // }}
@@ -654,7 +654,7 @@ const Tac = () => {
                     defaultValue={dateToString(myDate)}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={(e, v) => { setDate(e.target.value); refetch() }}
+                    onChange={e => { console.log('date',e.target.value);setDate(e.target.value) }}
                 // InputLabelProps={{
                 //     shrink: true,
                 // }}
@@ -668,10 +668,10 @@ const Tac = () => {
                         className={classes.textField}
                         onInputChange={(event, newInputValue, reason) => {
                             if (reason === 'clear') {
-                                setStatus(''); refetch()
+                                setStatus('')
                                 return
                             } else {
-                                setStatus(newInputValue); refetch()
+                                setStatus(newInputValue)
                             }
                         }}
                         // onChange={(e, v) => { setStatus(v.status);alert(v.status); refetch() }}
@@ -688,10 +688,10 @@ const Tac = () => {
                         className={classes.textField}
                         onInputChange={(event, newInputValue, reason) => {
                             if (reason === 'clear') {
-                                setTask(''); refetch()
+                                setTask('')
                                 return
                             } else {
-                                setTask(newInputValue); refetch()
+                                setTask(newInputValue)
                             }
                         }}
                         // onChange={(e, v) => { setStatus(v.status);alert(v.status); refetch() }}
@@ -709,7 +709,7 @@ const Tac = () => {
                         // defaultValue={dateToString(myDate)}
                         variant="outlined"
                         className={classes.textField}
-                        onChange={(e, v) => { setSite(e.target.value); refetch() }}
+                        onChange={(e, v) => { setSite(e.target.value) }}
                     // InputLabelProps={{
                     //     shrink: true,
                     // }}
@@ -720,13 +720,13 @@ const Tac = () => {
                     <Controller
                         control={control}
                         name="responsible"
-
+                        defaultValue={'abran'}
                         render={({ field: { onChange, value }, fieldState: { error } }) => (
                             <Autocomplete
                                 id="responsible"
                                 // TODO: update to sort by options
                                 options={responsiblesList}
-                                defaultValue={{ 'DISTINCT': responsible || '' }}
+                                // defaultValue={{ 'DISTINCT': responsible || '' }}
                                 getOptionLabel={(option) => option.DISTINCT}
                                 style={{ width: 300 }}
                                 className={classes.textField}
@@ -734,10 +734,10 @@ const Tac = () => {
 
                                 onInputChange={(event, newInputValue, reason) => {
                                     if (reason === 'clear') {
-                                        setResponsible(null); refetch()
+                                        setResponsible(null)
                                         return
                                     } else {
-                                        setResponsible(newInputValue); refetch()
+                                        setResponsible(newInputValue)
                                     }
                                 }}
                                 renderInput={(params) => <TextField {...params}
