@@ -25,7 +25,6 @@ module.exports = {
   Query: {
     async getAll(root, args, context) {
       try {
-       
         let dateSearch = new Date(args.date)
         // TODO: implement date type in graphql
         let dateFilter = args.date ? { date: dateSearch } : null

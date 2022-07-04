@@ -242,14 +242,16 @@ const Tac = () => {
     const [weekList, setuWeeksList] = useState([]);
     const [itvList, setuitvList] = useState([]);
     const [status, setStatus] = useState();
+    const [state, setState] = useState({})
     const [task, setTask] = useState < string > ('');
     const [showModal, setShowModal] = React.useState < boolean > (false);
     const [operation, setOperation] = useState < string > (null);
     const [selectedItem, setSelectedItem] = useState();
     const [no_incident, setIncident] = useState < string > (null);
     const [site, setSite] = useState < string > (null);
+    const dateToString = d => `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
     const newDate = new Date();
-    const [date, setDate] = useState(newDate);
+    const [date, setDate] = useState(dateToString(newDate));
     const [responsiblesList, setResponsiblesList] = useState([]);
     const [responsible, setResponsible] = useState < string > (user.auth.userName);
     const [operationStatus, setOperationStatus] = useState<boolean>(null)
@@ -258,14 +260,16 @@ const Tac = () => {
     // const [statusClear, setClearStatus] = useState < boolean > (false)
     const [item, setItem] = useState([]);
     const [showUploadModal, setShowUploadModal] = useState < boolean > (false)
-    const { watch, control, setValue } = useForm({});
-    const { data, loading, error, refetch } = useQuery(GET_ALL, {
-        variables: { first: 100, task: task, status: status, week: week, date: date, responsible_entity: responsible, no_incident: no_incident, site: site }, onCompleted: (
-        ) => {
-            setItems(data.getAll)
+    const { watch, control, setValue, getValues } = useForm({});
 
-        }
-    });
+    // const { data, loading, error, refetch } = useQuery(GET_ALL, {
+    //     variables: { 
+    //         first: 100, task: task, status: status, week: week, date: getValues().date, responsible_entity: getValues().responsible, no_incident: no_incident, site: site }, onCompleted: (
+    //     ) => {
+    //         setItems(data.getAll)
+
+    //     }
+    // });
 
     // const [loadGreeting, { called, loading:isLoading, data:exportData}] = useLazyQuery(GET_ALL, {
     //     variables: { task: task, status: status, week: week, date: date, responsible_entity: responsible, no_incident: no_incident, site: site }, onCompleted: (
@@ -546,7 +550,7 @@ const Tac = () => {
 
 
 
-    const dateToString = d => `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
+    
     const myDate = new Date()
 
 
@@ -559,17 +563,34 @@ const Tac = () => {
         return data.data
     }
 
+    const getAllData = async (props) => {
+
+        console.log(props.responsible)
+
+        let data = await apiclient.query({
+            query: GET_ALL,
+            variables: { first: 100, task: task, status: status, week: week, responsible_entity: props.responsible, no_incident: no_incident, site: site }
+        })
+        return console.log(data.data)
+    }
 
     // FIXME: does not clear form filters values
-    const clearFilters = () => {
-        setDate();
-        setTask();
-        setWeek();
-        setSite();
-        setStatus();
-        setIncident();
-        setResponsible('');
-        refetch();
+    const updateFilters = async (props) => {
+        let {date, responsible} = props
+        console.log(getValues())
+        // setDate(getValues().date);
+        // setResponsible(getValues().responsible);
+        // getAllData(getValues())
+        console.log('clearing filters')
+     
+        apiclient.query({
+            query: GET_ALL,
+            variables: { first: 1000, task: getValues().task, date: getValues().date, status: status, week: getValues().week, responsible_entity: getValues().responsible, no_incident: getValues().no_incident, site: getValues().site }
+        }).then(data => {
+            setItems(data.data.getAll)
+        })
+
+
     }
 
 
@@ -620,7 +641,7 @@ const Tac = () => {
                     // defaultValue={dateToString(myDate)}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={(e, v) => { setWeek(e.target.value); refetch() }}
+                    onChange={(e, v) => { setWeek(e.target.value)}}
                 // InputLabelProps={{
                 //     shrink: true,
                 // }}
@@ -646,18 +667,34 @@ const Tac = () => {
             </>
 
             <>
+            <Controller
+                        control={control}
+                        name="date"
+                        // defaultValue={'abran'}
+                        render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                     id="dateFilter"
                     type="date"
-                    // value={"12-02-2021"}
-                    // defaultValue={}
-                    defaultValue={dateToString(myDate)}
+                    // defaultValue={myDate}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={e => { console.log('date',e.target.value);setDate(e.target.value) }}
+                    onChange={e => {
+                            const value = e.target.value;
+                            if (value =='') {
+                                setValue("date", null);
+                                updateFilters({date: null})
+                            }
+                            else {
+                                // setState({date: value});
+                                setValue("date", value) 
+                                updateFilters({date: value})
+                            }
+                         }}
                 // InputLabelProps={{
                 //     shrink: true,
                 // }}
+                />
+                )}
                 />
                 <>
                     <Autocomplete
@@ -720,7 +757,7 @@ const Tac = () => {
                     <Controller
                         control={control}
                         name="responsible"
-                        defaultValue={'abran'}
+                        // defaultValue={'abran'}
                         render={({ field: { onChange, value }, fieldState: { error } }) => (
                             <Autocomplete
                                 id="responsible"
@@ -732,26 +769,28 @@ const Tac = () => {
                                 className={classes.textField}
                                 // onChange={(e, v) => { setResponsible(v.DISTINCT); refetch() }}
 
-                                onInputChange={(event, newInputValue, reason) => {
+                                onChange={(event, newInputValue, reason) => {
+                                    console.log(reason);
+                                    console.log(control);
                                     if (reason === 'clear') {
-                                        setResponsible(null)
-                                        return
+                                        setValue('responsible', null )
+                                        updateFilters({responsible: null})
                                     } else {
-                                        setResponsible(newInputValue)
+                                        setValue("responsible",newInputValue.DISTINCT)
+                                        updateFilters({responsible: newInputValue.DISTINCT})
                                     }
                                 }}
                                 renderInput={(params) => <TextField {...params}
                                     label="select responsible"
                                     variant="outlined"
 
-                                    defaultValue={responsible}
+                                    // defaultValue={responsible}
                                 />}
                             />
                         )}
-                    // rules={{ required: 'On sait traite is required' }}
                     />
 
-                    <Button variant="contained" color="primary" onClick={() => { clearFilters() }}>CLEAR</Button>
+                    <Button variant="contained" color="primary" onClick={() => { updateFilters() }}>CLEAR</Button>
                     {/* )} */}
                     {/* /> */}
                 </>
