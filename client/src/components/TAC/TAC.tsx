@@ -576,21 +576,13 @@ const Tac = () => {
 
     // FIXME: does not clear form filters values
     const updateFilters = async (props) => {
-        let {date, responsible} = props
-        console.log(getValues())
-        // setDate(getValues().date);
-        // setResponsible(getValues().responsible);
-        // getAllData(getValues())
-        console.log('clearing filters')
-     
+        let {date, responsible} = props     
         apiclient.query({
             query: GET_ALL,
             variables: { first: 1000, task: getValues().task, date: getValues().date, status: status, week: getValues().week, responsible_entity: getValues().responsible, no_incident: getValues().no_incident, site: getValues().site }
         }).then(data => {
             setItems(data.data.getAll)
         })
-
-
     }
 
 
