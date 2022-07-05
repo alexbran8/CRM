@@ -531,8 +531,9 @@ const Tac = () => {
 
 
     useEffect(() => {
-        setResponsible(user.auth.userName);
+        setResponsible(user.auth.user);
         refetchResponsibles();
+        updateFilters({responsible:user.auth.user, date:date});
     }, [])
 
     function getModalStyle() {
@@ -563,23 +564,13 @@ const Tac = () => {
         return data.data
     }
 
-    const getAllData = async (props) => {
-
-        console.log(props.responsible)
-
-        let data = await apiclient.query({
-            query: GET_ALL,
-            variables: { first: 100, task: task, status: status, week: week, responsible_entity: props.responsible, no_incident: no_incident, site: site }
-        })
-        return console.log(data.data)
-    }
-
     // FIXME: does not clear form filters values
     const updateFilters = async (props) => {
         let {date, responsible} = props     
+        console.log('these are the props')
         apiclient.query({
             query: GET_ALL,
-            variables: { first: 1000, task: getValues().task, date: getValues().date, status: status, week: getValues().week, responsible_entity: getValues().responsible, no_incident: getValues().no_incident, site: getValues().site }
+            variables: { first: 100, task: getValues().task, date: date, status: status, week: getValues().week, responsible_entity: responsible, no_incident: getValues().no_incident, site: getValues().site }
         }).then(data => {
             setItems(data.data.getAll)
         })
