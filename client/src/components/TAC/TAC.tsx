@@ -790,7 +790,7 @@ const Tac = () => {
                         )}
                     />
 
-                    <Button variant="contained" color="primary" onClick={() => { updateFilters() }}>CLEAR</Button>
+                    {/* <Button variant="contained" color="primary" onClick={() => { updateFilters() }}>CLEAR</Button> */}
                     {/* )} */}
                     {/* /> */}
                 </>
