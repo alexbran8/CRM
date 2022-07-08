@@ -28,6 +28,7 @@ import { getWeek } from "./../common/Form";
 
 
 import { GET_ALL_EXPORT } from "./queries.tsx"
+import auth from "../../redux/reducers/auth";
 // TODO: 1. check pre-check on upload (needs to be prise en compte)
 // TODO: 2. pre-check => disabled
 // TODO: 3. Supervision NE to SSNE => DONE!
@@ -253,7 +254,7 @@ const Tac = () => {
     const newDate = new Date();
     const [date, setDate] = useState(dateToString(newDate));
     const [responsiblesList, setResponsiblesList] = useState([]);
-    const [responsible, setResponsible] = useState < string > (user.auth.userName);
+    const [responsible, setResponsible] = useState < string > (user.auth.user);
     const [operationStatus, setOperationStatus] = useState<boolean>(null)
     const [response, setResponse] = useState < string > (null);
     const [week, setWeek] = useState();
@@ -531,9 +532,12 @@ const Tac = () => {
 
 
     useEffect(() => {
+        setValue("date", myDate) 
+        setValue("responsible", user.auth.user)
+        console.log(getValues().date)
         setResponsible(user.auth.user);
         refetchResponsibles();
-        updateFilters({responsible:user.auth.user, date:date});
+        updateFilters({responsible:user.auth.user, date: getValues().date});
     }, [])
 
     function getModalStyle() {
@@ -552,7 +556,7 @@ const Tac = () => {
 
 
     
-    const myDate = new Date()
+    const myDate = new Date().toISOString().substring(0, 10);
 
 
     const getAllExport = async () => {
@@ -566,11 +570,12 @@ const Tac = () => {
 
     // FIXME: does not clear form filters values
     const updateFilters = async (props) => {
-        let {date, responsible} = props     
+        let {date, responsible} = props   
+        console.log(getValues().responsible)  
         console.log('these are the props')
         apiclient.query({
             query: GET_ALL,
-            variables: { first: 100, task: getValues().task, date: date, status: status, week: getValues().week, responsible_entity: responsible, no_incident: getValues().no_incident, site: getValues().site }
+            variables: { first: 100, task: getValues().task, date:getValues().date, status: getValues().status, week: getValues().week, responsible_entity: getValues().responsible, no_incident: getValues().no_incident, site: getValues().site }
         }).then(data => {
             setItems(data.data.getAll)
         })
@@ -600,7 +605,7 @@ const Tac = () => {
                 //formValidator={formCheck}
                 // setShowModalOpen={showModal}
                 item={selectedItem}
-                user={user.auth.userName}
+                user={user.auth.user}
                 upalu={user.auth.upalu}
                 userList={responsiblesList}
                 handleModal={handleModal}
@@ -624,7 +629,10 @@ const Tac = () => {
                     // defaultValue={dateToString(myDate)}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={(e, v) => { setWeek(e.target.value)}}
+                    onChange={(e, v) => { 
+                        setValue("week",e.target.value)
+                        updateFilters({week: e.target.value})
+                    }}
                 // InputLabelProps={{
                 //     shrink: true,
                 // }}
@@ -642,7 +650,10 @@ const Tac = () => {
                     // defaultValue={dateToString(myDate)}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={(e, v) => { setIncident(e.target.value) }}
+                    onChange={(e, v) => { 
+                        setValue("no_incident",e.target.value)
+                        updateFilters({no_incident: e.target.value})
+                    }}
                 // InputLabelProps={{
                 //     shrink: true,
                 // }}
@@ -653,17 +664,19 @@ const Tac = () => {
             <Controller
                         control={control}
                         name="date"
-                        // defaultValue={'abran'}
+                        
                         render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                     id="dateFilter"
                     type="date"
-                    // defaultValue={myDate}
+                    defaultValue={myDate}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={e => {
+                    onChange={(e, newInputValue, reason) => {
                             const value = e.target.value;
+                            console.log(reason)
                             if (value =='') {
+                                console.log('date clear filter')
                                 setValue("date", null);
                                 updateFilters({date: null})
                             }
@@ -688,10 +701,11 @@ const Tac = () => {
                         className={classes.textField}
                         onInputChange={(event, newInputValue, reason) => {
                             if (reason === 'clear') {
-                                setStatus('')
-                                return
+                                setValue("status", newInputValue) 
+                                updateFilters({status: newInputValue})
                             } else {
-                                setStatus(newInputValue)
+                                setValue("status", newInputValue) 
+                                updateFilters({status: newInputValue})
                             }
                         }}
                         // onChange={(e, v) => { setStatus(v.status);alert(v.status); refetch() }}
@@ -740,13 +754,16 @@ const Tac = () => {
                     <Controller
                         control={control}
                         name="responsible"
+                        
                         // defaultValue={'abran'}
                         render={({ field: { onChange, value }, fieldState: { error } }) => (
                             <Autocomplete
+                                freeSolo
                                 id="responsible"
                                 // TODO: update to sort by options
                                 options={responsiblesList}
-                                // defaultValue={{ 'DISTINCT': responsible || '' }}
+                                
+                                defaultValue={{ 'DISTINCT': user.auth.user || '' }}
                                 getOptionLabel={(option) => option.DISTINCT}
                                 style={{ width: 300 }}
                                 className={classes.textField}
@@ -866,7 +883,7 @@ const Tac = () => {
                         <td><Button variant="contained" color="primary"
                             onClick={(event) => {
                                 // FIXME: should this check be happenning in the backend? (YES => move check to backend)
-                                if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3' || item.responsible_entity === null) {
+                                if (user.auth.user === item.responsible_entity || user.auth.role === 'L3' || item.responsible_entity === null) {
                                     setOperation('edit'); setItem(item); handleModal({ title: 'Edit Item', data: item });
                                 }
                                 else { alert('You are not allowed to edit this item...') }
@@ -887,7 +904,7 @@ const Tac = () => {
                         <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25) : null}</span></td>
                         <td><Button variant="contained" color="secondary" disabled={user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ? false : true}
                             onClick={() => {
-                                if (user.auth.userName === item.responsible_entity || user.auth.role === 'L3') {
+                                if (user.auth.user === item.responsible_entity || user.auth.role === 'L3') {
                                     if (
                                         window.confirm(`Are you sure you want to delete ${item.no_incident} items?
                                       `)

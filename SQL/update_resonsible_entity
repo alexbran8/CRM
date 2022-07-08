@@ -1,0 +1,15 @@
+SELECT no_incident, no_itv, insert_date, insert_entity, responsible_entity, "createdBy" FROM public.tacdashboard_item;
+
+update public.tacdashboard_item set responsible_entity = 'adrian.breaz@nokia.com' where responsible_entity = 'abreaz'
+
+SELECT username, email FROM PUBLIC.auth_user 
+	where email <> '';
+	
+	UPDATE
+  public.tacdashboard_item
+SET
+  insert_entity=PUBLIC.auth_user .email
+FROM
+  PUBLIC.auth_user 
+WHERE
+  public.tacdashboard_item.insert_entity=PUBLIC.auth_user.username;
