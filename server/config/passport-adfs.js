@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const db = require("../models");
+
 function msToTime(duration) {
   var milliseconds = Math.floor((duration % 1000) / 100),
     seconds = Math.floor((duration / 1000) % 60),
