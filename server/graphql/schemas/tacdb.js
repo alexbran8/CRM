@@ -33,6 +33,7 @@ type tacdb {
     main_cause:String
     root_cause:String
     outil_utilise:String
+    blocage:String
   }
   type getDistinct {
     week: String
@@ -81,6 +82,7 @@ type tacdb {
     problem:String
     outil_utilise:String
     createdBy:String
+    blocage:String
   }
 
   type tacdbItem {
@@ -116,6 +118,7 @@ type tacdb {
     problem:String
     outil_utilise:String
     createdBy:String
+    blocage:String
   }
 
   input idArray {

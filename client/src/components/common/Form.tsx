@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStyles, makeStyles, Theme, styled } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form'
 
@@ -203,10 +203,16 @@ export default function FormPropsTextFields(props: any) {
   const [weekGet, setWeek] = useState()
   const [dateValue, setDateValue] = useState()
 
+  const [borderMandatoryStyle, setBorderMandaotyStile] = useState(null)
 
 
+  useEffect(()=> {
+    watch('status') === 'Problème pas identifié' || watch('status') === 'Problème identifié' ? setBorderMandaotyStile('1px solid red') : setBorderMandaotyStile(null)
+  },[watch('status')])
 
   const getDurartion = (norm, taskType) => {
+
+    
 
     switch (true) {
       case norm === "T0" && taskType === "Assigné":
@@ -988,6 +994,32 @@ export default function FormPropsTextFields(props: any) {
                     />
                   )}
                   rules={{ required: 'alarm_active is required' }}
+                />
+                 <Controller
+                  control={control}
+                  name="blocage"
+                  defaultValue={props.operation === 'edit' ? props.values.blocage : null}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="blocage"
+                      type="text"
+                      label={borderMandatoryStyle === null ? "blocage": "blocage*"}
+                      value={value}
+                      className={classes.textField}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      style={{  borderBottom: borderMandatoryStyle }}
+                    />
+                  )}
+                  rules={{required: {
+                    value: (watch('status') === 'Problème pas identifié' || watch('status') === 'Problème identifié' ) ? true : false,
+                    message: "Blocage is mandaotry if status is 'Problème pas identifié' or 'Problème identifié'"
+                }
+              }}
                 />
                 <Grid item style={{ borderColor: 'orange', width: '30ch' }} >
                   {/* <Paper className={classes.paper}>xs=12 sm=6</Paper> */}

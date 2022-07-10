@@ -25,15 +25,22 @@ module.exports = {
   Query: {
     async getAll(root, args, context) {
       try {
-       
         let dateSearch = new Date(args.date)
         // TODO: implement date type in graphql
         let dateFilter = args.date ? { date: dateSearch } : null
         let weekFilter = args.week ? { week: args.week } : null
-        let incidentFilter = args.no_incident ? { no_incident: args.no_incident } : null
+        let incidentFilter = args.no_incident ? { 
+          no_incident: {
+            [Op.like]: '%' + args.no_incident + '%'
+        }
+        } : null
         var statusFilter = args.status ? { status: args.status } : null
         var taskFilter = args.task ? { task: args.task } : null
-        let siteFilter = args.site ? { site: args.site } : null
+        let siteFilter = args.site ? { 
+         site: {
+            [Op.like]: '%' + args.site + '%'
+        }
+        } : null
         let responsibleFilter = args.responsible_entity ? { responsible_entity: args.responsible_entity } : null
         let firstFilter = args.first > 0 ? args.first : null
 
