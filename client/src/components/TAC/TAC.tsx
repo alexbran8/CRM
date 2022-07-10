@@ -82,6 +82,7 @@ const GET_ALL = gql`
         corrective_action
         hastagTac
         outil_utilise
+        blocage
     }
   }
 `;
@@ -153,6 +154,7 @@ mutation ($data: itemSave) {
         corrective_action
         hastagTac
         outil_utilise
+        blocage
         }
       }
     }
@@ -197,6 +199,7 @@ mutation ($data: itemSave) {
             corrective_action
             hastagTac
             outil_utilise
+            blocage
         }
       }
     }

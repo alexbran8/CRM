@@ -66,6 +66,7 @@ module.exports = (sequelize, type) => {
       corrective_action: { type: type.STRING },
       outil_utilise: { type: type.STRING },
       process_status: { type: type.STRING },
+      blocage:{type: type.STRING}
     },
 
     { timestamps: false, freezeTableName: true, tableName: 'tacdashboard_item' },
