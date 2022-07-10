@@ -536,7 +536,7 @@ const Tac = () => {
 
     useEffect(() => {
         setValue("date", myDate) 
-        setValue("responsible", user.auth.user)
+        setValue("responsible", user.auth.user || user.auth.email)
         console.log(getValues().date)
         setResponsible(user.auth.user);
         refetchResponsibles();
@@ -766,7 +766,7 @@ const Tac = () => {
                                 // TODO: update to sort by options
                                 options={responsiblesList}
                                 
-                                defaultValue={{ 'DISTINCT': user.auth.user || '' }}
+                                defaultValue={{ 'DISTINCT': user.auth.user || user.auth.email || '' }}
                                 getOptionLabel={(option) => option.DISTINCT}
                                 style={{ width: 300 }}
                                 className={classes.textField}
