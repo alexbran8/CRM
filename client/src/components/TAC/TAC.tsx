@@ -723,13 +723,13 @@ const Tac = () => {
                         // getOptionLabel={(option) => option.value}
                         style={{ width: 200 }}
                         className={classes.textField}
-                        onInputChange={(event, newInputValue, reason) => {
+                        onInputChange={(e, newInputValue, reason) => {
                             if (reason === 'clear') {
-                                setTask('')
-                                return
-                            } else {
-                                setTask(newInputValue)
-                            }
+                                setValue("task", newInputValue);updateFilters({task: null})  
+                            } else 
+                            console.log
+                                setValue("task",newInputValue);updateFilters({task: newInputValue})  
+                            
                         }}
                         // onChange={(e, v) => { setStatus(v.status);alert(v.status); refetch() }}
                         renderInput={(params) => <TextField {...params} label="select tasktype" variant="outlined" />}
@@ -746,7 +746,7 @@ const Tac = () => {
                         // defaultValue={dateToString(myDate)}
                         variant="outlined"
                         className={classes.textField}
-                        onChange={(e, v) => { setSite(e.target.value) }}
+                        onChange={(e, v) => {   setValue("site", e.target.value);updateFilters({site: e.target.value})  }}
                     // InputLabelProps={{
                     //     shrink: true,
                     // }}
