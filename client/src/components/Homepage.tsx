@@ -24,12 +24,14 @@ export const HomePage = () => {
 
 
             <h1>You have been logged in succcessfully!</h1>
-            <h2>Welcome {sessionStorage.getItem('userEmail')}!</h2>
+            
+            <h2>Welcome {sessionStorage.getItem('userEmail')}, <span style={{color:"red"}}>please check out the latest updates in the below list!</span></h2>
           </div>
         )}
         <div className="notification-container">
-          <h3 style={{ color: "orange" }}>Working on refactoring the authentification check once token expires so that it will refresh automatically... </h3>
-          <h3 style={{ color: "red" }}>Please refresh page / login logout if filter does not work... Token lifetime has been extended until refresh will be implemented.</h3>
+          <h3 style={{color:"red"}}>Working on refactoring the authentification check once token expires so that it will refresh automatically...</h3>
+          <h3 style={{ color:"orange"}}>Filters have been reviewed and now work as they should.</h3>
+          <h3 style={{ color:"orange"}}>Responsibles are now based on email and not shordId.</h3>
         </div>
       </div>
     </div>
