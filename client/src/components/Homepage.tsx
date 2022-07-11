@@ -1,5 +1,3 @@
-// import Header from "./Header.jsx";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { config } from "../config"
 
