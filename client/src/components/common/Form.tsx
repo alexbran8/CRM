@@ -178,7 +178,7 @@ export function getWeek(date) {
   console.log(result-1)
   // add leading 0 if week is below 10
   result < 10  ?  result = '0' + result : result;
-  var finalResult = result-1 + '-' + currentdate.getFullYear().toString().substr(-2);
+  var finalResult = result + '-' + currentdate.getFullYear().toString().substr(-2);
   return finalResult
 }
 
