@@ -179,7 +179,7 @@ export function getWeek(date) {
   console.log(result - 1)
   // add leading 0 if week is below 10
   result < 10 ? result = '0' + result : result;
-  var finalResult = result + '-' + currentdate.getFullYear().toString().substr(-2);
+  var finalResult = result -1 + '-' + currentdate.getFullYear().toString().substr(-2);
   return finalResult
 }
 
@@ -213,9 +213,9 @@ export default function FormPropsTextFields(props: any) {
 
   useEffect(() => {
     watch('task') === 'Appel' ? setHotlineVisible(false) : setHotlineVisible(true)
-
-    
   }, [watch('task')])
+
+  useEffect(()=>{setWeek(getWeek(props.defaultDateValue))},[])
 
   const getDurartion = (norm, taskType) => {
 
@@ -431,7 +431,7 @@ export default function FormPropsTextFields(props: any) {
                   <Controller
                     name="week"
                     control={control}
-                    defaultValue={props.operation === 'edit' ? props.values.week : null}
+                    defaultValue={props.operation === 'edit' ? props.values.week : getWeek(props.defaultDateValue)}
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                       <TextField
                         id="week"
@@ -629,7 +629,7 @@ export default function FormPropsTextFields(props: any) {
             // }}
 
             /> */}
-{/* FIXME:  responsible is not being added as default value from state*/}
+
                 </Grid>
                 <Grid container direction="row" className={classes.mainHeader}>
                   <Controller
