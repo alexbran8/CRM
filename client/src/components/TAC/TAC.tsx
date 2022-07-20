@@ -566,7 +566,7 @@ const Tac = () => {
 
         let data = await apiclient.query({
             query: GET_ALL_EXPORT,
-            variables: { first: null, task: task, status: status, week: week, responsible_entity: responsible, no_incident: no_incident, site: site, first: null }
+            variables: { first: null, task: getValues().task, date:getValues().date, status: getValues().status, week: getValues().week, responsible_entity: getValues().responsible, no_incident: getValues().no_incident, site: getValues().site }
         })
         return data.data
     }
