@@ -8,8 +8,8 @@ SELECT username, email FROM PUBLIC.auth_user
 	UPDATE
   public.tacdashboard_item
 SET
-  insert_entity=PUBLIC.auth_user .email
+  responsible_entity=PUBLIC.auth_user.email
 FROM
   PUBLIC.auth_user 
 WHERE
-  public.tacdashboard_item.insert_entity=PUBLIC.auth_user.username;
+  public.tacdashboard_item.responsible_entity=PUBLIC.auth_user.username;

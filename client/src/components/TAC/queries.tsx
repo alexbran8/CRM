@@ -18,6 +18,7 @@ export const GET_ALL_EXPORT = gql`
         site
         region
         comment_tac
+        blocage
     }
   }
 `;

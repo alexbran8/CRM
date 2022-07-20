@@ -78,6 +78,7 @@ export default function SimpleModal(props:any) {
      <FormPropsTextFields 
      values={props.item.data}
      user={props.user}
+     defaultDateValue={props.defaultDateValue}
      upalu={props.upalu}
      userList={props.userList}
      operation={props.operation}

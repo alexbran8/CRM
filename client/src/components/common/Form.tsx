@@ -14,13 +14,14 @@ import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-
+import { setInterval } from 'timers';
 
 import { useFormControls } from './Create';
 
 import "./Form.scss"
 
 import { appelList } from '../TAC/types';
+import { clearInterval } from 'timers';
 
 const actionList = ["ITV terrain", "Action à distance", "Escalader le ticket", "Ticket déjà fermé/cloturé", "Ticket à fermer", "Analyser au N2/N3", "ITV + Action à distance", "TI Gelé"];
 const constructorList = ["ERICSSON", "HUAWEI", "NOKIA", "NORTEL", "OTHER"]
@@ -212,6 +213,8 @@ export default function FormPropsTextFields(props: any) {
 
   useEffect(() => {
     watch('task') === 'Appel' ? setHotlineVisible(false) : setHotlineVisible(true)
+
+    
   }, [watch('task')])
 
   const getDurartion = (norm, taskType) => {
@@ -424,6 +427,7 @@ export default function FormPropsTextFields(props: any) {
                     rules={{ required: 'Appel is required' }}
 
                   />
+                  {/* FIXME:  week is not being calculated accordingly based on date value*/}
                   <Controller
                     name="week"
                     control={control}
@@ -498,7 +502,7 @@ export default function FormPropsTextFields(props: any) {
                   <Controller
                     name="date"
                     control={control}
-                    defaultValue={props.operation === 'edit' ? props.values.date : null}
+                    defaultValue={props.operation === 'edit' ? props.values.date : props.defaultDateValue}
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                       <TextField
                         id="date"
@@ -625,7 +629,7 @@ export default function FormPropsTextFields(props: any) {
             // }}
 
             /> */}
-
+{/* FIXME:  responsible is not being added as default value from state*/}
                 </Grid>
                 <Grid container direction="row" className={classes.mainHeader}>
                   <Controller

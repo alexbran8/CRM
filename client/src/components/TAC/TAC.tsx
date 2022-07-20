@@ -605,10 +605,9 @@ const Tac = () => {
 
         {showModal ? (
             <SimpleModal
-                //formValidator={formCheck}
-                // setShowModalOpen={showModal}
                 item={selectedItem}
-                user={user.auth.user}
+                user={user.auth.user || user.auth.email}
+                defaultDateValue={myDate}
                 upalu={user.auth.upalu}
                 userList={responsiblesList}
                 handleModal={handleModal}
