@@ -906,7 +906,7 @@ const Tac = () => {
                         <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25) : null}</span></td>
                         <td><Button variant="contained" color="secondary" disabled={user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ? false : true}
                             onClick={() => {
-                                if (user.auth.user === item.responsible_entity || user.auth.role === 'L3') {
+                                if (user.auth.email === item.responsible_entity || user.auth.user  === item.responsible_entity || user.auth.role === 'L3') {
                                     if (
                                         window.confirm(`Are you sure you want to delete ${item.no_incident} items?
                                       `)
