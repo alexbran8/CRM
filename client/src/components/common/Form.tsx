@@ -997,8 +997,8 @@ export default function FormPropsTextFields(props: any) {
                             error={!!error}
                             helperText={error ? error.message : null}
                             
-                            label="outil_utilise*"
-                            style={{ borderBottom: '1px solid red' }}
+                            label={watch('task') === 'Appel' ? "outil_utilise*" : "outil_utilise"}
+                            style={watch('task') === 'Appel' ? { borderBottom: '1px solid red' } : null}
                           />
                         )}
                       />
