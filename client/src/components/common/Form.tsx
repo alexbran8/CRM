@@ -1003,7 +1003,12 @@ export default function FormPropsTextFields(props: any) {
                         )}
                       />
                     )}
-                    rules={{ required: 'alarm_active is required' }}
+                    rules={{required: {
+                      value: (watch('task') === 'Appel' ) ? true : false,
+                      message: "Outil utilise is mandatory if task is Appel"
+                  }
+                }}
+  
                   />
                   <Controller
                     control={control}
