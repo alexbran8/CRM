@@ -7,11 +7,11 @@ module.exports = (sequelize, type) => {
       uid: {
         type: type.INTEGER,
         // primaryKey: true
-        field: 'id'
+        // field: 'id'
       },
       week: { type: type.STRING },
       date: {
-        type: type.DATE(),
+        type: 'DATE',
         required: true,
       },
       duration: {
@@ -26,7 +26,8 @@ module.exports = (sequelize, type) => {
         type: type.STRING,
       },
       comment_tac: {
-        type: type.STRING,
+        type: type.STRING(15000),
+        required: false,
       },
       problem: {
         type: type.STRING,

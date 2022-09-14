@@ -28,17 +28,15 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+
+sequelize.sync({alter: true}).then(
+  () => console.log("Sync complete")
+);
+
 db.sequelize2 = database2;
 
-// db.dailyTasks.model = require("./dailyTasks.model.js")(sequelize, Sequelize);
 db.Tacdb = require("./tacdb.js")(sequelize, Sequelize);
-// db.Pip = require("./pip.js")(sequelize, Sequelize);
-
-// db.gallery = require("./gallery.js")(sequelize, Sequelize);
-// db.cartItem = require("./cartItem.js")(sequelize, Sequelize);
-// db.tags = require("./tags.js")(sequelize, Sequelize);
-// db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
-// db.comments = require("./comment.model.js")(sequelize, Sequelize);
+db.FieldValues = require("./modelValues.js")(sequelize, Sequelize);
 
 // db.tutorials.hasMany(db.comments, { as: "comments" });
 // db.comments.belongsTo(db.tutorials, {

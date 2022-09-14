@@ -258,7 +258,7 @@ const Tac = () => {
     const [date, setDate] = useState(dateToString(newDate));
     const [responsiblesList, setResponsiblesList] = useState([]);
     const [responsible, setResponsible] = useState < string > (user.auth.user);
-    const [operationStatus, setOperationStatus] = useState<boolean>(null)
+    const [operationStatus, setOperationStatus] = useState < boolean > (null)
     const [response, setResponse] = useState < string > (null);
     const [week, setWeek] = useState();
     // const [statusClear, setClearStatus] = useState < boolean > (false)
@@ -296,18 +296,18 @@ const Tac = () => {
     const [addItemMutation] = useMutation(ADD_ITEM, {
         onCompleted: (dataRes) => {
             if (dataRes.addItem.success === "true") {
-            // update state
-            console.log(dataRes)
-            const newItems = [...items]
-            const updatedItem = item
-            // updatedItem.uid = dataRes.addItem.data.uid
-            setItems(newItems => [...newItems,  dataRes.addItem.data]);
-            console.log(dataRes)
-            setShowModal(false)
-        }
-        else {
-            console.error("Error creating a post"); alert("Error creating a post request; Please login / logout...")
-        }
+                // update state
+                console.log(dataRes)
+                const newItems = [...items]
+                const updatedItem = item
+                // updatedItem.uid = dataRes.addItem.data.uid
+                setItems(newItems => [...newItems, dataRes.addItem.data]);
+                console.log(dataRes)
+                setShowModal(false)
+            }
+            else {
+                console.error("Error creating a post"); alert("Error creating a post request; Please login / logout...")
+            }
 
         },
         onError: (error) => { console.error("Error creating a post", error); alert("Error creating a post request " + error.message) },
@@ -347,15 +347,15 @@ const Tac = () => {
             // update state
             if (dataRes.editItem.success === "true") {
 
-            const newItems = [...items]
-            let index = newItems.findIndex((y) => y.uid === dataRes.editItem.data.uid)
+                const newItems = [...items]
+                let index = newItems.findIndex((y) => y.uid === dataRes.editItem.data.uid)
 
-            newItems[index] = dataRes.editItem.data
+                newItems[index] = dataRes.editItem.data
 
-            setItems(newItems)
-            dataRes && dataRes.edit && setOperationStatus(dataRes.edit.message)
-            console.log(dataRes)
-            setShowModal(false)
+                setItems(newItems)
+                dataRes && dataRes.edit && setOperationStatus(dataRes.edit.message)
+                console.log(dataRes)
+                setShowModal(false)
             }
             else {
                 console.error("Error creating a post"); alert("Error creating a post request; ")
@@ -535,12 +535,12 @@ const Tac = () => {
 
 
     useEffect(() => {
-        setValue("date", myDate) 
+        setValue("date", myDate)
         setValue("responsible", user.auth.user || user.auth.email)
         console.log(getValues().date)
         setResponsible(user.auth.user);
         refetchResponsibles();
-        updateFilters({responsible:user.auth.user, date: getValues().date});
+        updateFilters({ responsible: user.auth.user, date: getValues().date });
     }, [])
 
     function getModalStyle() {
@@ -558,7 +558,7 @@ const Tac = () => {
 
 
 
-    
+
     const myDate = new Date().toISOString().substring(0, 10);
 
 
@@ -566,19 +566,19 @@ const Tac = () => {
 
         let data = await apiclient.query({
             query: GET_ALL_EXPORT,
-            variables: { first: null, task: getValues().task, date:getValues().date, status: getValues().status, week: getValues().week, responsible_entity: getValues().responsible, no_incident: getValues().no_incident, site: getValues().site }
+            variables: { first: null, task: getValues().task, date: getValues().date, status: getValues().status, week: getValues().week, responsible_entity: getValues().responsible, no_incident: getValues().no_incident, site: getValues().site }
         })
         return data.data
     }
 
     // FIXME: does not clear form filters values
     const updateFilters = async (props) => {
-        let {date, responsible} = props   
-        console.log(getValues().responsible)  
+        let { date, responsible } = props
+        console.log(getValues().responsible)
         console.log('these are the props')
         apiclient.query({
             query: GET_ALL,
-            variables: { first: 100, task: getValues().task, date:getValues().date, status: getValues().status, week: getValues().week, responsible_entity: getValues().responsible, no_incident: getValues().no_incident, site: getValues().site }
+            variables: { first: 100, task: getValues().task, date: getValues().date, status: getValues().status, week: getValues().week, responsible_entity: getValues().responsible, no_incident: getValues().no_incident, site: getValues().site }
         }).then(data => {
             setItems(data.data.getAll)
         })
@@ -609,6 +609,7 @@ const Tac = () => {
                 user={user.auth.user || user.auth.email}
                 defaultDateValue={myDate}
                 upalu={user.auth.upalu}
+                userRole={user.auth.role}
                 userList={responsiblesList}
                 handleModal={handleModal}
                 handleClose={handleModal}
@@ -631,9 +632,9 @@ const Tac = () => {
                     // defaultValue={dateToString(myDate)}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={(e, v) => { 
-                        setValue("week",e.target.value)
-                        updateFilters({week: e.target.value})
+                    onChange={(e, v) => {
+                        setValue("week", e.target.value)
+                        updateFilters({ week: e.target.value })
                     }}
                 // InputLabelProps={{
                 //     shrink: true,
@@ -652,9 +653,9 @@ const Tac = () => {
                     // defaultValue={dateToString(myDate)}
                     variant="outlined"
                     className={classes.textField}
-                    onChange={(e, v) => { 
-                        setValue("no_incident",e.target.value)
-                        updateFilters({no_incident: e.target.value})
+                    onChange={(e, v) => {
+                        setValue("no_incident", e.target.value)
+                        updateFilters({ no_incident: e.target.value })
                     }}
                 // InputLabelProps={{
                 //     shrink: true,
@@ -663,36 +664,36 @@ const Tac = () => {
             </>
 
             <>
-            <Controller
-                        control={control}
-                        name="date"
-                        
-                        render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <TextField
-                    id="dateFilter"
-                    type="date"
-                    defaultValue={myDate}
-                    variant="outlined"
-                    className={classes.textField}
-                    onChange={(e, newInputValue, reason) => {
-                            const value = e.target.value;
-                            console.log(reason)
-                            if (value =='') {
-                                console.log('date clear filter')
-                                setValue("date", null);
-                                updateFilters({date: null})
-                            }
-                            else {
-                                // setState({date: value});
-                                setValue("date", value) 
-                                updateFilters({date: value})
-                            }
-                         }}
-                // InputLabelProps={{
-                //     shrink: true,
-                // }}
-                />
-                )}
+                <Controller
+                    control={control}
+                    name="date"
+
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                            id="dateFilter"
+                            type="date"
+                            defaultValue={myDate}
+                            variant="outlined"
+                            className={classes.textField}
+                            onChange={(e, newInputValue, reason) => {
+                                const value = e.target.value;
+                                console.log(reason)
+                                if (value == '') {
+                                    console.log('date clear filter')
+                                    setValue("date", null);
+                                    updateFilters({ date: null })
+                                }
+                                else {
+                                    // setState({date: value});
+                                    setValue("date", value)
+                                    updateFilters({ date: value })
+                                }
+                            }}
+                        // InputLabelProps={{
+                        //     shrink: true,
+                        // }}
+                        />
+                    )}
                 />
                 <>
                     <Autocomplete
@@ -703,11 +704,11 @@ const Tac = () => {
                         className={classes.textField}
                         onInputChange={(event, newInputValue, reason) => {
                             if (reason === 'clear') {
-                                setValue("status", newInputValue) 
-                                updateFilters({status: newInputValue})
+                                setValue("status", newInputValue)
+                                updateFilters({ status: newInputValue })
                             } else {
-                                setValue("status", newInputValue) 
-                                updateFilters({status: newInputValue})
+                                setValue("status", newInputValue)
+                                updateFilters({ status: newInputValue })
                             }
                         }}
                         // onChange={(e, v) => { setStatus(v.status);alert(v.status); refetch() }}
@@ -724,11 +725,11 @@ const Tac = () => {
                         className={classes.textField}
                         onInputChange={(e, newInputValue, reason) => {
                             if (reason === 'clear') {
-                                setValue("task", newInputValue);updateFilters({task: null})  
-                            } else 
-                            console.log
-                                setValue("task",newInputValue);updateFilters({task: newInputValue})  
-                            
+                                setValue("task", newInputValue); updateFilters({ task: null })
+                            } else
+                                console.log
+                            setValue("task", newInputValue); updateFilters({ task: newInputValue })
+
                         }}
                         // onChange={(e, v) => { setStatus(v.status);alert(v.status); refetch() }}
                         renderInput={(params) => <TextField {...params} label="select tasktype" variant="outlined" />}
@@ -745,7 +746,7 @@ const Tac = () => {
                         // defaultValue={dateToString(myDate)}
                         variant="outlined"
                         className={classes.textField}
-                        onChange={(e, v) => {   setValue("site", e.target.value);updateFilters({site: e.target.value})  }}
+                        onChange={(e, v) => { setValue("site", e.target.value); updateFilters({ site: e.target.value }) }}
                     // InputLabelProps={{
                     //     shrink: true,
                     // }}
@@ -756,7 +757,7 @@ const Tac = () => {
                     <Controller
                         control={control}
                         name="responsible"
-                        
+
                         // defaultValue={'abran'}
                         render={({ field: { onChange, value }, fieldState: { error } }) => (
                             <Autocomplete
@@ -764,7 +765,7 @@ const Tac = () => {
                                 id="responsible"
                                 // TODO: update to sort by options
                                 options={responsiblesList}
-                                
+
                                 defaultValue={{ 'DISTINCT': user.auth.user || user.auth.email || '' }}
                                 getOptionLabel={(option) => option.DISTINCT}
                                 style={{ width: 300 }}
@@ -775,18 +776,18 @@ const Tac = () => {
                                     console.log(reason);
                                     console.log(control);
                                     if (reason === 'clear') {
-                                        setValue('responsible', null )
-                                        updateFilters({responsible: null})
+                                        setValue('responsible', null)
+                                        updateFilters({ responsible: null })
                                     } else {
-                                        setValue("responsible",newInputValue.DISTINCT)
-                                        updateFilters({responsible: newInputValue.DISTINCT})
+                                        setValue("responsible", newInputValue.DISTINCT)
+                                        updateFilters({ responsible: newInputValue.DISTINCT })
                                     }
                                 }}
                                 renderInput={(params) => <TextField {...params}
                                     label="select responsible"
                                     variant="outlined"
 
-                                    // defaultValue={responsible}
+                                // defaultValue={responsible}
                                 />}
                             />
                         )}
@@ -906,7 +907,7 @@ const Tac = () => {
                         <td><span title={item.comment_tac}>{item.comment_tac ? item.comment_tac.substring(0, 25) : null}</span></td>
                         <td><Button variant="contained" color="secondary" disabled={user.auth.email === item.responsible_entity || user.auth.userName === item.responsible_entity || user.auth.role === 'L3' ? false : true}
                             onClick={() => {
-                                if (user.auth.email === item.responsible_entity || user.auth.user  === item.responsible_entity || user.auth.role === 'L3') {
+                                if (user.auth.email === item.responsible_entity || user.auth.user === item.responsible_entity || user.auth.role === 'L3') {
                                     if (
                                         window.confirm(`Are you sure you want to delete ${item.no_incident} items?
                                       `)

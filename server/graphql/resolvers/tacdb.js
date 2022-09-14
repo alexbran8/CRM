@@ -66,6 +66,11 @@ module.exports = {
       let result = await db.Tacdb.aggregate({ attributes: ['week'], distinct: true })
       return result
     },
+    async getFieldValues(root, args, context) {
+      let result = await db.FieldValues.findAll()
+      console.log(result)
+      return result
+    },
 
     async getResponsibles(root, args, context) {
       let result = await db.Tacdb.aggregate('responsible_entity', 'DISTINCT', { plain: false })

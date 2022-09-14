@@ -85,6 +85,13 @@ type tacdb {
     blocage:String
   }
 
+  type FieldValuesType {
+    value:String
+    id: Int
+    constraintField: String
+    contraintValue: String
+  }
+
   type tacdbItem {
     cr_date: String
     uid: String
@@ -146,6 +153,7 @@ extend  type Query  {
     getAll(first: Int week:String date:String no_incident: String status: String site: String responsible_entity: String task:String): [tacdb]
     getDistinctWeeks:[getDistinct]
     getResponsibles:[getResponsibles]
+    getFieldValues(field: String) : [FieldValuesType]
 } 
 
 extend type Mutation {
