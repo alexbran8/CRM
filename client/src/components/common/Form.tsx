@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { createStyles, makeStyles, Theme, styled } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form'
+import { useMutation, useQuery, gql } from "@apollo/client";
 
 import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
+// import MenuItem from '@material-ui/core/MenuItem';
 
-import { InputAdornment } from '@material-ui/core';
+// import { InputAdornment } from '@material-ui/core';
 import Grid from "@material-ui/core/Grid";
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import { setInterval } from 'timers';
+// import Box from '@material-ui/core/Box';
+// import Typography from "@material-ui/core/Typography";
+// import Divider from "@material-ui/core/Divider";
+// import { setInterval } from 'timers';
+
+import { apiclient } from "../..";
+
 
 import { useFormControls } from './Create';
 
 import "./Form.scss"
 
 import { appelList } from '../TAC/types';
-import { clearInterval } from 'timers';
+// import { clearInterval } from 'timers';
 
 const actionList = ["ITV terrain", "Action à distance", "Escalader le ticket", "Ticket déjà fermé/cloturé", "Ticket à fermer", "Analyser au N2/N3", "ITV + Action à distance", "TI Gelé"];
 const constructorList = ["ERICSSON", "HUAWEI", "NOKIA", "NORTEL", "OTHER"]
@@ -139,6 +143,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 
+const GET_FIELD_VALUES = gql`
+query ($field: String) {
+    getFieldValues (field: $field) {
+        value
+        id
+        constraintField
+        constraintValue
+    }
+}
+`;
 
 type Profile = {
   appel: string
@@ -179,7 +193,7 @@ export function getWeek(date) {
   console.log(result - 1)
   // add leading 0 if week is below 10
   result < 10 ? result = '0' + result : result;
-  var finalResult = result -1 + '-' + currentdate.getFullYear().toString().substr(-2);
+  var finalResult = result - 1 + '-' + currentdate.getFullYear().toString().substr(-2);
   return finalResult
 }
 
@@ -203,6 +217,7 @@ export default function FormPropsTextFields(props: any) {
   const { handleSubmit, control, setValue, watch, register } = useForm({});
   const [weekGet, setWeek] = useState()
   const [dateValue, setDateValue] = useState()
+  const [blocageFieldValues, setBlocageFieldValues] = useState()
 
   const [borderMandatoryStyle, setBorderMandaotyStile] = useState(null)
   const [isHotlineVisible, setHotlineVisible] = useState(true)
@@ -215,7 +230,30 @@ export default function FormPropsTextFields(props: any) {
     watch('task') === 'Appel' ? setHotlineVisible(false) : setHotlineVisible(true)
   }, [watch('task')])
 
-  useEffect(()=>{setWeek(getWeek(props.defaultDateValue))},[])
+  useEffect(() => { setWeek(getWeek(props.defaultDateValue)) }, [])
+
+  //   const { data, loading, error } = useQuery(GET_FIELD_VALUES, {
+  //     variables: { field: "blocage"}, 
+  //     onCompleted: (
+  //     ) => {
+  //        console.log(data)
+
+  //     },
+  //     onError: (error) => { console.error("Error creating a request", error); alert("Error creating a request for retreiving field data: " + error.message) }
+  // });
+
+  useEffect(() => {
+    getFieldValues()
+  }, [])
+
+  const getFieldValues = async () => {
+
+    let data = await apiclient.query({
+      query: GET_FIELD_VALUES,
+      variables: { field: "blocage" }
+    })
+    setBlocageFieldValues(data.data.getFieldValues)
+  }
 
   const getDurartion = (norm, taskType) => {
 
@@ -638,11 +676,14 @@ export default function FormPropsTextFields(props: any) {
                     defaultValue={props.operation === 'edit' ? props.values.responsible_entity : props.user}
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                       <Autocomplete
+                        id="responsible_entity"
+                        freeSolo={props.user.role === "L3" ? false : true}
+                        autoSelect={props.user.role === "L3" ? false : true}
                         value={value}
                         onChange={(event, item) => {
                           onChange(item);
                         }}
-                        id="responsible_entity"
+
                         options={props.userList ? props.userList.sort(dynamicSort("DISTINCT")).map(item => { return item.DISTINCT }) : {}}
                         // getOptionLabel={(option) => option.DISTINCT}
                         // defaultValue={props.operation === 'edit' ? { 'DISTINCT': props.values.responsible_entity } : { 'DISTINCT': props.user }}
@@ -739,6 +780,7 @@ export default function FormPropsTextFields(props: any) {
                   />
 
                 </Grid>
+                
                 <Grid container direction="row" className={classes.mainHeader}>
                   <Controller
                     control={control}
@@ -837,8 +879,6 @@ export default function FormPropsTextFields(props: any) {
                     )}
                     rules={{ required: 'Sous Cause is required' }}
                   />
-
-
                 </Grid>
                 <Grid container direction="row" className={classes.mainHeader}>
                   <Controller
@@ -996,40 +1036,73 @@ export default function FormPropsTextFields(props: any) {
                             {...params}
                             error={!!error}
                             helperText={error ? error.message : null}
-                            
+
                             label={watch('task') === 'Appel' ? "outil_utilise*" : "outil_utilise"}
                             style={watch('task') === 'Appel' ? { borderBottom: '1px solid red' } : null}
                           />
                         )}
                       />
                     )}
-                    rules={{required: {
-                      value: (watch('task') === 'Appel' ) ? true : false,
-                      message: "Outil utilise is mandatory if task is Appel"
-                  }
-                }}
-  
+                    rules={{
+                      required: {
+                        value: (watch('task') === 'Appel') ? true : false,
+                        message: "Outil utilise is mandatory if task is Appel"
+                      }
+                    }}
+
                   />
                   <Controller
                     control={control}
                     name="blocage"
                     defaultValue={props.operation === 'edit' ? props.values.blocage : null}
+
+                    // render={({ field: { onChange, value }, fieldState: { error } }) => (
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                      <TextField
-                        id="blocage"
-                        type="text"
-                        label={borderMandatoryStyle === null ? "blocage" : "blocage*"}
+                      <Autocomplete
                         value={value}
-                        className={classes.textField}
-                        onChange={onChange}
-                        error={!!error}
-                        helperText={error ? error.message : null}
-                        InputLabelProps={{
-                          shrink: true,
+                        onChange={(event, item) => {
+                          onChange(item);
                         }}
-                        style={{ borderBottom: borderMandatoryStyle }}
+                        id="blocage"
+                        options={blocageFieldValues ? blocageFieldValues.map(item => { return item.value }) : {}}
+                        renderInput={(params) => (
+                          <TextField
+                            // InputProps={{
+                            //   className: classes.mandatory,
+                            // }}
+                            {...params}
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            id="blocage"
+                            type="text"
+                            label={borderMandatoryStyle === null ? "blocage" : "blocage*"}
+                            value={value}
+                            className={classes.textField}
+                            onChange={onChange}
+                            helperText={error ? error.message : null}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            style={{ borderBottom: borderMandatoryStyle }}
+                          />
+                        )}
                       />
                     )}
+                    //   <TextField
+                    //     id="blocage"
+                    //     type="text"
+                    //     label={borderMandatoryStyle === null ? "blocage" : "blocage*"}
+                    //     value={value}
+                    //     className={classes.textField}
+                    //     onChange={onChange}
+                    //     error={!!error}
+                    //     helperText={error ? error.message : null}
+                    //     InputLabelProps={{
+                    //       shrink: true,
+                    //     }}
+                    //     style={{ borderBottom: borderMandatoryStyle }}
+                    //   />
+                    // )}
                     rules={{
                       required: {
                         value: (watch('status') === 'Problème pas identifié' || watch('status') === 'Problème identifié') ? true : false,
